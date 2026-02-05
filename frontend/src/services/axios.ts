@@ -2,7 +2,7 @@ import axios from "axios";
 import { decryptString } from "../utilities/encrypt";
 
 const axiosInstance = axios.create({
-	baseURL: "http://localhost:5155/",
+	baseURL: "http://localhost:5000/api/v1",
 	headers: {
 		"Content-Type": "application/json",
 	},

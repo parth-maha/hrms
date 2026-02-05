@@ -1,20 +1,12 @@
 import React from "react";
 import { Breadcrumbs as MUIBreadcrumbs, Typography, Link } from "@mui/material";
 import { useLocation, Link as RouterLink } from "react-router-dom";
-import { RiBarChartHorizontalLine } from "react-icons/ri";
 import {
-	AccountTreeOutlined,
 	ArrowForwardIos,
-	BusinessOutlined,
-	CalendarMonthOutlined,
 	DashboardOutlined,
-	GroupOutlined,
 	Home,
-	LuggageOutlined,
-	ScheduleOutlined,
-	SwapHorizOutlined,
 } from "@mui/icons-material";
-
+import ModeOfTravelIcon from '@mui/icons-material/ModeOfTravel';
 type NavItem = {
 	name: string;
 	icon?: React.ElementType;
@@ -28,31 +20,9 @@ type NavItem = {
 
 // === NAVIGATION STRUCTURE ===
 const navigation: NavItem[] = [
-	{ name: "Dashboard", icon: DashboardOutlined, path: "/dashboard" },
-	{ name: "Company", icon: BusinessOutlined, path: "/company" },
-	{ name: "Branch", icon: AccountTreeOutlined, path: "/branch" },
-	{ name: "Import Employees", icon: GroupOutlined, path: "/employees" },
-	{ name: "Work Schedule", icon: ScheduleOutlined, path: "/work-schedule" },
-	{
-		name: "Attendance Policy",
-		icon: CalendarMonthOutlined,
-		path: "/attendance-policy",
-	},
-	{ name: "Holiday", icon: LuggageOutlined, path: "/holiday" },
-	{
-		name: "Workflow Configuration",
-		icon: SwapHorizOutlined,
-		path: "/workflow-configuration",
-	},
-	{
-		name: "Other Details",
-		icon: RiBarChartHorizontalLine,
-		path: "/other-details",
-		subItems: [
-			{ name: "SMTP Setup", path: "/smtp-setup" },
-			{ name: "Approval Workflow", path: "/approval-workflow" },
-		],
-	},
+	{ name: "Dashboard", icon: DashboardOutlined, path: "/" },
+	{ name: "Travel", icon: ModeOfTravelIcon, path: "/travel" },
+
 ];
 
 // === HELPER ===
@@ -89,13 +59,13 @@ export default function Breadcrumbs() {
 					separator={
 						<ArrowForwardIos
 							style={{ width: ".85rem", height: ".85rem", marginTop: "0.125rem" }}
-							color="secondary"
+							color="action"
 							fontSize="small"
 						/>
 					}
 				>
 					<Link component={RouterLink} underline="hover" color="inherit" to="/">
-						<Home color="secondary" fontSize="small" />
+						<Home color="action" fontSize="small" />
 					</Link>
 
 					{pathnames.map((value, index) => {

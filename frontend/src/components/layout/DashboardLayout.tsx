@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
 import TopBar from "./Topbar";
 // import { useStore } from "../store/store";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../ui/BreadCrumbs";
 // import type { DashboardData } from "../utilities/types";
 interface DashboardLayoutProps {
@@ -10,10 +10,7 @@ interface DashboardLayoutProps {
 	onLogout: () => void;
 }
 
-export default function DashboardLayout({
-	children,
-	onLogout,
-}: DashboardLayoutProps) {
+export default function DashboardLayout() {
 	const navigate = useNavigate();
 	// const { userDetails } = useStore();
 	const user = {
@@ -27,23 +24,23 @@ export default function DashboardLayout({
 	}, []);
 
 	return (
-		<div className="min-h-screen bg-[#FAFBFB]">
+		<div className="min-h-screen bg-white">
 			<Sidebar
 				user={user}
 				company="Roima Intelligence"
-				onLogout={onLogout}
+				// onLogout={onLogout}
                 />
 			<TopBar
 				user={user}
 				company="Roima Intelligence"
-				onLogout={onLogout}
+				// onLogout={onLogout}
 			/>
 
 			{/* Main content area */}
 			<main className="ml-14 pt-14 p-6">
 				<div className="max-w-full mx-auto">
 					<Breadcrumbs />
-					{children}
+					<Outlet/>
 				</div>
 			</main>
 		</div>

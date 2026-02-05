@@ -2,17 +2,13 @@ import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RiBarChartHorizontalLine } from "react-icons/ri";
 import {
-  AccountTreeOutlined,
-  BusinessOutlined,
-  CalendarMonthOutlined,
   DashboardOutlined,
-  GroupOutlined,
-  LuggageOutlined,
-  ScheduleOutlined,
-  SwapHorizOutlined,
+  ModeOfTravel,
+  ContentCopy
 } from "@mui/icons-material";
+import GamesIcon from '@mui/icons-material/Games';
 import { theme } from "../../utilities/theme";
-import icon from '../../assets/roima.svg'
+import icon from '../../../public/favicon.ico'
 // import type { DashboardData } from "../../utilities/types";
 
 type NavItem = {
@@ -34,51 +30,30 @@ interface SidebarProps {
   };
   company: string;
   // dashboardData: DashboardData | null;
-  onLogout: () => void;
+//   onLogout: () => void;
 }
 
 export function Sidebar({
   user,
-  company,
   // dashboardData,
 }: SidebarProps) {
   const navigation: NavItem[] = useMemo(
     () => [
-      { name: "Dashboard", icon: DashboardOutlined, path: "/dashboard" },
+      { name: "Dashboard", icon: DashboardOutlined, path: "/" },
       {
-        name: "Company",
-        icon: BusinessOutlined,
-        path: "/company",
+        name: "Travel & Expense",
+        icon: ModeOfTravel,
+        path: "/travel",
       },
       {
-        name: "Branch",
-        icon: AccountTreeOutlined,
-        path: "/branch",
+        name: "Games",
+        icon: GamesIcon,
+        path: "/games",
       },
-      {
-        name: "Import Employees",
-        icon: GroupOutlined,
-        path: "/employees",
-      },
-      {
-        name: "Work Schedule",
-        icon: ScheduleOutlined,
-        path: "/work-schedule",
-      },
-      {
-        name: "Attendance Policy",
-        icon: CalendarMonthOutlined,
-        path: "/attendance-policy",
-      },
-      {
-        name: "Holiday",
-        icon: LuggageOutlined,
-        path: "/holiday",
-      },
-      {
-        name: "Workflow Configuration",
-        icon: SwapHorizOutlined,
-        path: "/workflow-configuration",
+	  {
+        name: "Policies",
+        icon: ContentCopy,
+        path: "/policies",
       },
     ],
     [user],
@@ -108,7 +83,7 @@ export function Sidebar({
         isHovered && !isDashboardActive ? "z-30" : "z-10"
       }`}
       style={{
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: "#3E9f34",
         borderColor: theme.palette.divider,
       }}
       onMouseEnter={() => !isDashboardActive && setIsHovered(true)}
@@ -119,7 +94,7 @@ export function Sidebar({
         <img src={icon} alt="Company Logo" className="w-8 h-8" />
 
         {isExpanded && (
-          <span className="font-semibold text-gray-800 text-lg">Roima</span>
+          <span className="font-semibold text-white text-lg">Roima</span>
         )}
       </div>
 
@@ -153,8 +128,8 @@ export function Sidebar({
                     item.disabled
                       ? "opacity-50 cursor-not-allowed"
                       : isActive
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        ? " text-white  bg-blend-lighten"
+                        : "text-white hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
                   <IconComponent
@@ -163,8 +138,8 @@ export function Sidebar({
                       item.disabled
                         ? "text-gray-400"
                         : isActive
-                          ? "text-blue-700"
-                          : "text-gray-700 group-hover:text-gray-600"
+                          ? "text-white"
+                          : "text-white group-hover:text-gray-600"
                     }`}
                   />
                   {isExpanded && (

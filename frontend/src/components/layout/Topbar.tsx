@@ -8,10 +8,10 @@ interface TopBarProps {
     email: string;
   };
   company: string
-  onLogout: () => void;
+  // onLogout: () => void;
 }
 
-export function TopBar({ onLogout }: TopBarProps) {
+export function TopBar({  }: TopBarProps) {
 
   const location = useLocation();
   const isDashboard = location.pathname === "/";
@@ -20,7 +20,7 @@ export function TopBar({ onLogout }: TopBarProps) {
   const handleLogout = async () => {
     try {
         localStorage.clear();
-        onLogout();
+        // onLogout();
         navigate('/login')
     } catch (error) {
       console.error("Logout failed:", error);
@@ -29,20 +29,15 @@ export function TopBar({ onLogout }: TopBarProps) {
   };
 
   return (
-    <header className={`fixed top-0 ${isDashboard ? 'left-64' : 'left-16'} right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-20  transition-all duration-200`}>
+    <header className={`fixed top-0 ${isDashboard ? 'left-64' : 'left-16'} right-0 h-14 bg-[#3E9f34] border-b border-gray-200 flex items-center justify-end px-6 z-20  transition-all duration-200`}>
       {/* Left side - Company logo and progress */}
-      <div className={`flex items-center ${isDashboard ? 'gap-6' : 'gap-4'}`}>
-        {/* Progress indicator */}
-      </div>
-
+    
       {/* Right side - User profile and actions */}
       <div className="flex items-center gap-4">
           
         {/* User profile */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-            <FaRegUserCircle className="w-4 h-4 text-gray-600" />
-          </div>
+            <FaRegUserCircle className="w-4 h-4 text-white" />
         </div>
 
         {/* Logout button */}
@@ -51,7 +46,7 @@ export function TopBar({ onLogout }: TopBarProps) {
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           title="Logout"
         >
-          <IoIosLogOut className="w-5 h-5 text-gray-500" />
+          <IoIosLogOut className="w-5 h-5 text-white" />
         </button>
       </div>
     </header>

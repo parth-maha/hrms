@@ -2,7 +2,7 @@ import type { JSX } from "react";
 import { usePromiseTracker } from "react-promise-tracker";
 import LoaderSpinner from "../../assets/roima.svg";
 
-const LoadingIndicator = (): false | JSX.Element => {
+const Loader = (): false | JSX.Element => {
   const { promiseInProgress } = usePromiseTracker();
 
   return (
@@ -96,4 +96,4 @@ styleSheet.textContent = `
 `;
 document.head.appendChild(styleSheet);
 
-export default LoadingIndicator;
+export default Loader;
