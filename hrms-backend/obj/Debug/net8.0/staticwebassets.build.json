@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "oU+KNcPlJnZqWo+VdrmdVnEIn9PwHafZwQSvvxFfbs4=",
+  "Source": "hrms-backend",
+  "BasePath": "_content/hrms-backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
