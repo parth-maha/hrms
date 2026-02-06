@@ -1,3 +1,4 @@
+import { Notifications } from "@mui/icons-material";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -29,15 +30,18 @@ export function TopBar({  }: TopBarProps) {
   };
 
   return (
-    <header className={`fixed top-0 ${isDashboard ? 'left-64' : 'left-16'} right-0 h-14 bg-[#3E9f34] border-b border-gray-200 flex items-center justify-end px-6 z-20  transition-all duration-200`}>
+    <header className={`fixed top-0 ${isDashboard ? 'left-64' : 'left-15'} right-0 h-14 bg-[#3E9f34] border-b border-gray-200 flex items-center justify-end px-6 z-20  transition-all duration-200`}>
       {/* Left side - Company logo and progress */}
     
       {/* Right side - User profile and actions */}
       <div className="flex items-center gap-4">
-          
+
+        <div className="flex items-center gap-2">
+            <Notifications className="w-5 h-5 text-white" />
+        </div>  
         {/* User profile */}
         <div className="flex items-center gap-2">
-            <FaRegUserCircle className="w-4 h-4 text-white" />
+            <FaRegUserCircle className="w-5 h-5 text-white" />
         </div>
 
         {/* Logout button */}

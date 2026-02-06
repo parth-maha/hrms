@@ -7,6 +7,28 @@ import type {
 } from "react-hook-form";
 import type { AutocompleteProps, ChipTypeMap } from "@mui/material";
 
+export type NavItem = {
+	name: string;
+	icon?: React.ElementType;
+	path: string;
+	subItems?: Array<{
+		name: string;
+		icon?: React.ElementType;
+		path: string;
+	}>;
+};
+
+export type SidebarNavItem = {
+  name: string;
+  icon?: React.ElementType;
+  path: string;
+  subItems?: Array<{
+    name: string;
+    icon?: React.ElementType;
+    path: string;
+  }>;
+  disabled?: boolean;
+};
 //==================== AUTOCOMPLETEWOCONTROL ===================
 export type CustomAutoCompleteWoControlProps<
   Value,

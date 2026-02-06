@@ -1,4 +1,3 @@
-import React from "react";
 import { Breadcrumbs as MUIBreadcrumbs, Typography, Link } from "@mui/material";
 import { useLocation, Link as RouterLink } from "react-router-dom";
 import {
@@ -7,16 +6,8 @@ import {
 	Home,
 } from "@mui/icons-material";
 import ModeOfTravelIcon from '@mui/icons-material/ModeOfTravel';
-type NavItem = {
-	name: string;
-	icon?: React.ElementType;
-	path: string;
-	subItems?: Array<{
-		name: string;
-		icon?: React.ElementType;
-		path: string;
-	}>;
-};
+import type { NavItem } from "../../types/uiTypes";
+
 
 // === NAVIGATION STRUCTURE ===
 const navigation: NavItem[] = [
@@ -48,6 +39,7 @@ export default function Breadcrumbs() {
 	const iconSX = {
 		width: "1rem",
 		height: "1rem",
+		color : ""
 	};
 
 	return (
@@ -72,11 +64,9 @@ export default function Breadcrumbs() {
 						const to = `/${pathnames.slice(0, index + 1).join("/")}`;
 						const isLast = index === pathnames.length - 1;
 						const navItem = findNavItemByPath(to);
-						const Icon = navItem?.icon;
 
 						return isLast ? (
 							<div className="flex items-center gap-2 mt-0.5" key={to}>
-								{Icon && <Icon fontSize="small" color="secondary" />}
 								<div className="mt-0.5">
 									<Typography key={to} fontWeight={600}>
 										{capitalize(decodeURIComponent(value.replace(/-/g, " ")))}
@@ -92,10 +82,9 @@ export default function Breadcrumbs() {
 								to={to}
 								key={to}
 							>
-								{Icon && <Icon style={iconSX} color="secondary" />}
 								<div className="mt-0.5">
 									<Typography
-										color="text.primary"
+										color="info"
 										key={to}
 										className="flex items-center"
 									>

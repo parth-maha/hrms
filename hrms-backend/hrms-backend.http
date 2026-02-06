@@ -1,4 +1,4 @@
-@hrms_backend_HostAddress = http://localhost:5000
+@hrms_backend_HostAddress = http://localhost:5225
 
 GET {{hrms_backend_HostAddress}}/weatherforecast/
 Accept: application/json

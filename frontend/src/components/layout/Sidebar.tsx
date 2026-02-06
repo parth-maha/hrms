@@ -4,24 +4,15 @@ import { RiBarChartHorizontalLine } from "react-icons/ri";
 import {
   DashboardOutlined,
   ModeOfTravel,
-  ContentCopy
+  ContentCopy,
+  ShowChart,
 } from "@mui/icons-material";
-import GamesIcon from '@mui/icons-material/Games';
+import WorkIcon from "@mui/icons-material/Work";
+import GamesIcon from "@mui/icons-material/Games";
 import { theme } from "../../utilities/theme";
-import icon from '../../../public/favicon.ico'
+import icon from "../../assets/favicon.ico";
+import type { SidebarNavItem } from "../../types/uiTypes";
 // import type { DashboardData } from "../../utilities/types";
-
-type NavItem = {
-  name: string;
-  icon?: React.ElementType;
-  path: string;
-  subItems?: Array<{
-    name: string;
-    icon?: React.ElementType;
-    path: string;
-  }>;
-  disabled?: boolean;
-};
 
 interface SidebarProps {
   user: {
@@ -30,14 +21,14 @@ interface SidebarProps {
   };
   company: string;
   // dashboardData: DashboardData | null;
-//   onLogout: () => void;
+  //   onLogout: () => void;
 }
 
 export function Sidebar({
   user,
   // dashboardData,
 }: SidebarProps) {
-  const navigation: NavItem[] = useMemo(
+  const navigation: SidebarNavItem[] = useMemo(
     () => [
       { name: "Dashboard", icon: DashboardOutlined, path: "/" },
       {
@@ -50,7 +41,17 @@ export function Sidebar({
         icon: GamesIcon,
         path: "/games",
       },
-	  {
+      {
+        name: "Jobs",
+        icon: WorkIcon,
+        path: "/jobs",
+      },
+      {
+        name: "Org Chart",
+        icon: ShowChart,
+        path: "/chart",
+      },
+      {
         name: "Policies",
         icon: ContentCopy,
         path: "/policies",
@@ -159,8 +160,8 @@ export function Sidebar({
                           onClick={() => handleNavigation(subItem.path)}
                           className={`cursor-pointer w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left ${
                             isSubActive
-                              ? "bg-blue-50 text-blue-700"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                              ? "text-white"
+                              : "text-white group-hover:text-gray-600"
                           }`}
                         >
                           <span className="text-sm">{subItem.name}</span>
