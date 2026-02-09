@@ -1,5 +1,5 @@
 import axios from "axios";
-import { decryptString } from "../utilities/encrypt";
+import { decryptString, encryptString } from "../utilities/encrypt";
 
 const api = axios.create({
 	baseURL: "http://localhost:5225/api/v1",
@@ -36,7 +36,7 @@ api.interceptors.response.use(
         
         const { jwtToken } = response.data;
         
-        localStorage.setItem("accessToken", jwtToken);
+        localStorage.setItem("token",encryptString(jwtToken));
         
         originalRequest.headers["Authorization"] = `Bearer ${jwtToken}`;
         
@@ -44,6 +44,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         console.error("Session expired", refreshError);
         localStorage.removeItem("token");
+        localStorage.removeItem("userDetails")
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

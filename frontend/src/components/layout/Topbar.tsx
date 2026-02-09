@@ -44,7 +44,7 @@ export function TopBar({  }: TopBarProps) {
 
         <button 
           onClick={handleLogout}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 hover:cursor-pointer rounded-full transition-colors"
           title="Logout"
         >
           <IoIosLogOut className="w-5 h-5 text-white" />

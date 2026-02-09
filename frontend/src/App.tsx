@@ -6,12 +6,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer, Bounce } from "react-toastify";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./utilities/theme";
+import Loader from "./components/ui/RequestLoaders";
 
 function App() {
   const initializeAuth = useAuthStore((state: any) => state.initializeAuth);
+  const isLoading = useAuthStore((state:any) => state.isLoading)
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
+
+  if(isLoading){
+    return <Loader/>
+  }
 
   const queryClient = new QueryClient();
 
