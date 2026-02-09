@@ -12,6 +12,7 @@ namespace hrms_backend.Services
         {
             _logger = logger;
             _applicationDbContext = applicationDbContext;
+            _jwtUtils = jwtUtils;
         }
 
 

@@ -17,7 +17,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-//app.UseCors("")
+app.UseCors("AllowFrontend");
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();

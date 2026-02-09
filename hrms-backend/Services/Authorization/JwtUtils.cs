@@ -18,7 +18,7 @@ namespace hrms_backend.Services.Authorization
 
         public JwtUtils (IOptions<AppSettings> appSettings, ApplicationDbContext applicationDbContext)
         {
-            _appSettings = (AppSettings?)appSettings;
+            _appSettings = appSettings.Value;
             _applicatioDbContext = applicationDbContext;
         }
 

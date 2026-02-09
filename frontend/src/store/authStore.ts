@@ -66,16 +66,16 @@ const useAuthStore = create<AuthState>((set) => ({
     }
 
     try {
-      const response = await api.get('/auth/verify');
+      const response = await api.get('/Auth/verify');
       const userData = response.data;
-      const { jwtToken, Email, EmployeeId, Roles,FirstName,LastName } = userData;
+      const { jwtToken, email, employeeId, role,firstName,lastName } = userData;
       set({
-        empId: EmployeeId,
+        empId: employeeId,
         token: jwtToken,
         isLoading: false,
-        name : FirstName + " " + LastName, 
-        roles: Roles,
-        email: Email,
+        name : firstName + " " + lastName, 
+        roles: role,
+        email: email,
         isAuthenticated: true
       });
     } catch (err: any) {

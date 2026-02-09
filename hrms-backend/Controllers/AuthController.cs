@@ -1,6 +1,7 @@
 ﻿using hrms_backend.Data;
 using hrms_backend.Models.dto;
 using hrms_backend.Services;
+using hrms_backend.Services.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hrms_backend.Controllers
@@ -51,8 +52,10 @@ namespace hrms_backend.Controllers
         }
 
         [HttpPost("revoke-token")]
-        public IActionResult RevokeToken([FromBody] string refreshToken)
+        public IActionResult RevokeToken()
         {
+            var refreshToken = Request.Cookies["refreshToken"];
+            Console.WriteLine(refreshToken);
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest(new { message = "Token is required" });
 

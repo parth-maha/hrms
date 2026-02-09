@@ -2,10 +2,11 @@ import axios from "axios";
 import { decryptString } from "../utilities/encrypt";
 
 const api = axios.create({
-	baseURL: "http://localhost:5000/api/v1",
+	baseURL: "http://localhost:5225/api/v1",
 	headers: {
 		"Content-Type": "application/json",
 	},
+  withCredentials : true
 });
 
 // Request interceptor: Attach token

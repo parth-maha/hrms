@@ -63,7 +63,7 @@ namespace hrms_backend.Models.Entities
         public string? Department { get; set; }
         public string? Position { get; set; }
 
-        public List<RefreshToken> RefreshTokens { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         //public ICollection<Post> Posts { get; set; }
         //public ICollection<TravelExpense> TravelExpenses { get; set; }
         //public ICollection<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }

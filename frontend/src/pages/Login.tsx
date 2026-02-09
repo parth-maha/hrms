@@ -5,19 +5,15 @@ import logo from "../assets/image.png";
 import Button from "../components/ui/Button";
 import { isValidEmail } from "../utilities/FormValidator";
 import TextField from "../components/ui/TextField";
-import { useLoginMutation } from "../services/authService";
-import Loader from "../components/ui/RequestLoaders";
-import api from "../services/axios";
-import useAuthStore from "../store/authStore";
+import { useLoginMutation } from "../services/auth.service";
 
 const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
 
-  //   const { mutate, isPending } = useLoginMutation();
+  const { mutate, isPending } = useLoginMutation();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -39,36 +35,7 @@ const Login: React.FC<{}> = () => {
       setLoading(false);
       return;
     }
-    try {
-      const response = await api.post("/auth/login", {
-        Email: email,
-        Password: password,
-      });
-
-      if (response.data) {
-        const { Email, EmployeeId, Roles, jwtToken, FirstName, LastName } =
-          response.data;
-        const name = FirstName + " " + LastName;
-        login(Email, EmployeeId.toString(), Roles, jwtToken, name);
-
-        const userDetails = {
-          name: FirstName + LastName || "",
-          email: Email || "",
-          employeeId: EmployeeId || "",
-          role: Roles || "",
-        };
-
-        localStorage.setItem("userDetails", JSON.stringify(userDetails));
-        navigate("/");
-      } else {
-        throw new Error("Login failed.");
-      }
-    } catch (error: any) {
-      console.error("Login error:", error);
-    } finally {
-      setLoading(false);
-    }
-    // mutate({email,password})
+    mutate({ email, password });
   };
 
   return (
@@ -113,7 +80,7 @@ const Login: React.FC<{}> = () => {
             id="login"
             type="submit"
             onClick={handleLogin}
-            disabled={loading}
+            disabled={isPending}
             fullWidth
           >
             {loading ? (

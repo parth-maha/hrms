@@ -4,6 +4,7 @@ using hrms_backend.Helpers;
 using hrms_backend.Models.dto;
 using hrms_backend.Models.Entities;
 using hrms_backend.Services.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace hrms_backend.Services
@@ -13,21 +14,19 @@ namespace hrms_backend.Services
         private readonly ILogger<AuthService> _logger;
         private ApplicationDbContext _context;
         private JwtUtils _jwtUtils;
-        private readonly AppSettings _appSettings;
-        private readonly EmailService _emailService;
+        //private readonly EmailService _emailService;
 
-        public AuthService(ILogger<AuthService> logger, ApplicationDbContext context, JwtUtils jwtUtils,IOptions<AppSettings> appSettings,EmailService emailService)
+        public AuthService(ILogger<AuthService> logger, ApplicationDbContext context, JwtUtils jwtUtils)
         {
             _logger = logger;
             _context = context;
             _jwtUtils = jwtUtils;
-            _appSettings = appSettings.Value;
-            _emailService= emailService;
+            //_emailService= emailService;
         }
 
         public async Task<LoginResponse> Login(LoginReqDTO dto, string ipAddress)
         {
-            var employee = _context.Employees.SingleOrDefault(x => x.Email == dto.Email);
+            var employee = _context.Employees.Include(e => e.Roles).SingleOrDefault(x => x.Email == dto.Email);
 
             if(employee == null && !BCrypt.Net.BCrypt.Verify(dto.Password, employee.Password))
             {
@@ -44,15 +43,15 @@ namespace hrms_backend.Services
             _context.SaveChanges();
 
             // send mail
-            await _emailService.QueueEmailAsync(
-                    employee.Email,
-                    "New Login Detected",
-                    $"Login detected from IP : {ipAddress} at {DateTime.UtcNow}"
-                );
+            //await _emailService.QueueEmailAsync(
+            //        employee.Email,
+            //        "New Login Detected",
+            //        $"Login detected from IP : {ipAddress} at {DateTime.UtcNow}"
+            //    );
 
             _logger.LogInformation($"Email sent:{employee.Email} - Refresh Token Added : {refreshToken}");
-
-            return new LoginResponse(employee.Id.ToString(),employee.FirstName,employee.LastName,employee.Email,employee.Roles.ToString(), jwtToken, refreshToken.Token);
+            Console.WriteLine(employee.Roles.Role.ToString());
+            return new LoginResponse(employee.Id.ToString(),employee.FirstName,employee.LastName,employee.Email, employee.Roles.Role.ToString(), jwtToken, refreshToken.Token);
         }
         
         public LoginResponse RefreshToken(string token, string ipAddress)
@@ -104,7 +103,7 @@ namespace hrms_backend.Services
             // remove old inactive refresh tokens from user based on TTL in app settings
             employe.RefreshTokens.RemoveAll(x =>
                 !x.IsActive &&
-                x.Created.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+                x.Created.AddDays(15) <= DateTime.UtcNow);
         }
 
         private RefreshToken rotateRefreshToken(RefreshToken refreshToken, string ipAddress)

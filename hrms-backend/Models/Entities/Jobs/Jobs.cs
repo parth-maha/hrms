@@ -33,8 +33,8 @@ namespace hrms_backend.Models.Entities.Jobs
         [ForeignKey("PocId")]
         public virtual Employees Poc{ get; set; }
 
-        public virtual ICollection<Referrals> Referrals { get; set;  }
-        public virtual ICollection<JobShared> JobShared { get; set; }
-        public virtual ICollection<JobReviewers> JobReviewers { get; set; }
+        public virtual ICollection<Referrals> Referrals { get; set;  } = new List<Referrals>();
+        public virtual ICollection<JobShared> JobShared { get; set; } = new List<JobShared>();
+        public virtual ICollection<JobReviewers> JobReviewers { get; set; } = new List<JobReviewers>();
     }
 }

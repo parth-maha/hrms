@@ -1,8 +1,5 @@
 using hrms_backend.Models.Entities;
-using hrms_backend.Models.Entities.Games;
 using hrms_backend.Models.Entities.Jobs;
-using hrms_backend.Models.Entities.Socials;
-using hrms_backend.Models.Entities.Travel;
 using Microsoft.EntityFrameworkCore;
 
 namespace hrms_backend.Data
@@ -31,10 +28,10 @@ namespace hrms_backend.Data
         //public DbSet<HrTravelDocuments> HrTravelDocuments { get; set; }
 
         // ================== JOBS ==================
-        //public DbSet<Jobs> Jobs { get; set; }
-        //public DbSet<Referrals> Referrals { get; set; }
-        //public DbSet<JobShared> JobShares { get; set; }
-        //public DbSet<JobReviewers> JobReviewers { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
+        public DbSet<Referrals> Referrals { get; set; }
+        public DbSet<JobShared> JobShares { get; set; }
+        public DbSet<JobReviewers> JobReviewers { get; set; }
 
         // ================== GAMES ==================
         //public DbSet<GameType> GameTypes { get; set; }
@@ -113,16 +110,16 @@ namespace hrms_backend.Data
             //    .HasForeignKey(r => r.RefferedBy)
             //    .OnDelete(DeleteBehavior.Restrict);
 
+            //modelBuilder.Entity<Referrals>()
+            //    .HasOne(r => r.Job)
+            //    .WithMany(j => j.Referrals)
+            //    .HasForeignKey(r => r.JobId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
             //modelBuilder.Entity<JobShared>()
             //    .HasOne(js => js.SharedBy)
             //    .WithMany()
             //    .HasForeignKey(js => js.SharedById)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<JobShared>()
-            //    .HasOne(js => js.SharedTo)
-            //    .WithMany()
-            //    .HasForeignKey(js => js.SharedToId)
             //    .OnDelete(DeleteBehavior.Restrict);
 
             //modelBuilder.Entity<JobReviewers>()
