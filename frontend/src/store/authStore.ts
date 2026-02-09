@@ -1,31 +1,35 @@
 import { create } from 'zustand'
 import api from '../services/axios'
+import { encryptString } from '../utilities/encrypt';
 
 interface AuthState {
-  userId: number | null;
+  empId: string | null;
   token: string | null;
   isAuthenticated: boolean;
   email: string | null;
   isLoading: boolean;
+  name : string | null;
   roles: string[];
-  login: (email: string, EmployeeId: number, roles: string[], token: string) => void;
+  login: (email: string, empId: string, roles: string[], token: string,name: string,) => void;
   logout: () => void;
   initializeAuth: () => Promise<void>;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
-  userId: null,
+  empId: null,
   token: null,
+  name : null,
   isAuthenticated: false,
   email: null,
   isLoading: true,
   roles: [],
 
-  login: (email: string, userId: number, roles: string[], token: string) => {
-    localStorage.setItem('token', token);
+  login: (email: string, empId: string, roles: string[], token: string,name : string) => {
+    localStorage.setItem('token', encryptString(token));
     set({
-      userId,
+      empId,
       token,
+      name,
       isLoading: false,
       roles,
       email,
@@ -36,7 +40,8 @@ const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem('token');
     set({
-      userId: null, 
+      empId: null,
+      name : null,
       token: null,
       isLoading: false,
       roles: [],
@@ -49,9 +54,10 @@ const useAuthStore = create<AuthState>((set) => ({
     const token = localStorage.getItem('token');  
     if (!token) {
       set({
-        userId: null,
+        empId: null,
         token: null,
         isLoading: false,
+        name : null,
         roles: [],
         email: null,
         isAuthenticated: false
@@ -61,22 +67,24 @@ const useAuthStore = create<AuthState>((set) => ({
 
     try {
       const response = await api.get('/auth/verify');
-      const userData = response.data.data;
-      const { token, email, id, roles } = userData;
+      const userData = response.data;
+      const { jwtToken, Email, EmployeeId, Roles,FirstName,LastName } = userData;
       set({
-        userId: id,
-        token: token,
+        empId: EmployeeId,
+        token: jwtToken,
         isLoading: false,
-        roles: roles,
-        email: email,
+        name : FirstName + " " + LastName, 
+        roles: Roles,
+        email: Email,
         isAuthenticated: true
       });
     } catch (err: any) {
       console.error("Authentication failed:", err?.response?.message || err);
       localStorage.removeItem('token');
       set({
-        userId: null,
+        empId: null,
         token: null,
+        name : null,
         isLoading: false,
         roles: [],
         email: null,

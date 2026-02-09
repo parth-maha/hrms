@@ -1,7 +1,7 @@
 import axios from "axios";
 import { decryptString } from "../utilities/encrypt";
 
-const axiosInstance = axios.create({
+const api = axios.create({
 	baseURL: "http://localhost:5000/api/v1",
 	headers: {
 		"Content-Type": "application/json",
@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 });
 
 // Request interceptor: Attach token
-axiosInstance.interceptors.request.use(
+api.interceptors.request.use(
 	(config) => {
 		const token = localStorage.getItem("token");
 		if (token) {
@@ -22,15 +22,33 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor: Logout on 401 or 403
-axiosInstance.interceptors.response.use(
+api.interceptors.response.use(
 	(response) => response,
-	(error) => {
-		if (error.response && [401, 403].includes(error.response.status)) {
-			localStorage.clear(); // Clear all localStorage
-			window.location.href = "/login"; // Redirect to login/root page
-		}
-		return Promise.reject(error);
-	}
+	async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const response = await api.post("/Auth/refresh-token");
+        
+        const { jwtToken } = response.data;
+        
+        localStorage.setItem("accessToken", jwtToken);
+        
+        originalRequest.headers["Authorization"] = `Bearer ${jwtToken}`;
+        
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.error("Session expired", refreshError);
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
 );
 
-export default axiosInstance;
+export default api;

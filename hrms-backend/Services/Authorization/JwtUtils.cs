@@ -72,7 +72,7 @@ namespace hrms_backend.Services.Authorization
             var refreshToken = new RefreshToken
             {
                 Token = getUniqueToken(),
-                Expires = DateTime.UtcNow.AddDays(30),
+                Expires = DateTime.UtcNow.AddDays(15), // number of days
                 Created = DateTime.UtcNow,
                 CreatedByIp = ipAddress
             };

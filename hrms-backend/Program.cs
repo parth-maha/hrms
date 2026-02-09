@@ -1,22 +1,11 @@
+using hrms_backend;
 using hrms_backend.Helpers;
 using hrms_backend.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+var startup = new Startup(builder.Configuration);
 
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
-});
-
-
+startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
@@ -28,7 +17,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-
+//app.UseCors("")
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();

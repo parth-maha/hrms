@@ -11,7 +11,7 @@ namespace hrms_backend.Services
         public EmployeeService(ILogger<EmployeeService> logger, ApplicationDbContext applicationDbContext,JwtUtils jwtUtils)
         {
             _logger = logger;
-            _applicationDbContext = applicationDbContext
+            _applicationDbContext = applicationDbContext;
         }
 
 

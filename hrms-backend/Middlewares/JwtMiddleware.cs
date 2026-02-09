@@ -1,4 +1,5 @@
-﻿using hrms_backend.Helpers;
+﻿using hrms_backend.Data;
+using hrms_backend.Helpers;
 using hrms_backend.Services.Authorization;
 using Microsoft.Extensions.Options;
 
@@ -15,14 +16,15 @@ namespace hrms_backend.Middlewares
             _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService, JwtUtils jwtUtils)
+        public async Task Invoke(HttpContext context, ApplicationDbContext dbContext, JwtUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = jwtUtils.ValidateJwtToken(token);
+
             if (userId != null)
             {
-                // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId.Value);
+            
+                context.Items["User"] = await dbContext.Employees.FindAsync(userId);
             }
 
             await _next(context);

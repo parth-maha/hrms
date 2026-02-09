@@ -4,11 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace hrms_backend.Models.Entities
 {
+    [Table("refresh_tokens")]
     public class RefreshToken
     {
         [Key]
         [JsonIgnore]
         public int Id { get; set; }
+
+        [ForeignKey("EmployeeId")]
+        public virtual Employees Employee { get; set; }
         public string Token { get; set; }
         public DateTime Expires { get; set; }
         public DateTime Created { get; set; }
