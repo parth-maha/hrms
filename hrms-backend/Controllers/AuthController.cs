@@ -1,8 +1,11 @@
 ﻿using hrms_backend.Data;
 using hrms_backend.Models.dto;
+using hrms_backend.Models.Entities;
 using hrms_backend.Services;
 using hrms_backend.Services.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using NLog.Web.LayoutRenderers;
 
 namespace hrms_backend.Controllers
 {
@@ -36,7 +39,7 @@ namespace hrms_backend.Controllers
         [HttpPost("refresh-token")]
         public IActionResult RefreshToken()
         {
-            var refreshTone = Request.Cookies["refresh-token"];
+            var refreshTone = Request.Cookies["refreshToken"];
             if (string.IsNullOrEmpty(refreshTone))
                 return BadRequest(new { message = "Token is required" });
              
@@ -51,11 +54,26 @@ namespace hrms_backend.Controllers
             }
         }
 
+        [HttpGet("verify")]
+        public IActionResult Verify()
+        {
+            var user = (Employees?)HttpContext.Items["User"];
+            if (user == null)
+                return Unauthorized(new { message = "Token is invalid or expired" });
+
+            return Ok(new {
+            employeeId=user.Id.ToString(),
+            firstName = user.FirstName,
+            lastName = user.LastName,
+            email = user.Email,
+            role = user.Roles
+            });
+        }
+
         [HttpPost("revoke-token")]
         public IActionResult RevokeToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            Console.WriteLine(refreshToken);
             if (string.IsNullOrEmpty(refreshToken))
                 return BadRequest(new { message = "Token is required" });
 
@@ -77,7 +95,8 @@ namespace hrms_backend.Controllers
             {
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(15),
-                Secure = true
+                Secure = false,
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax
             };
             Response.Cookies.Append("refreshToken", refreshToken, option);
         }

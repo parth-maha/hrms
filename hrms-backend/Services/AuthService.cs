@@ -86,9 +86,9 @@ namespace hrms_backend.Services
         public void RevokeToken(string token, string ipAddress)
         {
             var user = getUserByRefreshToken(token);
-            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+            var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == token);
 
-            if (!refreshToken.IsActive)
+            if (!refreshToken.IsActive && refreshToken == null)
                 throw new AppException("Invalid token");
 
             // revoke token and save
@@ -121,8 +121,7 @@ namespace hrms_backend.Services
 
         private Employees getUserByRefreshToken(string token)
         {
-            var user = _context.Employees.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
-
+            var user = _context.Employees.Include(u=> u.RefreshTokens).SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
             if (user == null)
                 throw new AppException("Invalid token");
 

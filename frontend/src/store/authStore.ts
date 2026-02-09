@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import api from '../services/axios'
-import { encryptString } from '../utilities/encrypt';
+import { decryptString, encryptString } from '../utilities/encrypt';
 
 interface AuthState {
   empId: string | null;
@@ -37,8 +37,14 @@ const useAuthStore = create<AuthState>((set) => ({
     });
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
+  logout: async () => {
+    try{
+      await api.post("/Auth/revoke-token")
+    }catch(error){
+        console.error("Logout failed on server:",error)
+    }finally{
+      localStorage.removeItem('token');
+      localStorage.removeItem("userDetails")
     set({
       empId: null,
       name : null,
@@ -48,18 +54,15 @@ const useAuthStore = create<AuthState>((set) => ({
       email: null,
       isAuthenticated: false
     });
+    window.location.href="/login"
+    }
   },
 
   initializeAuth: async () => {
     const token = localStorage.getItem('token');  
     if (!token) {
       set({
-        empId: null,
-        token: null,
         isLoading: false,
-        name : null,
-        roles: [],
-        email: null,
         isAuthenticated: false
       });
       return;
@@ -68,10 +71,13 @@ const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await api.get('/Auth/verify');
       const userData = response.data;
+
+      const token =localStorage.getItem("token")
+      const t = token ? decryptString(token) : null
       const { jwtToken, email, employeeId, role,firstName,lastName } = userData;
       set({
         empId: employeeId,
-        token: jwtToken,
+        token: jwtToken || t,
         isLoading: false,
         name : firstName + " " + lastName, 
         roles: role,

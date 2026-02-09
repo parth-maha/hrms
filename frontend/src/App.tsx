@@ -8,9 +8,12 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./utilities/theme";
 import Loader from "./components/ui/RequestLoaders";
 
+const queryClient = new QueryClient();
+
 function App() {
   const initializeAuth = useAuthStore((state: any) => state.initializeAuth);
   const isLoading = useAuthStore((state:any) => state.isLoading)
+  
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
@@ -18,8 +21,6 @@ function App() {
   if(isLoading){
     return <Loader/>
   }
-
-  const queryClient = new QueryClient();
 
   return (
     <>
