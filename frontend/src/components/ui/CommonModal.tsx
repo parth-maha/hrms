@@ -9,7 +9,7 @@ import {
 	useTheme,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import type { CommonModalProps } from "../../types/uiTypes";
+import type { CommonModalProps } from "../../types/ui.types";
 
 const CommonModal: React.FunctionComponent<CommonModalProps> = ({
 	openState,

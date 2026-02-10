@@ -1,6 +1,6 @@
 import { forwardRef, type JSX } from "react";
 import { TextField as TextFieldMUI, type TextFieldProps } from "@mui/material";
-import type { FormComponentError } from "../../types/uiTypes";
+import type { FormComponentError } from "../../types/ui.types";
 
 const TextField = forwardRef<
 	HTMLInputElement,

@@ -1,4 +1,4 @@
-import type { ConfirmBoxPros } from "../../types/uiTypes";
+import type { ConfirmBoxPros } from "../../types/ui.types";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";

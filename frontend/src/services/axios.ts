@@ -1,5 +1,4 @@
 import axios from "axios";
-import { decryptString, encryptString } from "../utilities/encrypt";
 
 const api = axios.create({
 	baseURL: "http://localhost:5225/api/v1",
@@ -14,8 +13,7 @@ api.interceptors.request.use(
 	(config) => {
 		const token = localStorage.getItem("token");
 		if (token) {
-			const decryptToken = decryptString(token);
-			config.headers["Authorization"] = `Bearer ${decryptToken}`;
+			config.headers["Authorization"] = `Bearer ${token}`;
 		}
 		return config;
 	},
@@ -36,7 +34,7 @@ api.interceptors.response.use(
         
         const { jwtToken } = response.data;
         
-        localStorage.setItem("token",encryptString(jwtToken));
+        localStorage.setItem("token",jwtToken);
         
         originalRequest.headers["Authorization"] = `Bearer ${jwtToken}`;
         

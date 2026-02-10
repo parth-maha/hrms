@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import api from "../services/axios";
-import { decryptString, encryptString } from "../utilities/encrypt";
 
 interface AuthState {
   empId: string | null;
@@ -37,7 +36,7 @@ const useAuthStore = create<AuthState>((set) => ({
     token: string,
     name: string,
   ) => {
-    localStorage.setItem("token", encryptString(token));
+    localStorage.setItem("token", token);
     set({
       empId,
       token,
@@ -52,12 +51,12 @@ const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     try {
       window.location.href='/login'
+      localStorage.removeItem("token");
+      localStorage.removeItem("userDetails");
       await api.post("/Auth/revoke-token");
     } catch (error) {
       console.error("Logout failed on server:", error);
     } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userDetails");
       set({
         empId: null,
         name: null,
@@ -90,12 +89,11 @@ const useAuthStore = create<AuthState>((set) => ({
       const userData = response.data;
 
       const token = localStorage.getItem("token");
-      const t = token ? decryptString(token) : null;
       const { jwtToken, email, employeeId, role, firstName, lastName } =
         userData;
       set({
         empId: employeeId,
-        token: jwtToken || t,
+        token: jwtToken || token,
         isLoading: false,
         name: firstName + " " + lastName,
         roles: role,

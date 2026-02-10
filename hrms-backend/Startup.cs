@@ -47,35 +47,12 @@ namespace hrms_backend
             });
             services.AddSingleton<ILoggerProvider, NLogLoggerProvider>();
 
-            //var rabbitMqConfig = Configuration.GetSection("RabbitMq").Get<RabbitMqConfig>();
-
-            //services.AddMassTransit(x =>
-            //{
-            //    x.AddConsumer<EmailConsumer>();
-
-            //    x.UsingRabbitMq((context, cfg) =>
-            //    {
-            //        cfg.Host($"rabbitmq://{rabbitMqConfig.Host}:{rabbitMqConfig.Port}", h =>
-            //        {
-            //            h.Username(rabbitMqConfig.Username);
-            //            h.Password(rabbitMqConfig.Password);
-            //        });
-
-            //        cfg.ReceiveEndpoint("email-queue", e =>
-            //        {
-            //            e.ConfigureConsumer<EmailConsumer>(context);
-
-            //            e.UseMessageRetry(r => r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5)));
-            //        });
-            //    });
-            //});
-
             services.AddScoped<JwtUtils>();
             services.AddScoped<AuthService>();
             services.AddScoped<IJobRepository, JobRepository>();
             services.AddScoped<JobService>();
-
-            //services.AddScoped<IRabbitMqService, RabbitMqService>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<EmployeeService>();
 
             //services.AddScoped<EmailService>();
 

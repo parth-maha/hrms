@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace hrms_backend.Models.Entities.Jobs
 {
@@ -13,6 +14,7 @@ namespace hrms_backend.Models.Entities.Jobs
         [Column("fk_job_id")]
         public Guid JobId { get; set; }
         [ForeignKey("JobId")]
+        [JsonIgnore]
         public virtual Jobs Job { get; set;  }
 
         [Column("reviewer_id")]

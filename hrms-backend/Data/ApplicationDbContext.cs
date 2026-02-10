@@ -105,6 +105,11 @@ namespace hrms_backend.Data
                 .WithMany()
                 .HasForeignKey(j => j.PocId)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            //job code will be unique 
+            modelBuilder.Entity<Jobs>()
+                .HasIndex(j => j.JobCode)
+                .IsUnique();
 
             // referrals belong to a job
             modelBuilder.Entity<Referrals>()

@@ -29,7 +29,7 @@ namespace hrms_backend.Services.Authorization
             var tokenDetails = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("employeeId", employee.Id.ToString())}),
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddMinutes(300),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.Audience
@@ -60,7 +60,6 @@ namespace hrms_backend.Services.Authorization
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var employeeId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "employeeId").Value);
-                Console.WriteLine($"EmployeeID: {employeeId}");
                 return employeeId;
             }
             catch

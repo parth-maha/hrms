@@ -3,6 +3,7 @@ using hrms_backend.Data;
 using hrms_backend.Models.dto.Jobs;
 using hrms_backend.Models.Entities.Jobs;
 using hrms_backend.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace hrms_backend.Services
 {
@@ -17,9 +18,10 @@ namespace hrms_backend.Services
             _jobRepo = jobRepository;
         }
 
-        public async Task<IReadOnlyList<Jobs>> GetAllJobs()
+        public async Task<IReadOnlyList<JobDto>> GetAllJobs()
         {
-            return await _jobRepo.GetAllJobsAsync();
+            var jobs = await _jobRepo.GetAllJobsAsync();
+            return jobs.Select(mapToDto).ToList();
         }
 
         public async Task<Jobs> CreateJob(CreateJobDTO dto, Guid PostedById)
@@ -29,11 +31,11 @@ namespace hrms_backend.Services
                 Id = Guid.NewGuid(),
                 Title = dto.Title,
                 AttachedFile = dto.AttachedFile,
+                JobCode = dto.JobCode,
                 Description = dto.Description,
                 PostedById = PostedById,
                 PostedAt = DateTime.Now,
-                IsOpen = dto.IsOpen,
-                PocId = dto.PocId,
+                PocId = dto.PocId
             };
 
             await _jobRepo.AddJobAsync(job);
@@ -49,11 +51,10 @@ namespace hrms_backend.Services
 
                 await _jobRepo.AddJobReviewerAsync(reviewers);
             }
-
             return job;
         }
 
-        public async Task<Jobs> EditJob(Guid jobId, CreateJobDTO jobDTO)
+        public async Task<JobDto> EditJob(Guid jobId, CreateJobDTO jobDTO)
         {
             var job = await _jobRepo.GetJobByIdAsync(jobId);
 
@@ -64,7 +65,6 @@ namespace hrms_backend.Services
             job.JobCode = jobDTO.JobCode;
             job.PocId = jobDTO.PocId;
             job.AttachedFile = jobDTO.AttachedFile;
-            job.IsOpen = jobDTO.IsOpen;
 
             await _jobRepo.UpdateJobAsync(job);
 
@@ -82,12 +82,13 @@ namespace hrms_backend.Services
                 await _jobRepo.AddJobReviewerAsync(reviewers);
             }
 
-            return job;
+            return mapToDto(job);
         }
 
-        public async Task DeleteJob(Guid jobId)
+        [HttpDelete("/{id}")]
+        public async Task DeleteJob(Guid id)
         {
-            var job = await _jobRepo.GetJobByIdAsync(jobId);
+            var job = await _jobRepo.GetJobByIdAsync(id);
             if (job == null) throw new Exception("Job not found");
 
             await _jobRepo.DeleteJobAsync(job);
@@ -119,6 +120,26 @@ namespace hrms_backend.Services
             };
 
             await _jobRepo.AddReferralAsync(referral);
+        }
+
+        private JobDto mapToDto(Jobs job)
+        {
+            return new JobDto
+            {
+                JobId = job.Id,
+                Title = job.Title,
+                Description = job.Description,
+                PocId = job.PocId,
+                PocName = $"{job.Poc.FirstName} {job.Poc.LastName}",
+                JobCode = job.JobCode,
+                PostedAt = job.PostedAt,
+                AttachedFile = job.AttachedFile,
+                Reviewers = job.JobReviewers.Select(jr => new ReviewerDto
+                {
+                    Id = jr.ReviewerId,
+                    Name = $"{jr.Reviewer.FirstName} {jr.Reviewer.LastName}"
+                }).ToList(),
+            };
         }
     }
 }

@@ -36,7 +36,7 @@ namespace hrms_backend.Models.Entities
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        public DateTime JoiningDate;
+        public DateTime JoiningDate { get; set; }
 
         [Required]
         public string? Phone { get; set; }
