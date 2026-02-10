@@ -61,12 +61,14 @@ namespace hrms_backend.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Token is invalid or expired" });
 
-            return Ok(new {
-            employeeId=user.Id.ToString(),
-            firstName = user.FirstName,
-            lastName = user.LastName,
-            email = user.Email,
-            role = user.Roles
+            return Ok(new
+            {
+                employeeId = user.Id.ToString(),
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                email = user.Email,
+                role = user.Roles,
+                jwtToken = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()
             });
         }
 

@@ -1,5 +1,7 @@
 ﻿using hrms_backend.Data;
 using hrms_backend.Helpers;
+using hrms_backend.Repositories;
+using hrms_backend.Repositories.Implementation;
 using hrms_backend.Services;
 using hrms_backend.Services.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +34,7 @@ namespace hrms_backend
                         policy.WithOrigins("http://localhost:3000")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
-                              .AllowCredentials(); 
+                              .AllowCredentials();
                     });
             });
 
@@ -70,6 +72,8 @@ namespace hrms_backend
 
             services.AddScoped<JwtUtils>();
             services.AddScoped<AuthService>();
+            services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<JobService>();
 
             //services.AddScoped<IRabbitMqService, RabbitMqService>();
 

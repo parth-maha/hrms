@@ -50,7 +50,6 @@ namespace hrms_backend.Services
             //    );
 
             _logger.LogInformation($"Email sent:{employee.Email} - Refresh Token Added : {refreshToken}");
-            Console.WriteLine(employee.Roles.Role.ToString());
             return new LoginResponse(employee.Id.ToString(),employee.FirstName,employee.LastName,employee.Email, employee.Roles.Role.ToString(), jwtToken, refreshToken.Token);
         }
         
@@ -121,7 +120,7 @@ namespace hrms_backend.Services
 
         private Employees getUserByRefreshToken(string token)
         {
-            var user = _context.Employees.Include(u=> u.RefreshTokens).SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
+            var user = _context.Employees.Include(u=> u.RefreshTokens).Include(u => u.Roles).SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
             if (user == null)
                 throw new AppException("Invalid token");
 

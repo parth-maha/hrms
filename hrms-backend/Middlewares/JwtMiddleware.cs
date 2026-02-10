@@ -9,7 +9,6 @@ namespace hrms_backend.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
-
         public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
             _next = next;
@@ -21,9 +20,8 @@ namespace hrms_backend.Middlewares
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = jwtUtils.ValidateJwtToken(token);
 
-            if (userId != null)
+            if (userId != Guid.Empty)
             {
-            
                 context.Items["User"] = await dbContext.Employees.FindAsync(userId);
             }
 

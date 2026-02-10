@@ -18,11 +18,8 @@ namespace hrms_backend.Models.Entities.Jobs
         [Column("shared_by")]
         public Guid SharedById { get; set;  }
         [ForeignKey("SharedById")]
-        public virtual Employees SharedBy { get; set;  }
+        public virtual Employees SharedBy { get; set;}
 
-        [Column("shared_to")]
-        public Guid SharedToId{ get; set; }
-        [ForeignKey("SharedToId")]
-        public virtual Employees SharedTo{ get; set; }
+        public string SharedTo{ get; set; }
     }
 }

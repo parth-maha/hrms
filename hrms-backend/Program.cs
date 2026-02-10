@@ -1,9 +1,26 @@
 using hrms_backend;
-using hrms_backend.Helpers;
 using hrms_backend.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var startup = new Startup(builder.Configuration);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    };
+                });
 
 startup.ConfigureServices(builder.Services);
 
@@ -22,7 +39,6 @@ app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();

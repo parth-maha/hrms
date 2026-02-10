@@ -13,7 +13,7 @@ namespace hrms_backend.Models.Entities.Jobs
         [Column("job_id")]
         public string JobCode { get; set; }
 
-        public string Title;
+        public string Title { get; set; }
 
         public string Description { get; set;  }
 

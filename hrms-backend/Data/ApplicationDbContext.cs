@@ -92,41 +92,61 @@ namespace hrms_backend.Data
 
             // ================== JOBS ==================
 
-            //modelBuilder.Entity<Jobs>()
-            //    .HasOne(j => j.PostedBy)
-            //    .WithMany()
-            //    .HasForeignKey(j => j.PostedById)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // job is posted by a emp
+            modelBuilder.Entity<Jobs>()
+                .HasOne(j => j.PostedBy)
+                .WithMany()
+                .HasForeignKey(j => j.PostedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<Jobs>()
-            //    .HasOne(j => j.Poc)
-            //    .WithMany()
-            //    .HasForeignKey(j => j.PocId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // job has a poc
+            modelBuilder.Entity<Jobs>()
+                .HasOne(j => j.Poc)
+                .WithMany()
+                .HasForeignKey(j => j.PocId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<Referrals>()
-            //    .HasOne(r => r.RefferedBy)
-            //    .WithMany()
-            //    .HasForeignKey(r => r.RefferedBy)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // referrals belong to a job
+            modelBuilder.Entity<Referrals>()
+                .HasOne(r => r.Job)
+                .WithMany(r=> r.Referrals)
+                .HasForeignKey(r => r.JobId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<Referrals>()
-            //    .HasOne(r => r.Job)
-            //    .WithMany(j => j.Referrals)
-            //    .HasForeignKey(r => r.JobId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // referral -> employee
+            modelBuilder.Entity<Referrals>()
+                .HasOne(r => r.RefferedBy)
+                .WithMany()
+                .HasForeignKey(r => r.ReferralById)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<JobShared>()
-            //    .HasOne(js => js.SharedBy)
-            //    .WithMany()
-            //    .HasForeignKey(js => js.SharedById)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // job share -> job
+            modelBuilder.Entity<JobShared>()
+                .HasOne(js => js.Job)
+                .WithMany(js => js.JobShared)
+                .HasForeignKey(js => js.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<JobReviewers>()
-            //    .HasOne(jr => jr.Reviewer)
-            //    .WithMany()
-            //    .HasForeignKey(jr => jr.ReviewerId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // job shared -> employee
+            modelBuilder.Entity<JobShared>()
+                .HasOne(js => js.SharedBy)
+                .WithMany()
+                .HasForeignKey(js => js.SharedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Job reviewers -> job 
+            modelBuilder.Entity<JobReviewers>()
+                .HasOne(jr => jr.Job)
+                .WithMany(jr => jr.JobReviewers)
+                .HasForeignKey(jr => jr.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // job reviewers -> employee
+            modelBuilder.Entity<JobReviewers>()
+                .HasOne(jr => jr.Reviewer)
+                .WithMany()
+                .HasForeignKey(jr => jr.ReviewerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // ================== GAMES ==================
 

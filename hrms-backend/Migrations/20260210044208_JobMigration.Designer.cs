@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hrms_backend.Data;
 
@@ -11,9 +12,11 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260210044208_JobMigration")]
+    partial class JobMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,15 +147,17 @@ namespace hrms_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("shared_by");
 
-                    b.Property<string>("SharedTo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("SharedToId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("shared_to");
 
                     b.HasKey("Id");
 
                     b.HasIndex("JobId");
 
                     b.HasIndex("SharedById");
+
+                    b.HasIndex("SharedToId");
 
                     b.ToTable("job_shares");
                 });
@@ -356,9 +361,17 @@ namespace hrms_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "SharedTo")
+                        .WithMany()
+                        .HasForeignKey("SharedToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Job");
 
                     b.Navigation("SharedBy");
+
+                    b.Navigation("SharedTo");
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.Jobs", b =>
