@@ -1,4 +1,4 @@
-import useAuthStore from '../store/authStore'
+import useAuthStore from '../store/auth.store'
 
 function Home() {
   const {empId, name,email,roles} = useAuthStore();

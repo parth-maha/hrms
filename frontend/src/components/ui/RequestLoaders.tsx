@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { usePromiseTracker } from "react-promise-tracker";
-import LoaderSpinner from "../../assets/roima.svg";
+import LoaderSpinner from "../../assets/favicon.ico";
 
 const Loader = (): false | JSX.Element => {
   const { promiseInProgress } = usePromiseTracker();
@@ -79,8 +79,8 @@ const styles = {
     height: '60px',
   },
   image: {
-    maxWidth: '50%',
-    height: '50%',
+    maxWidth: '100%',
+    height: '100%',
     verticalAlign: 'middle' as const,
   },
 };

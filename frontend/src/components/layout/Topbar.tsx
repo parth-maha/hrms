@@ -2,7 +2,7 @@ import { Notifications } from "@mui/icons-material";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { useLocation} from 'react-router-dom';
-import useAuthStore from "../../store/authStore";
+import useAuthStore from "../../store/auth.store";
 
 interface TopBarProps {
   user: {

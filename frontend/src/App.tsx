@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useAuthStore from "./store/authStore";
+import useAuthStore from "./store/auth.store";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes/AppRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
