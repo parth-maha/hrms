@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 
 import TextField from "./TextField";
-import type { CustomAutoCompleteWoControlProps } from "../../types/uiTypes";
+import type { CustomAutoCompleteWoControlProps } from "../../types/ui.types";
 import type { JSX, ReactNode } from "react";
 
 const AutocompleteWoControl = <

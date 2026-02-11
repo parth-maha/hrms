@@ -6,7 +6,7 @@ import {
 	Home,
 } from "@mui/icons-material";
 import ModeOfTravelIcon from '@mui/icons-material/ModeOfTravel';
-import type { NavItem } from "../../types/uiTypes";
+import type { NavItem } from "../../types/ui.types";
 
 
 // === NAVIGATION STRUCTURE ===

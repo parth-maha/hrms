@@ -11,7 +11,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import GamesIcon from "@mui/icons-material/Games";
 import { theme } from "../../utilities/theme";
 import icon from "../../assets/favicon.ico";
-import type { SidebarNavItem } from "../../types/uiTypes";
+import type { SidebarNavItem } from "../../types/ui.types";
 // import type { DashboardData } from "../../utilities/types";
 
 interface SidebarProps {

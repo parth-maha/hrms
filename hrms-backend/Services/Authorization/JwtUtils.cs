@@ -18,7 +18,7 @@ namespace hrms_backend.Services.Authorization
 
         public JwtUtils (IOptions<AppSettings> appSettings, ApplicationDbContext applicationDbContext)
         {
-            _appSettings = (AppSettings?)appSettings;
+            _appSettings = appSettings.Value;
             _applicatioDbContext = applicationDbContext;
         }
 
@@ -29,8 +29,10 @@ namespace hrms_backend.Services.Authorization
             var tokenDetails = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("employeeId", employee.Id.ToString())}),
-                Expires = DateTime.UtcNow.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddMinutes(300),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _appSettings.Issuer,
+                Audience = _appSettings.Audience
             };
 
             var token = tokenHandler.CreateToken(tokenDetails);
@@ -51,13 +53,13 @@ namespace hrms_backend.Services.Authorization
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
+                    ValidIssuer = _appSettings.Issuer,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
                 },out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var employeeId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "employeeId").Value);
-
                 return employeeId;
             }
             catch
@@ -72,7 +74,7 @@ namespace hrms_backend.Services.Authorization
             var refreshToken = new RefreshToken
             {
                 Token = getUniqueToken(),
-                Expires = DateTime.UtcNow.AddDays(30),
+                Expires = DateTime.UtcNow.AddDays(15), // number of days
                 Created = DateTime.UtcNow,
                 CreatedByIp = ipAddress
             };

@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { usePromiseTracker } from "react-promise-tracker";
-import LoaderSpinner from "../../assets/roima.svg";
+import LoaderSpinner from "../../assets/favicon.ico";
 
 const Loader = (): false | JSX.Element => {
   const { promiseInProgress } = usePromiseTracker();
@@ -51,7 +51,7 @@ const styles = {
     position: 'absolute' as const,
     border: '1px solid transparent',
     borderRadius: '50%',
-    borderTopColor: '#1d8cbe',
+    borderTopColor: '#3E9f34',
     animation: 'loaderSpinner 2s linear infinite',
   },
   loader1: {
@@ -80,7 +80,7 @@ const styles = {
   },
   image: {
     maxWidth: '100%',
-    height: 'auto',
+    height: '100%',
     verticalAlign: 'middle' as const,
   },
 };

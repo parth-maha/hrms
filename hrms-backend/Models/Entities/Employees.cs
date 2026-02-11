@@ -1,12 +1,15 @@
 ﻿using hrms_backend.Models.Constants;
+using hrms_backend.Models.Entities.Travel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace hrms_backend.Models.Entities
 {
+    [Table("employees")]
     public class Employees
     {
         [Key]
+        [Column("pk_employee_id")]
         public Guid Id { get; set; }
 
         [Required]
@@ -33,31 +36,36 @@ namespace hrms_backend.Models.Entities
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
-        public DateTime JoiningDate;
+        public DateTime JoiningDate { get; set; }
 
         [Required]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
-        public Gender Gender { get; set; }
+        public string? Gender { get; set; }
 
-        public string PanNo { get; set; }
+        public string? PanNo { get; set; }
 
 
-        public string AadharNo { get; set; }
+        public string? AadharNo { get; set; }
 
-        public BloodGroup BloodGroup { get; set; }
+        public string? BloodGroup { get; set; }
 
-        [ForeignKey("manager_id")]
-        public Guid? ManagerId;
+        [ForeignKey("fk_manager_id")]
+        public Guid? ManagerId { get; set; }
+        [ForeignKey("ManagerId")]
+        public virtual Employees? Manager { get; set; }
 
-        public string BankName { get; set; }
-        public string BankAccNo { get; set; }
-        public string BankIFSC { get; set; }
-        public string BankBranch { get; set; }
+        public string? BankName { get; set; }
+        public string? BankAccNo { get; set; }
+        public string? BankIFSC { get; set; }
+        public string? BankBranch { get; set; }
         
-        public Guid DepartmentId { get; set; }
-        public Guid PositionId { get; set; }
+        public string? Department { get; set; }
+        public string? Position { get; set; }
 
-        public List<RefreshToken> RefreshTokens { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        //public ICollection<Post> Posts { get; set; }
+        //public ICollection<TravelExpense> TravelExpenses { get; set; }
+        //public ICollection<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }
     }
 }
