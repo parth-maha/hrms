@@ -1,9 +1,11 @@
 ﻿using hrms_backend.Data;
 using hrms_backend.Helpers;
+using hrms_backend.Models.Events;
 using hrms_backend.Repositories;
 using hrms_backend.Repositories.Implementation;
 using hrms_backend.Services;
 using hrms_backend.Services.Authorization;
+using hrms_backend.Services.CloudinaryService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
@@ -23,8 +25,9 @@ namespace hrms_backend
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.Configure<EmailConfig>(Configuration.GetSection("Smtp"));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<CloudinaryConfig>(Configuration.GetSection("Cloudinary"));
 
             services.AddCors(options =>
             {
@@ -47,6 +50,7 @@ namespace hrms_backend
             });
             services.AddSingleton<ILoggerProvider, NLogLoggerProvider>();
 
+            services.AddScoped<CloudinaryServiceImpl>();
             services.AddScoped<JwtUtils>();
             services.AddScoped<AuthService>();
             services.AddScoped<IJobRepository, JobRepository>();
@@ -54,8 +58,8 @@ namespace hrms_backend
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<EmployeeService>();
 
-            //services.AddScoped<EmailService>();
-
+            services.AddScoped<EmailService>();
+            services.AddHttpClient();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {

@@ -6,7 +6,7 @@
         public string JobCode { get; set; }
         public string Description { get; set; }
         public Guid PocId { get; set; }
-        public string? AttachedFile { get; set; }
+        public IFormFile AttachedFile { get; set; }
         public List<Guid> ReviewerIds { get; set; } = new List<Guid>();
     }
 }
