@@ -26,49 +26,36 @@ const rolePermissions: Record<Role, Permission[]> = {
 };
 
 export const hasPermission = (
-  userRoles: Role[],
+  userRole: string | null,
   permission: Permission
 ): boolean => {
-  if (!userRoles || userRoles.length === 0) return false;
-  
-  return userRoles.some(role => {
-    const permissions = rolePermissions[role as Role] || [];
-    return permissions.includes(permission);
-  });
+  if (!userRole) return false;
+
+  const permissions = rolePermissions[userRole as Role] || []
+  return permissions.includes(permission)
 };
 
 export const hasAnyPermission = (
-  userRoles: Role[],
+  userRoles: string | null,
   permissions: Permission[]
 ): boolean => {
   return permissions.some(permission => hasPermission(userRoles, permission));
 };
 
 export const hasAllPermissions = (
-  userRoles: Role[],
+  userRole: string | null,
   permissions: Permission[]
 ): boolean => {
-  return permissions.every(permission => hasPermission(userRoles, permission));
+  return permissions.every(permission => hasPermission(userRole, permission));
 };
 
-export const getUserPermissions = (userRoles: Role[]): Permission[] => {
-  if (!userRoles || userRoles.length === 0) return [];
+export const getUserPermissions = (userRole: string | null): Permission[] => {
+  if (!userRole ) return [];
   
-  const allPermissions = new Set<Permission>();
-  userRoles.forEach(role => {
-    const permissions = rolePermissions[role as Role] || [];
-    permissions.forEach(p => allPermissions.add(p));
-  });
-  
-  return Array.from(allPermissions);
+  return rolePermissions[userRole as Role] || []
 };
 
-export const hasRole = (userRoles: Role[], role: Role): boolean => {
-  if (!userRoles || userRoles.length === 0) return false;
-  return userRoles.includes(role);
-};
-
-export const hasAnyRole = (userRoles: Role[], roles: Role[]): boolean => {
-  if (!userRoles || userRoles.length === 0) return false;
-  return roles.some(role => userRoles.includes(role));
+export const hasRole = (userRole: string | null, role: Role): boolean => {
+  if (!userRole) return false;
+  return userRole===role;
 };

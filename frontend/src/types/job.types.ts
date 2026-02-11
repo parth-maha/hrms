@@ -25,7 +25,7 @@ export interface JobFormData {
   JobCode : string
   Description : string
   PocId : string;
-  AttachedFile? : string;
+  AttachedFile? : File | null | string;
   Reviewers : string[];
 }
 
@@ -38,7 +38,7 @@ export interface ShareJobDTO{
 export interface ReferJobDTO{
   JobId: string;
   ToName : string;
-  ToCvUrl : string;
+  ToCv : File;
   ToEmail : string;
   ReferredBy : string;
 }
