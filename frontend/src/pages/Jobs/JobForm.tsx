@@ -4,14 +4,14 @@ import {
   useEmployeeOptions,
   useUpdateJob,
 } from "../../services/queries/job.queries";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, Watch } from "react-hook-form";
 import TextField from "../../components/ui/TextField";
-import AutocompleteWoControl from "../../components/ui/AutoCompleteWoControl";
 import CircularLoader from "../../components/ui/CircularLoader";
 import { useEffect } from "react";
 import Button from "../../components/ui/Button";
-import Tooltip from "../../components/ui/Tooltip";
-import { InfoOutlined } from "@mui/icons-material";
+import { MenuItem, Typography } from "@mui/material";
+import IconButton from "../../components/ui/IconButton";
+import { Close } from "@mui/icons-material";
 
 interface JobFormProps {
   initialData?: Job;
@@ -30,16 +30,20 @@ const JobForm = ({ initialData, onSuccess, onCancel }: JobFormProps) => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue
   } = useForm<JobFormData>({
     defaultValues: {
       Title: "",
       JobCode: "",
       Description: "",
-      AttachedFile: "",
+      AttachedFile: null,
       PocId: "",
       Reviewers: [],
     },
   });
+
+  const attachedFile = watch("AttachedFile");
 
   useEffect(() => {
     if (initialData) {
@@ -47,7 +51,7 @@ const JobForm = ({ initialData, onSuccess, onCancel }: JobFormProps) => {
         Title: initialData.title,
         JobCode: initialData.jobCode,
         Description: initialData.description,
-        AttachedFile: initialData.attachedFile || "",
+        AttachedFile: initialData.attachedFile || null,
         PocId: initialData.pocId,
         Reviewers: initialData.reviewers?.map((r) => r.id) || [],
       });
@@ -65,139 +69,192 @@ const JobForm = ({ initialData, onSuccess, onCancel }: JobFormProps) => {
   const isLoading = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <>
-      <h2 className="text-xl font-bold mb-2 text-gray-800">
-        {initialData ? "Edit Job" : "Create New Job"}
-      </h2>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-6 bg-white rounded-lg  border border-gray-300"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="col-span-1">
-            <Controller
-              name="Title"
-              control={control}
-              rules={{ required: "Title is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Job Title"
-                  errors={errors}
-                  errorKey="Title"
-                  fullWidth
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1">
-            <Controller
-              name="JobCode"
-              control={control}
-              rules={{ required: "Job Code is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Job Code"
-                  errors={errors}
-                  errorKey="JobCode"
-                  disabled={!!initialData}
-                  fullWidth
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1 md:col-span-2">
-            <Controller
-              name="Description"
-              control={control}
-              rules={{ required: "Description is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Description"
-                  multiline
-                  rows={4}
-                  errors={errors}
-                  errorKey="Description"
-                  fullWidth
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1">
-            <Controller
-              name="PocId"
-              control={control}
-              rules={{ required: "POC is required" }}
-              render={({ field: { onChange, value } }) => (
-                <AutocompleteWoControl
-                  label="Point of Contact"
-                  options={employees.map((e) => e.name)}
-                  value={initialData?.pocId}
-                  onChange={(_, newValue: any) => onChange(newValue.id)}
-                  error={errors.PocId}
-                  helperText={errors.PocId?.message}
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1">
-            <Controller
-              name="Reviewers"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <AutocompleteWoControl
-                  label="Reviewers"
-                  multiple={true}
-                  options={employees.map((e) => e.name)}
-                  value={initialData?.reviewers?.map((m) => m.id)}
-                  onChange={(_, newValue: any) =>
-                    onChange(newValue.map((v: any) => v.id))
-                  }
-                  error={errors.Reviewers}
-                  helperText={errors.Reviewers?.message}
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1 md:col-span-2">
-            <Controller
-              name="AttachedFile"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Document"
-                  errors={errors}
-                  errorKey="AttachedFile"
-                  fullWidth
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-1 md:col-span-2 flex justify-end gap-3 mt-4">
-            <Button variant="outlined" color="inherit" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={isLoading}
-              className="bg-blue-600"
-            >
-              {isLoading ? <CircularLoader /> : "Save Job"}
-            </Button>
-          </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-3 bg-white rounded-lg  "
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="col-span-1">
+          <Controller
+            name="Title"
+            control={control}
+            rules={{ required: "Title is required" }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Job Title"
+                errors={errors}
+                errorKey="Title"
+                fullWidth
+              />
+            )}
+          />
         </div>
-      </form>
-    </>
+
+        <div className="col-span-1">
+          <Controller
+            name="JobCode"
+            control={control}
+            rules={{ required: "Job Code is required" }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Job Code"
+                errors={errors}
+                errorKey="JobCode"
+                disabled={!!initialData}
+                fullWidth
+              />
+            )}
+          />
+        </div>
+
+        <div className="col-span-1 md:col-span-2">
+          <Controller
+            name="Description"
+            control={control}
+            rules={{ required: "Description is required" }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Description"
+                multiline
+                rows={4}
+                errors={errors}
+                errorKey="Description"
+                fullWidth
+              />
+            )}
+          />
+        </div>
+
+        <div className="col-span-1">
+          <Controller
+            name="PocId"
+            control={control}
+            rules={{ required: "POC is required" }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                select
+                label="Point of contact"
+                errors={errors}
+                errorKey="PocId"
+                fullWidth
+              >
+                {employees.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </div>
+
+        <div className="col-span-1">
+          <Controller
+            name="Reviewers"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                select
+                label="Reviewers"
+                errors={errors}
+                errorKey="Reviewers"
+                fullWidth
+                SelectProps={{
+                  multiple: true,
+                }}
+              >
+                {employees.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </div>
+
+        <div className="col-span-1 md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Attached Document
+          </label>
+
+          {attachedFile ? (
+            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-100 rounded-lg">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="flex flex-col min-w-0">
+                  <a
+                    href={
+                      typeof attachedFile === "string"
+                        ? attachedFile
+                        : URL.createObjectURL(attachedFile)
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-blue-600 hover:underline truncate"
+                  >
+                  </a>
+                </div>
+              </div>
+
+              {/* Remove Button */}
+              <button
+                type="button"
+                onClick={() => setValue("AttachedFile", "")}
+                className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                title="Remove file"
+              >
+                <Close />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center w-full">
+              <label
+                htmlFor="file-upload"
+                className="flex flex-col items-center justify-center w-full h-32 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <p className="mb-2 text-sm text-gray-500">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">PDF, DOCX (MAX. 5MB)</p>
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setValue("AttachedFile", file, { shouldValidate: true });
+                    }
+                  }}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
+        <div className="col-span-1 md:col-span-2 flex justify-end gap-3 mt-4">
+          <Button color="error" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isLoading}
+            className="bg-blue-600"
+          >
+            {isLoading ? <CircularLoader /> : "Save Job"}
+          </Button>
+        </div>
+      </div>
+    </form>
   );
 };
 

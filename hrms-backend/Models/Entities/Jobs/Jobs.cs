@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace hrms_backend.Models.Entities.Jobs
 {
@@ -33,8 +34,11 @@ namespace hrms_backend.Models.Entities.Jobs
         [ForeignKey("PocId")]
         public virtual Employees Poc{ get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Referrals> Referrals { get; set;  } = new List<Referrals>();
+        [JsonIgnore]
         public virtual ICollection<JobShared> JobShared { get; set; } = new List<JobShared>();
+        [JsonIgnore]
         public virtual ICollection<JobReviewers> JobReviewers { get; set; } = new List<JobReviewers>();
     }
 }

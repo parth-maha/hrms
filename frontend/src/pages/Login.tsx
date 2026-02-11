@@ -76,6 +76,7 @@ const Login: React.FC<{}> = () => {
           <Button
             id="login"
             type="submit"
+            variant="contained"
             onClick={handleLogin}
             disabled={isPending}
             fullWidth

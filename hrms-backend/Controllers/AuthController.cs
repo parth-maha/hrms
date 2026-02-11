@@ -67,7 +67,7 @@ namespace hrms_backend.Controllers
                 firstName = user.FirstName,
                 lastName = user.LastName,
                 email = user.Email,
-                role = user.Roles,
+                role = user.Roles.Role,
                 jwtToken = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()
             });
         }

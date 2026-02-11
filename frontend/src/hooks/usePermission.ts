@@ -9,30 +9,30 @@ import {
 } from '../utilities/permissions';
 
 export const usePermissions = () => {
-  const roles = useAuthStore((state: any) => state.roles);
+  const role = useAuthStore((state: any) => state.roles);
 
   const permissions = useMemo(() => ({
     // Check if user has a specific permission
     can: (permission: Permission): boolean => {
-      return hasPermission(roles, permission);
+      return hasPermission(role, permission);
     },
 
     // Check if user has any of the specified permissions
     canAny: (permissions: Permission[]): boolean => {
-      return hasAnyPermission(roles, permissions);
+      return hasAnyPermission(role, permissions);
     },
 
     // Check if user has all of the specified permissions
     canAll: (permissions: Permission[]): boolean => {
-      return hasAllPermissions(roles, permissions);
+      return hasAllPermissions(role, permissions);
     },
 
     // Get all user permissions
     all: (): Permission[] => {
-      return getUserPermissions(roles);
+      return getUserPermissions(role);
     },
 
-  }), [roles]);
+  }), [role]);
 
   return permissions;
 };

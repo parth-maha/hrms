@@ -22,7 +22,6 @@ const CommonModal: React.FunctionComponent<CommonModalProps> = ({
 	sizes = ["80%", "70%", "60%", "50%"],
 	children,
 	withCloseButton = true,
-	contentPadding,
 	styles,
 }) => {
 	const theme = useTheme();
@@ -68,9 +67,9 @@ const CommonModal: React.FunctionComponent<CommonModalProps> = ({
 			}}
 		>
 			<DialogTitle>
-				<Typography variant="h4" >
+				<div className="text-2xl text-black">
 					{title}
-				</Typography>
+				</div>
 				{title2 && (
 					<Typography variant="body2" color="textSecondary">
 						{title2}

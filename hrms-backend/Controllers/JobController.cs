@@ -26,7 +26,7 @@ namespace hrms_backend.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateJob([FromBody] CreateJobDTO dto)
+        public async Task<IActionResult> CreateJob([FromForm] CreateJobDTO dto)
         {
             try
             {
@@ -42,11 +42,12 @@ namespace hrms_backend.Controllers
             }
         }
         [HttpPut("edit/{id}")]
-        public async Task<IActionResult> EditJob(Guid id, [FromBody] CreateJobDTO dto)
+        public async Task<IActionResult> EditJob(Guid id, [FromForm] CreateJobDTO dto)
         {
             try
             {
-                var job = await _jobService.EditJob(id, dto);
+                var user = (Employees?)HttpContext.Items["User"];
+                var job = await _jobService.EditJob(id, dto,user.EmployeeId);
                 return Ok(job);
             }catch(Exception ex)
             {
@@ -59,7 +60,8 @@ namespace hrms_backend.Controllers
         {
             try
             {
-                await _jobService.DeleteJob(id);
+                var user = (Employees?)HttpContext.Items["User"];
+                await _jobService.DeleteJob(id,user.EmployeeId);
                 return Ok(new {message = "Job Deleted"});
             }catch(Exception ex)
             {
@@ -82,8 +84,12 @@ namespace hrms_backend.Controllers
         }
 
         [HttpPost("refer")]
-        public async Task<IActionResult> ReferJob([FromBody] ReferJobDTO dto)
+        public async Task<IActionResult> ReferJob([FromForm] ReferJobDTO dto)
         {
+            if(dto.ToCv == null || dto.ToCv.Length == 0)
+            {
+                return BadRequest("File not selected or is empty.");
+            }
             try
             {
                 await _jobService.ReferJob(dto);

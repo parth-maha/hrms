@@ -1,6 +1,7 @@
 ﻿using hrms_backend.Data;
 using hrms_backend.Helpers;
 using hrms_backend.Services.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace hrms_backend.Middlewares
@@ -22,7 +23,7 @@ namespace hrms_backend.Middlewares
 
             if (userId != Guid.Empty)
             {
-                context.Items["User"] = await dbContext.Employees.FindAsync(userId);
+                context.Items["User"] = await dbContext.Employees.Include(u=> u.Roles).FirstOrDefaultAsync(u => u.Id==userId);
             }
 
             await _next(context);

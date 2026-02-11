@@ -7,7 +7,7 @@ export const useJobs = () =>{
     return useQuery({
         queryKey : ['jobs'],
         queryFn : getJobs,
-        staleTime : 3600
+        staleTime : 10 * 60 * 1000 //10 min
     })
 }
 
@@ -15,7 +15,7 @@ export const useEmployeeOptions = () =>{
     return useQuery({
         queryKey : ['employees-list'],
         queryFn:getEmployeeOptions,
-        staleTime: 3600
+        staleTime: 60 * 60 * 1000 // 1hr
     })
 }
 

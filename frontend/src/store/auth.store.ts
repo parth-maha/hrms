@@ -8,11 +8,11 @@ interface AuthState {
   email: string | null;
   isLoading: boolean;
   name: string | null;
-  roles: string[];
+  roles: string | null;
   login: (
     email: string,
     empId: string,
-    roles: string[],
+    roles: string,
     token: string,
     name: string,
   ) => void;
@@ -27,12 +27,12 @@ const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   email: null,
   isLoading: true,
-  roles: [],
+  roles:  null,
 
   login: (
     email: string,
     empId: string,
-    roles: string[],
+    roles: string,
     token: string,
     name: string,
   ) => {
@@ -62,7 +62,7 @@ const useAuthStore = create<AuthState>((set) => ({
         name: null,
         token: null,
         isLoading: false,
-        roles: [],
+        roles: null,
         email: null,
         isAuthenticated: false,
       });
@@ -77,7 +77,7 @@ const useAuthStore = create<AuthState>((set) => ({
         name: null,
         token: null,
         isLoading: false,
-        roles: [],
+        roles: null,
         email: null,
         isAuthenticated: false,
       });
@@ -109,7 +109,7 @@ const useAuthStore = create<AuthState>((set) => ({
         token: null,
         name: null,
         isLoading: false,
-        roles: [],
+        roles: null,
         email: null,
         isAuthenticated: false,
       });

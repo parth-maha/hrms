@@ -1,0 +1,762 @@
+{
+  "info": {
+    "_postman_id": "12e0958f-5ccb-4c68-a676-5e9cfc19dad2",
+    "name": "HRMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51760852",
+    "_collection_link": "https://go.postman.co/collection/51760852-12e0958f-5ccb-4c68-a676-5e9cfc19dad2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All Jobs",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzA1NjUyLCJleHAiOjE3NzA3MDYyNTIsImlhdCI6MTc3MDcwNTY1Mn0._rA_OTVykXs935dlLO0Vh7zKQRRA2-3BAisNoU6R2YU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/Job",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Job"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Jobs",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/Job",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 09:44:36 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"jobId\": \"4076e177-1073-4f3f-84dd-c5eb86a784b8\",\n        \"title\": \"Technical Intern\",\n        \"jobCode\": \"I2025\",\n        \"description\": \"Need a full stack developer intern for 2025 batch\",\n        \"pocId\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n        \"pocName\": \"Rishu Arora\",\n        \"postedAt\": \"2026-02-10T14:28:56.0656591\",\n        \"attachedFile\": \"https://roimaint.com\",\n        \"reviewers\": [\n            {\n                \"id\": \"f23bf512-346d-4caa-a5a5-5f14d9328c1d\",\n                \"name\": \"Parth Maha\"\n            }\n        ]\n    },\n    {\n        \"jobId\": \"3eb3745a-156e-4d3a-a436-c68bc5b93607\",\n        \"title\": \"Technical Intern\",\n        \"jobCode\": \"I2026\",\n        \"description\": \"Need a full stack developer intern\",\n        \"pocId\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n        \"pocName\": \"Rishu Arora\",\n        \"postedAt\": \"2026-02-10T14:24:46.6888467\",\n        \"attachedFile\": \"https://roimaint.com\",\n        \"reviewers\": [\n            {\n                \"id\": \"d12c5b6d-9058-4ffb-8505-f473c94eecca\",\n                \"name\": \"Parth Maha\"\n            }\n        ]\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Delete Job",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzEzNjYzLCJleHAiOjE3NzA3MzE2NjMsImlhdCI6MTc3MDcxMzY2MywiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.Zx86-dzPnybatCyOdTPQ6iQv9Hd_4mr_H3J0pkXiwjs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Title\" : \"Software Engineer\",\r\n    \"JobCode\" : \"SE20261\",\r\n    \"Description\" : \"Need a SDE1 for java full stack role in WMS\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/Job/3EB3745A-156E-4D3A-A436-C68BC5B93607",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Job",
+            "3EB3745A-156E-4D3A-A436-C68BC5B93607"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Job",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Title\" : \"Technical Intern\",\r\n    \"JobCode\" : \"I2026\",\r\n    \"Description\" : \"Need a full stack developer intern\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"IsOpen\" : \"true\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "create"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 08:54:46 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": \"3eb3745a-156e-4d3a-a436-c68bc5b93607\",\n    \"jobCode\": \"I2026\",\n    \"title\": \"Technical Intern\",\n    \"description\": \"Need a full stack developer intern\",\n    \"postedById\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n    \"postedBy\": {\n        \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n        \"employeeId\": \"331\",\n        \"firstName\": \"Parth\",\n        \"lastName\": \"Maha\",\n        \"email\": \"parth.maha@roimaint.com\",\n        \"password\": \"$2a$11$L5ejAg2wcEAynx.hOTCSyum6X9pzwx14E8Fg25BBU05dXIejCsMXu\",\n        \"roles\": null,\n        \"dob\": \"2004-06-25T00:00:00\",\n        \"phone\": \"9723459525\",\n        \"gender\": \"MALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"A_POSITIVE\",\n        \"managerId\": null,\n        \"manager\": null,\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"Discrete\",\n        \"position\": \"Technical Intern\",\n        \"refreshTokens\": []\n    },\n    \"postedAt\": \"2026-02-10T14:24:46.6888467+05:30\",\n    \"isOpen\": false,\n    \"attachedFile\": \"https://roimaint.com\",\n    \"pocId\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n    \"poc\": null,\n    \"referrals\": [],\n    \"jobShared\": [],\n    \"jobReviewers\": [\n        {\n            \"id\": \"d12c5b6d-9058-4ffb-8505-f473c94eecca\",\n            \"jobId\": \"3eb3745a-156e-4d3a-a436-c68bc5b93607\",\n            \"reviewerId\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n            \"reviewer\": {\n                \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n                \"employeeId\": \"331\",\n                \"firstName\": \"Parth\",\n                \"lastName\": \"Maha\",\n                \"email\": \"parth.maha@roimaint.com\",\n                \"password\": \"$2a$11$L5ejAg2wcEAynx.hOTCSyum6X9pzwx14E8Fg25BBU05dXIejCsMXu\",\n                \"roles\": null,\n                \"dob\": \"2004-06-25T00:00:00\",\n                \"phone\": \"9723459525\",\n                \"gender\": \"MALE\",\n                \"panNo\": \"HPPPM3214B\",\n                \"aadharNo\": \"762327867654\",\n                \"bloodGroup\": \"A_POSITIVE\",\n                \"managerId\": null,\n                \"manager\": null,\n                \"bankName\": \"SBI\",\n                \"bankAccNo\": \"6772282\",\n                \"bankIFSC\": \"SBI0087\",\n                \"bankBranch\": \"Bopal\",\n                \"department\": \"Discrete\",\n                \"position\": \"Technical Intern\",\n                \"refreshTokens\": []\n            }\n        }\n    ]\n}"
+        },
+        {
+          "name": "Create Job",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Title\" : \"Software Engineer\",\r\n    \"JobCode\" : \"SE20261\",\r\n    \"Description\" : \"Need a SDE1 for java full stack role in WMS\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/3EB3745A-156E-4D3A-A436-C68BC5B93607",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "3EB3745A-156E-4D3A-A436-C68BC5B93607"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 10:25:43 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Job Deleted\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Job",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzEzNjYzLCJleHAiOjE3NzA3MzE2NjMsImlhdCI6MTc3MDcxMzY2MywiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.Zx86-dzPnybatCyOdTPQ6iQv9Hd_4mr_H3J0pkXiwjs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Title\" : \"Quintiq Specialist\",\r\n    \"JobCode\" : \"Q2026\",\r\n    \"Description\" : \"Need Qunitiq specialist for MES\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/Job/create",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Job",
+            "create"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Job",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Title\" : \"Technical Intern\",\r\n    \"JobCode\" : \"I2026\",\r\n    \"Description\" : \"Need a full stack developer intern\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"IsOpen\" : \"true\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "create"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8",
+              "uuid": "1d0acb30-e689-490a-a66f-986904d6f45c"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 08:54:46 GMT",
+              "uuid": "f158f886-131e-4f8e-a93d-63c3404150d8"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel",
+              "uuid": "7dc024fc-f3b5-4abe-9897-5cc12c5efa2f"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked",
+              "uuid": "77cc5675-c099-4f99-bba2-fa3d64f4084b"
+            }
+          ],
+          "cookie": [
+            {
+              "expires": "Invalid Date",
+              "domain": "",
+              "path": ""
+            }
+          ],
+          "body": "{\n    \"id\": \"3eb3745a-156e-4d3a-a436-c68bc5b93607\",\n    \"jobCode\": \"I2026\",\n    \"title\": \"Technical Intern\",\n    \"description\": \"Need a full stack developer intern\",\n    \"postedById\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n    \"postedBy\": {\n        \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n        \"employeeId\": \"331\",\n        \"firstName\": \"Parth\",\n        \"lastName\": \"Maha\",\n        \"email\": \"parth.maha@roimaint.com\",\n        \"password\": \"$2a$11$L5ejAg2wcEAynx.hOTCSyum6X9pzwx14E8Fg25BBU05dXIejCsMXu\",\n        \"roles\": null,\n        \"dob\": \"2004-06-25T00:00:00\",\n        \"phone\": \"9723459525\",\n        \"gender\": \"MALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"A_POSITIVE\",\n        \"managerId\": null,\n        \"manager\": null,\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"Discrete\",\n        \"position\": \"Technical Intern\",\n        \"refreshTokens\": []\n    },\n    \"postedAt\": \"2026-02-10T14:24:46.6888467+05:30\",\n    \"isOpen\": false,\n    \"attachedFile\": \"https://roimaint.com\",\n    \"pocId\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n    \"poc\": null,\n    \"referrals\": [],\n    \"jobShared\": [],\n    \"jobReviewers\": [\n        {\n            \"id\": \"d12c5b6d-9058-4ffb-8505-f473c94eecca\",\n            \"jobId\": \"3eb3745a-156e-4d3a-a436-c68bc5b93607\",\n            \"reviewerId\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n            \"reviewer\": {\n                \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n                \"employeeId\": \"331\",\n                \"firstName\": \"Parth\",\n                \"lastName\": \"Maha\",\n                \"email\": \"parth.maha@roimaint.com\",\n                \"password\": \"$2a$11$L5ejAg2wcEAynx.hOTCSyum6X9pzwx14E8Fg25BBU05dXIejCsMXu\",\n                \"roles\": null,\n                \"dob\": \"2004-06-25T00:00:00\",\n                \"phone\": \"9723459525\",\n                \"gender\": \"MALE\",\n                \"panNo\": \"HPPPM3214B\",\n                \"aadharNo\": \"762327867654\",\n                \"bloodGroup\": \"A_POSITIVE\",\n                \"managerId\": null,\n                \"manager\": null,\n                \"bankName\": \"SBI\",\n                \"bankAccNo\": \"6772282\",\n                \"bankIFSC\": \"SBI0087\",\n                \"bankBranch\": \"Bopal\",\n                \"department\": \"Discrete\",\n                \"position\": \"Technical Intern\",\n                \"refreshTokens\": []\n            }\n        }\n    ]\n}"
+        },
+        {
+          "name": "Create Job",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Title\" : \"Software Engineer\",\r\n    \"JobCode\" : \"SE20261\",\r\n    \"Description\" : \"Need a SDE1 for java full stack role in WMS\",\r\n    \"PocId\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"AttachedFile\" : \"https://roimaint.com\",\r\n    \"ReviewerIds\" : [\r\n        \"1ECC2D6F-FE7B-4956-81C2-58A1DF9EB75F\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/3EB3745A-156E-4D3A-A436-C68BC5B93607",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "3EB3745A-156E-4D3A-A436-C68BC5B93607"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8",
+              "uuid": "cbb61622-4751-4948-910c-2cc769762294"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 10:25:43 GMT",
+              "uuid": "29c02d64-ca4c-4fb3-b2f2-7bb4e5289f54"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel",
+              "uuid": "b083fc95-cdaf-48ab-8ce9-28c3a08f325b"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked",
+              "uuid": "a843561d-7a45-454f-8973-7b658b070183"
+            }
+          ],
+          "cookie": [
+            {
+              "expires": "Invalid Date",
+              "domain": "",
+              "path": ""
+            }
+          ],
+          "body": "{\n    \"message\": \"Job Deleted\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Share Job",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzM4NjgxLCJleHAiOjE3NzA3NTY2ODEsImlhdCI6MTc3MDczODY4MSwiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.n8D3oY9i6UbdLizGyPZU-g4erSSLmB22yf8B8p8kkJI",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"JobId\" : \"489E86D5-736D-4EF6-A52F-284AC2AC3D6E\",\r\n    \"SharedById\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"ShareToEmail\" : \"parthmaha9@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/Job/share",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Job",
+            "share"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Share Job",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"JobId\" : \"489E86D5-736D-4EF6-A52F-284AC2AC3D6E\",\r\n    \"SharedById\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"ShareToEmail\" : \"parthmaha9@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/share",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "share"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 16:00:33 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Job shared successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Refer Job",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzEzNjYzLCJleHAiOjE3NzA3MzE2NjMsImlhdCI6MTc3MDcxMzY2MywiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.Zx86-dzPnybatCyOdTPQ6iQv9Hd_4mr_H3J0pkXiwjs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"JobId\" :\"1F6383C8-B90B-4543-BB3D-4E1C789899C5\",\r\n    \"ReferredBy\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"ToName\" : \"Xp\",\r\n    \"ToEmail\" : \"parthmaha9@gmail.com\",\r\n    \"ToCvUrl\" : \"https://parthmaha.in\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/Job/refer",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Job",
+            "refer"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Refer Job",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"JobId\" :\"1F6383C8-B90B-4543-BB3D-4E1C789899C5\",\r\n    \"ReferredBy\" : \"B0B828DC-5AD3-45B5-B1AA-87720B53BADD\",\r\n    \"ToName\" : \"Xp\",\r\n    \"ToEmail\" : \"parthmaha9@gmail.com\",\r\n    \"ToCvUrl\" : \"https://parthmaha.in\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/Job/refer",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Job",
+                "refer"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 12:21:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Job referred\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Employees",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzEzNjYzLCJleHAiOjE3NzA3MzE2NjMsImlhdCI6MTc3MDcxMzY2MywiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.Zx86-dzPnybatCyOdTPQ6iQv9Hd_4mr_H3J0pkXiwjs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/Employee/all",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Employee",
+            "all"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Employees",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/Employee/all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Employee",
+                "all"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 12:31:29 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n        \"employeeId\": \"331\",\n        \"name\": \"Parth Maha\",\n        \"email\": \"parth.maha@roimaint.com\",\n        \"password\": null,\n        \"roles\": {\n            \"id\": 1,\n            \"role\": \"MANAGER\"\n        },\n        \"dob\": \"2004-06-25T00:00:00\",\n        \"joiningDate\": \"0001-01-01T00:00:00\",\n        \"phone\": \"9723459525\",\n        \"gender\": \"MALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"A_POSITIVE\",\n        \"managerId\": null,\n        \"mangerName\": \" \",\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"Discrete\",\n        \"position\": \"Technical Intern\"\n    },\n    {\n        \"id\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n        \"employeeId\": \"1\",\n        \"name\": \"Rishu Arora\",\n        \"email\": \"rishu.arora@roimaint.com\",\n        \"password\": null,\n        \"roles\": {\n            \"id\": 1,\n            \"role\": \"MANAGER\"\n        },\n        \"dob\": \"1990-06-25T00:00:00\",\n        \"joiningDate\": \"0001-01-01T00:00:00\",\n        \"phone\": \"1111122222\",\n        \"gender\": \"FEMALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"B_POSITIVE\",\n        \"managerId\": null,\n        \"mangerName\": \" \",\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"HR\",\n        \"position\": \"HR\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get All list of Employees",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZUlkIjoiMWVjYzJkNmYtZmU3Yi00OTU2LTgxYzItNThhMWRmOWViNzVmIiwibmJmIjoxNzcwNzEzNjYzLCJleHAiOjE3NzA3MzE2NjMsImlhdCI6MTc3MDcxMzY2MywiaXNzIjoiSHJtc0FwaSIsImF1ZCI6IkhybXNBcGkifQ.Zx86-dzPnybatCyOdTPQ6iQv9Hd_4mr_H3J0pkXiwjs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/Employee/list",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Employee",
+            "list"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get All Employees",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/Employee/all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Employee",
+                "all"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8",
+              "uuid": "dd1b62bb-e42c-4a77-9349-c66afdeef248"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 12:31:29 GMT",
+              "uuid": "5500ad61-b1c7-4341-b0a3-9a559091840e"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel",
+              "uuid": "01c59a25-fa26-423e-89a6-9f57073ab625"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked",
+              "uuid": "df232b6c-f9a4-4fa8-abf4-ff7a10ca5cf2"
+            }
+          ],
+          "cookie": [
+            {
+              "expires": "Invalid Date",
+              "domain": "",
+              "path": ""
+            }
+          ],
+          "body": "[\n    {\n        \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n        \"employeeId\": \"331\",\n        \"name\": \"Parth Maha\",\n        \"email\": \"parth.maha@roimaint.com\",\n        \"password\": null,\n        \"roles\": {\n            \"id\": 1,\n            \"role\": \"MANAGER\"\n        },\n        \"dob\": \"2004-06-25T00:00:00\",\n        \"joiningDate\": \"0001-01-01T00:00:00\",\n        \"phone\": \"9723459525\",\n        \"gender\": \"MALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"A_POSITIVE\",\n        \"managerId\": null,\n        \"mangerName\": \" \",\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"Discrete\",\n        \"position\": \"Technical Intern\"\n    },\n    {\n        \"id\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n        \"employeeId\": \"1\",\n        \"name\": \"Rishu Arora\",\n        \"email\": \"rishu.arora@roimaint.com\",\n        \"password\": null,\n        \"roles\": {\n            \"id\": 1,\n            \"role\": \"MANAGER\"\n        },\n        \"dob\": \"1990-06-25T00:00:00\",\n        \"joiningDate\": \"0001-01-01T00:00:00\",\n        \"phone\": \"1111122222\",\n        \"gender\": \"FEMALE\",\n        \"panNo\": \"HPPPM3214B\",\n        \"aadharNo\": \"762327867654\",\n        \"bloodGroup\": \"B_POSITIVE\",\n        \"managerId\": null,\n        \"mangerName\": \" \",\n        \"bankName\": \"SBI\",\n        \"bankAccNo\": \"6772282\",\n        \"bankIFSC\": \"SBI0087\",\n        \"bankBranch\": \"Bopal\",\n        \"department\": \"HR\",\n        \"position\": \"HR\"\n    }\n]"
+        },
+        {
+          "name": "Get All list of Employees",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/Employee/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "Employee",
+                "list"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Tue, 10 Feb 2026 12:43:06 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": \"1ecc2d6f-fe7b-4956-81c2-58a1df9eb75f\",\n        \"name\": \"Parth Maha\"\n    },\n    {\n        \"id\": \"b0b828dc-5ad3-45b5-b1aa-87720b53badd\",\n        \"name\": \"Rishu Arora\"\n    }\n]"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}

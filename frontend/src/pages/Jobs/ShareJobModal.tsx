@@ -14,7 +14,7 @@ interface ShareJobModalProps {
 
 const ShareJobModal = ({ open, onClose, jobId }: ShareJobModalProps) => {
   const shareMutation = useShareJob(onClose);
-  const { control, handleSubmit, formState: { errors }, reset } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { email: '' }
   });
   const {empId} = useAuthStore();
@@ -25,7 +25,6 @@ const ShareJobModal = ({ open, onClose, jobId }: ShareJobModalProps) => {
       ShareToEmail: data.email,
       SharedById: empId
     });
-    reset();
   };
 
   return (

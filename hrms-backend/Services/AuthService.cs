@@ -5,7 +5,6 @@ using hrms_backend.Models.dto;
 using hrms_backend.Models.Entities;
 using hrms_backend.Services.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace hrms_backend.Services
 {
@@ -116,6 +115,7 @@ namespace hrms_backend.Services
         {
             token.Revoked = DateTime.UtcNow;
             token.RevokedByIp = ipAddress;
+            token.ReplacedByToken = token.Token;
         }
 
         private Employees getUserByRefreshToken(string token)
