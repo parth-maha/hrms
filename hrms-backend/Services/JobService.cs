@@ -51,6 +51,7 @@ namespace hrms_backend.Services
 
                 await _jobRepo.AddJobReviewerAsync(reviewers);
             }
+            _logger.LogInformation($"Job Created. JobId : {job.Id},Title: {job.Title}, PostedBy: {job.PostedBy.FirstName} {job.PostedBy.LastName}");
             return job;
         }
 
@@ -85,7 +86,6 @@ namespace hrms_backend.Services
             return mapToDto(job);
         }
 
-        [HttpDelete("/{id}")]
         public async Task DeleteJob(Guid id)
         {
             var job = await _jobRepo.GetJobByIdAsync(id);
@@ -100,7 +100,9 @@ namespace hrms_backend.Services
             {
                 Id = Guid.NewGuid(),
                 SharedById = dto.SharedById,
-                SharedTo = dto.ShareToEmail
+                SharedTo = dto.ShareToEmail,
+                JobId = dto.JobId,
+                SharedTime = DateTime.UtcNow
             };
 
             await _jobRepo.AddJobShareAsync(share);

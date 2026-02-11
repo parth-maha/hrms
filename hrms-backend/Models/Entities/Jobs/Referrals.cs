@@ -17,7 +17,7 @@ namespace hrms_backend.Models.Entities.Jobs
 
         [Column("referred_by")]
         public Guid ReferralById { get; set; }
-        [ForeignKey("ReferredById")]
+        [ForeignKey("ReferralById")]
         public virtual Employees RefferedBy { get; set; }
 
         [Column("referred_to")]

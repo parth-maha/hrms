@@ -20,6 +20,8 @@ namespace hrms_backend.Models.Entities.Jobs
         [ForeignKey("SharedById")]
         public virtual Employees SharedBy { get; set;}
 
+        public DateTime SharedTime { get; set; }
+
         public string SharedTo{ get; set; }
     }
 }

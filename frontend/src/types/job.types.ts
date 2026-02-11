@@ -1,19 +1,14 @@
 
 export interface Job {
-  id: number;
-  position: string;
-  yoer : number;
-  description: string;
-  location: string;
-  type: string;
-  status: string;
-  postedAt: string;
-  closeComment: string | null;
-  closeReason: string | null;
-  selectedCandidateIds: number[];
-  companyName: string;
-  createdById: number;
-
+  jobId: string;
+  title: string;
+  jobCode : string
+  description : string
+  pocId? : string;
+  pocName? : string;
+  postedAt? : string | undefined;
+  attachedFile? : string;
+  reviewers? : { id : string;name : string;}[];
 }
 
 export const formatDate = (date: Date | string): string => {
@@ -26,20 +21,40 @@ export const formatDate = (date: Date | string): string => {
 };
 
 export interface JobFormData {
-  position: string;
-  description: string;
-  yoer : number;
-  status: string;
-  location: string;
-  type: string;
+  Title: string;
+  JobCode : string
+  Description : string
+  PocId : string;
+  AttachedFile? : string;
+  Reviewers : string[];
+}
+
+export interface ShareJobDTO{
+  JobId : string;
+  ShareToEmail :String;
+  SharedById : string | null;
+}
+
+export interface ReferJobDTO{
+  JobId: string;
+  ToName : string;
+  ToCvUrl : string;
+  ToEmail : string;
+  ReferredBy : string;
+}
+
+export interface EmployeeOption{
+  id: string;
+  name : string;
 }
 
 export interface JobCardProps {
   job: Job;
-  onDelete: (jobId: number) => void;
-  onShare: (jobId: number) => void;
-  onView: (jobId: number) => void;
-  onEdit: (jobId: number) => void;
+  onDelete: (jobId: string) => void;
+  onShare: (jobId: string) => void;
+  onView: (jobId: string) => void;
+  onEdit: (jobId: string) => void;
+  onRefer : (jobId : string) => void;
 }
 
 export interface JobFormProps {

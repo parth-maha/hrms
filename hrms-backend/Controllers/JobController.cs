@@ -38,7 +38,7 @@ namespace hrms_backend.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException});
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message});
             }
         }
         [HttpPut("edit/{id}")]
@@ -50,7 +50,7 @@ namespace hrms_backend.Controllers
                 return Ok(job);
             }catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -63,7 +63,7 @@ namespace hrms_backend.Controllers
                 return Ok(new {message = "Job Deleted"});
             }catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -77,7 +77,7 @@ namespace hrms_backend.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -90,7 +90,7 @@ namespace hrms_backend.Controllers
                 return Ok(new { message = "Job referred" });
             }catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
     } 
