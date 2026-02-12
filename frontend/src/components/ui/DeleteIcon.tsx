@@ -1,40 +1,37 @@
-import { forwardRef, type JSX } from "react";
-import { TextField as TextFieldMUI, type TextFieldProps } from "@mui/material";
-import type { FormComponentError } from "../../types/ui.types";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import IconButton from "./IconButton";
+import { Tooltip } from "@mui/material";
 
-const TextField = forwardRef<
-	HTMLInputElement,
-	TextFieldProps & Partial<FormComponentError> & { id: string }
->(
-	(
-		{
-			errors = {},
-			errorKey = "",
-			error = null,
-			helperText = null,
-			variant = "outlined",
-			fullWidth = true,
-			id,
-			...props
-		},
-		ref
-	): JSX.Element => (
-		<TextFieldMUI
-			id={id}
-			error={error ?? !!errors[errorKey]}
-			helperText={helperText || errors[errorKey]?.message?.toString() || ""}
-			variant={variant }
-			fullWidth={fullWidth}
-			inputRef={ref}
-            size={props.size || 'small'}
-			{...props}
-			sx={{
-				"& .MuiFormHelperText-root": {
-					marginLeft: "0px",
-				},
-			}}
-		/>
-	)
-);
+interface DeleteIconProps {
+	title: string;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	iconProps?: React.ComponentProps<typeof DeleteOutlineOutlinedIcon>;
+	iconButtonProps?: React.ComponentProps<typeof IconButton>;
+	[key: string]: any;
+}
 
-export default TextField;
+const DeleteIcon: React.FC<DeleteIconProps> = ({
+	onClick,
+	title,
+	iconProps,
+	iconButtonProps,
+	...rest
+}) => {
+	return (
+		<Tooltip title={title}>
+			<IconButton
+				color={iconButtonProps?.color || "error"}
+				onClick={onClick}
+				{...iconButtonProps}
+				{...rest}
+			>
+				<DeleteOutlineOutlinedIcon
+					fontSize={iconProps?.fontSize ? `${iconProps?.fontSize}` : "small"}
+					{...iconProps}
+				/>
+			</IconButton>
+		</Tooltip>
+	);
+};
+
+export default DeleteIcon;

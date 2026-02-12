@@ -11,7 +11,6 @@ const Branch: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [view, setView] = useState<"list" | "create" | "edit">("list");
   const [selectedConfig, setSelectedConfig] = useState<Config | undefined>(undefined);
-  const [deletedId, setDeletedId] = useState<number | null>(null);
   const {data, isLoading} = useConfigs();
   const deleteConfig = useDeleteConfig();
   const handleCreate = () =>{
@@ -32,11 +31,8 @@ const Branch: React.FC = () => {
     setSelectedConfig(undefined);
   };
 
-  const handleDelete = () =>{
-    if(deletedId){
-        deleteConfig.mutate(deletedId)
-        setDeletedId(null)
-    }
+  const handleDelete = (id : number) =>{
+        deleteConfig.mutate(id)
   }
 
   if(isLoading) return <Loader/>
@@ -44,11 +40,12 @@ const Branch: React.FC = () => {
   return (
     <Box sx={{ p: 2 }}>
       <ConfigList 
-        isLoading
         configs={data}
         onAddConfig={handleCreate}
-        onEditConfig={handleEdit}
-        onDeleteConfig={handleDelete}
+        onEditConfig={(config)=> handleEdit(config)}
+        onDeleteConfig={(id : number)=> {
+            handleDelete(id)
+        }}
       />
       {view === "create" && (
           <ConfigForm

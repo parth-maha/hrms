@@ -30,7 +30,7 @@ namespace hrms_backend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -43,7 +43,20 @@ namespace hrms_backend.Controllers
                 return Ok(list);
             }catch(Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpGet("org-chart")]
+        public async Task<IActionResult> GetOrgChart()
+        {
+            try
+            {
+                var chart = await _employeeService.GetOrgChart();
+                return Ok(chart);
+            }catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -56,7 +69,7 @@ namespace hrms_backend.Controllers
                 return Ok(employees);
             }catch (Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException});
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -70,7 +83,7 @@ namespace hrms_backend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException });
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -84,7 +97,7 @@ namespace hrms_backend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.InnerException});
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
     }

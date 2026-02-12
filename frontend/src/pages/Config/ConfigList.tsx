@@ -13,9 +13,8 @@ import {
 import type { Config, ConfigListProps } from "../../types/config.types";
 import Button from "../../components/ui/Button";
 import EditIcon from "../../components/ui/EditIcon";
-import { Delete } from "@mui/icons-material";
-import IconButton from "../../components/ui/IconButton";
 import ConfirmBox from "../../components/ui/ConfirmBox";
+import DeleteIcon from "../../components/ui/DeleteIcon";
 
 const ConfigList: React.FC<ConfigListProps> = ({
   onAddConfig,
@@ -24,10 +23,11 @@ const ConfigList: React.FC<ConfigListProps> = ({
   configs,
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedId, setSelectedId] = useState<number>();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
   const handleDeleteConfig = (config: Config) => {
     setShowConfirm(true);
-    setSelectedId(config.Id);
+    setSelectedId(config.id);
   };
 
   const handleEditConfig = (config: Config) => {
@@ -36,6 +36,7 @@ const ConfigList: React.FC<ConfigListProps> = ({
 
   const handleConfirmDelete = () => {
     onDeleteConfig(selectedId);
+    setShowConfirm(false);
   };
 
   return (
@@ -51,6 +52,7 @@ const ConfigList: React.FC<ConfigListProps> = ({
         >
           <Typography variant="h4">Configs</Typography>
           <Button
+		  	title="Add System Config"
             onClick={onAddConfig}
             id="addEmp"
             variant="contained"
@@ -64,11 +66,6 @@ const ConfigList: React.FC<ConfigListProps> = ({
           <Table className="w-full">
             <TableHead className="bg-gray-50 border border-gray-200">
               <TableRow>
-                <TableCell sx={{ paddingY: "10px" }}>
-                  <Typography fontWeight={600} variant="body2">
-                    Id
-                  </Typography>
-                </TableCell>
                 <TableCell sx={{ paddingY: "10px" }}>
                   <Typography fontWeight={600} variant="body2">
                     Config Id
@@ -103,9 +100,6 @@ const ConfigList: React.FC<ConfigListProps> = ({
                   className="border-b border-gray-100 hover:bg-gray-50"
                 >
                   <TableCell sx={{ paddingY: "4px" }}>
-                    <Typography>{row.id} </Typography> 
-                  </TableCell>
-                  <TableCell sx={{ paddingY: "4px" }}>
                     <Typography>{row.configId}</Typography>
                   </TableCell>
                   <TableCell sx={{ paddingY: "4px" }}>
@@ -122,9 +116,10 @@ const ConfigList: React.FC<ConfigListProps> = ({
                       title="Edit"
                       onClick={() => handleEditConfig(row)}
                     />
-                    <IconButton onClick={() => handleDeleteConfig(row)}>
-                      <Delete />
-                    </IconButton>
+                    <DeleteIcon
+                      title="Delete"
+                      onClick={() => handleDeleteConfig(row)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -141,7 +136,7 @@ const ConfigList: React.FC<ConfigListProps> = ({
         onCancel={() => setShowConfirm(false)}
         withCloseButton={true}
       >
-        Are you sure you want to change the branch status?
+        Are you sure you want to delete the config?
       </ConfirmBox>
     </>
   );

@@ -1,4 +1,5 @@
 ﻿using hrms_backend.Models.dto.Jobs;
+using hrms_backend.Models.DTO;
 using hrms_backend.Models.Entities;
 
 namespace hrms_backend.Repositories
@@ -7,8 +8,11 @@ namespace hrms_backend.Repositories
     {
         Task<List<Employees>> GetEmployeesAsync();
         Task UpdateEmployeeAsync(Employees employee);
-        public Task<Employees?> GetEmployeeByIdAsync(Guid id);
+        Task<Employees?> GetEmployeeByIdAsync(Guid id);
         Task DeleteEmployeeAsync(Employees employee);
-        public Task<List<ReviewerDto>> GetListOfEmployees();
+        Task<List<ReviewerDto>> GetListOfEmployees();
+
+        Task<List<OrgChartDto>> GetOrgChartAsync();
+
     }
 }

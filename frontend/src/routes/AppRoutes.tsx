@@ -8,7 +8,7 @@ import Login from "../pages/Login";
 import Jobs from "../pages/Jobs";
 import Games from "../pages/Games/Games";
 import Policies from "../pages/Policies";
-import OrgChart from "../pages/OrgChart";
+import OrgChart from "../pages/OrgChart/OrgChart";
 import AdminRoute from "./AdminRoute";
 import Config from "../pages/Config/Config";
 

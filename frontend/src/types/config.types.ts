@@ -1,7 +1,7 @@
 export interface ConfigListProps {
     onAddConfig: () => void;
     onEditConfig: (data: Config) => void;
-    onDeleteConfig  : (id : number | undefined) => void
+    onDeleteConfig  : (id : number | null) => void
     configs: Config[] | undefined;
 }
 

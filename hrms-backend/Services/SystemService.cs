@@ -70,7 +70,7 @@ namespace hrms_backend.Services
             return new ConfigDto
             {
                 Id = config.Id,
-                CreatedBy = $"{config.CreatedBy.FirstName} {config.CreatedBy.FirstName}",
+                CreatedBy = $"{config.CreatedBy.FirstName} {config.CreatedBy.LastName}",
                 ConfigId = config.ConfigId,
                 ConfigName = config.ConfigName,
                 ConfigValue = config.ConfigValue,
