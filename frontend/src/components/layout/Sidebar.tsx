@@ -12,7 +12,7 @@ import GamesIcon from "@mui/icons-material/Games";
 import { theme } from "../../utilities/theme";
 import icon from "../../assets/favicon.ico";
 import type { SidebarNavItem } from "../../types/ui.types";
-// import type { DashboardData } from "../../utilities/types";
+import useAuthStore from "../../store/auth.store";
 
 interface SidebarProps {
   user: {
@@ -20,17 +20,16 @@ interface SidebarProps {
     email: string;
   };
   company: string;
-  // dashboardData: DashboardData | null;
-  //   onLogout: () => void;
 }
 
 export function Sidebar({
   user,
-  // dashboardData,
 }: SidebarProps) {
-  const navigation: SidebarNavItem[] = useMemo(
-    () => [
-      { name: "Dashboard", icon: DashboardOutlined, path: "/" },
+  const {roles} = useAuthStore();
+  
+  const navigation = useMemo(() => {
+		const items: SidebarNavItem[] = [
+			{ name: "Dashboard", icon: DashboardOutlined, path: "/" },
       {
         name: "Travel & Expense",
         icon: ModeOfTravel,
@@ -56,9 +55,17 @@ export function Sidebar({
         icon: ContentCopy,
         path: "/policies",
       },
-    ],
-    [user],
-  );
+		];
+      
+    if(roles === 'MANAGER' || roles=== "HR"){
+      items.push({
+        name: "System Config",
+        icon: ModeOfTravel,
+        path: "/config",
+      })
+    }
+		return items;
+	}, [roles]);
 
   const location = useLocation();
   const pathname = location.pathname;
