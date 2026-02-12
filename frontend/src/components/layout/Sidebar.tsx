@@ -6,6 +6,7 @@ import {
   ModeOfTravel,
   ContentCopy,
   ShowChart,
+  Settings,
 } from "@mui/icons-material";
 import WorkIcon from "@mui/icons-material/Work";
 import GamesIcon from "@mui/icons-material/Games";
@@ -60,7 +61,7 @@ export function Sidebar({
     if(roles === 'MANAGER' || roles=== "HR"){
       items.push({
         name: "System Config",
-        icon: ModeOfTravel,
+        icon: Settings,
         path: "/config",
       })
     }

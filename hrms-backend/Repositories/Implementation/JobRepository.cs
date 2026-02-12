@@ -18,6 +18,7 @@ namespace hrms_backend.Repositories.Implementation
                 .Include(j => j.PostedBy)
                 .Include(j => j.Poc)
                 .Include(j => j.JobReviewers)
+                    .ThenInclude(jr => jr.Reviewer)
                 .OrderByDescending(j=> j.PostedAt)
                 .ToListAsync();
         }
@@ -33,7 +34,7 @@ namespace hrms_backend.Repositories.Implementation
 
         public async Task AddJobAsync(Jobs job)
         {
-            _dbContext.AddAsync(job);
+            await _dbContext.AddAsync(job);
             await _dbContext.SaveChangesAsync();
         }
 

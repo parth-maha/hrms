@@ -9,6 +9,8 @@ import Jobs from "../pages/Jobs";
 import Games from "../pages/Games/Games";
 import Policies from "../pages/Policies";
 import OrgChart from "../pages/OrgChart";
+import AdminRoute from "./AdminRoute";
+import Config from "../pages/Config/Config";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,15 @@ const router = createBrowserRouter([
       {
         path:"/policies",
         element : <Policies/>
+      },
+      {
+        element : <AdminRoute/>,
+        children : [
+          {
+            path : '/config',
+            element : <Config/>
+          }
+        ]
       },
       {
         path: "*",

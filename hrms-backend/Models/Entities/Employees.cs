@@ -50,10 +50,9 @@ namespace hrms_backend.Models.Entities
 
         public string? BloodGroup { get; set; }
 
-        [ForeignKey("fk_manager_id")]
         public Guid? ManagerId { get; set; }
-        [ForeignKey("ManagerId")]
-        public virtual Employees? Manager { get; set; }
+
+        public Employees Manager { get; set; }
 
         public string? BankName { get; set; }
         public string? BankAccNo { get; set; }
@@ -63,6 +62,7 @@ namespace hrms_backend.Models.Entities
         public string? Department { get; set; }
         public string? Position { get; set; }
 
+        public ICollection<Employees> Reports { get; set; } = new List<Employees>();
         public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         //public ICollection<Post> Posts { get; set; }
         //public ICollection<TravelExpense> TravelExpenses { get; set; }

@@ -12,8 +12,8 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260210061257_UpdateJobShare")]
-    partial class UpdateJobShare
+    [Migration("20260212124536_EmployeeUpdate")]
+    partial class EmployeeUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,9 @@ namespace hrms_backend.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("JoiningDate")
+                        .HasColumnType("Date");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -99,9 +102,7 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId")
-                        .IsUnique()
-                        .HasFilter("[ManagerId] IS NOT NULL");
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("RolesId");
 
@@ -147,6 +148,9 @@ namespace hrms_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("shared_by");
 
+                    b.Property<DateTime>("SharedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SharedTo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -180,7 +184,7 @@ namespace hrms_backend.Migrations
 
                     b.Property<string>("JobCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("job_id");
 
                     b.Property<Guid>("PocId")
@@ -197,6 +201,9 @@ namespace hrms_backend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("JobCode")
+                        .IsUnique();
 
                     b.HasIndex("PocId");
 
@@ -218,10 +225,7 @@ namespace hrms_backend.Migrations
 
                     b.Property<Guid>("ReferralById")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("referred_by");
-
-                    b.Property<Guid>("ReferredById")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnName("fk_referred_by");
 
                     b.Property<string>("ReferredToCV")
                         .IsRequired()
@@ -308,11 +312,68 @@ namespace hrms_backend.Migrations
                     b.ToTable("roles");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.SystemConfigs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("pk_system_config_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConfigId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_created_by");
+
+                    b.Property<int>("SystemId")
+                        .HasColumnType("int")
+                        .HasColumnName("fk_system_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("SystemId");
+
+                    b.ToTable("system_configs");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.SystemInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("pk_system_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("system_name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("system_info");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Employees", b =>
                 {
                     b.HasOne("hrms_backend.Models.Entities.Employees", "Manager")
-                        .WithOne()
-                        .HasForeignKey("hrms_backend.Models.Entities.Employees", "ManagerId")
+                        .WithMany("Reports")
+                        .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("hrms_backend.Models.Entities.Roles", "Roles")
@@ -413,9 +474,30 @@ namespace hrms_backend.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.SystemConfigs", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("hrms_backend.Models.Entities.SystemInfo", "System")
+                        .WithMany("SystemConfigs")
+                        .HasForeignKey("SystemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("System");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Employees", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("Reports");
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.Jobs", b =>
@@ -425,6 +507,11 @@ namespace hrms_backend.Migrations
                     b.Navigation("JobShared");
 
                     b.Navigation("Referrals");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.SystemInfo", b =>
+                {
+                    b.Navigation("SystemConfigs");
                 });
 #pragma warning restore 612, 618
         }

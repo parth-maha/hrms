@@ -36,7 +36,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseMiddleware<ErrorHandlerMiddleware>();
+    //app.UseMiddleware<ErrorHandlerMiddleware>();
     app.UseCors("AllowFrontend");
     app.UseMiddleware<JwtMiddleware>();
 

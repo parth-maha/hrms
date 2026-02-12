@@ -4,13 +4,12 @@ import {
   useEmployeeOptions,
   useUpdateJob,
 } from "../../services/queries/job.queries";
-import { Controller, useForm, Watch } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import TextField from "../../components/ui/TextField";
 import CircularLoader from "../../components/ui/CircularLoader";
 import { useEffect } from "react";
 import Button from "../../components/ui/Button";
-import { MenuItem, Typography } from "@mui/material";
-import IconButton from "../../components/ui/IconButton";
+import { MenuItem } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
 interface JobFormProps {
