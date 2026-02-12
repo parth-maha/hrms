@@ -1,16 +1,16 @@
 export interface ConfigListProps {
     onAddConfig: () => void;
     onEditConfig: (data: Config) => void;
-    onDeleteConfig  : (id : number | null) => void
+    onDeleteConfig  : (id : number) => void
     configs: Config[] | undefined;
 }
 
 export interface Config{
-    Id : number;
-    CreatedBy : string;
-    ConfigName : string;
-    ConfigId : string;
-    ConfigValue : string;
+    id : number;
+    createdBy : string;
+    configName : string;
+    configId : string;
+    configValue : string;
 }
 
 export interface ConfigFormData{

@@ -39,16 +39,16 @@ const ConfigForm = ({ initialData, onSuccess, onCancel }: ConfigFormProps) => {
   useEffect(() => {
     if (initialData) {
       reset({
-        ConfigId: initialData.ConfigId,
-        ConfigName: initialData.ConfigName,
-        ConfigValue: initialData.ConfigValue,
+        ConfigId: initialData.configId,
+        ConfigName: initialData.configName,
+        ConfigValue: initialData.configValue,
       });
     }
   }, [initialData, reset]);
 
   const onSubmit = (data: ConfigFormData) => {
     if (initialData) {
-      updateMutataion.mutate({ id: initialData.Id, data });
+      updateMutataion.mutate({ id: initialData.id, data });
     } else {
       createMutation.mutate(data);
     }

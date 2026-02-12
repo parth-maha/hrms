@@ -35,8 +35,10 @@ const ConfigList: React.FC<ConfigListProps> = ({
   };
 
   const handleConfirmDelete = () => {
-    onDeleteConfig(selectedId);
-    setShowConfirm(false);
+    if (selectedId) {
+      onDeleteConfig(selectedId);
+      setShowConfirm(false);
+    }
   };
 
   return (
@@ -52,9 +54,8 @@ const ConfigList: React.FC<ConfigListProps> = ({
         >
           <Typography variant="h4">Configs</Typography>
           <Button
-		  	title="Add System Config"
+            title="Add System Config"
             onClick={onAddConfig}
-            id="addEmp"
             variant="contained"
             withPlusIcon={true}
             size="small"
