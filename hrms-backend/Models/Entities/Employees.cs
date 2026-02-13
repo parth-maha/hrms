@@ -62,6 +62,12 @@ namespace hrms_backend.Models.Entities
         public string? Department { get; set; }
         public string? Position { get; set; }
 
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
+
         public ICollection<Employees> Reports { get; set; } = new List<Employees>();
         public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         //public ICollection<Post> Posts { get; set; }

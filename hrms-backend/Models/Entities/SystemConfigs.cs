@@ -18,6 +18,12 @@ namespace hrms_backend.Models.Entities
         [Column("fk_created_by")]
         public Guid CreatedById { get; set; }
         [ForeignKey("CreatedById")]
+
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
         public virtual Employees CreatedBy { get; set; }
         public string ConfigId { get; set; }
         public string ConfigName { get; set; }

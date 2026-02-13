@@ -34,6 +34,12 @@ namespace hrms_backend.Models.Entities.Jobs
         [ForeignKey("PocId")]
         public virtual Employees Poc{ get; set; }
 
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Referrals> Referrals { get; set;  } = new List<Referrals>();
         [JsonIgnore]

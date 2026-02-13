@@ -23,6 +23,11 @@ namespace hrms_backend.Models.Entities.Jobs
         [Column("referred_to")]
         public string RefferedTo { get; set;  }
 
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
         public string RefferedToEmail { get; set;  }
         public string ReferredToCV { get; set;  }
 

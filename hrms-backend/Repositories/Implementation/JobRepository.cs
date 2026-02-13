@@ -40,7 +40,7 @@ namespace hrms_backend.Repositories.Implementation
 
         public async Task DeleteJobAsync(Jobs job)
         {
-            _dbContext.Jobs.Remove(job);
+            _dbContext.Jobs.Update(job);  //soft delete
             await _dbContext.SaveChangesAsync();
         }
 

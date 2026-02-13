@@ -44,7 +44,7 @@ const Branch: React.FC = () => {
         onEditConfig={(config)=> handleEdit(config)}
         onDeleteConfig={(id:number) => handleDelete(id)}
       />
-      {view === "create" || view ==='edit'&& (
+      {(view === "create" || view ==='edit') && (
           <ConfigForm
             initialData={selectedConfig}
             onSuccess={handleCloseModal}

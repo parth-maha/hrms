@@ -40,7 +40,7 @@ namespace hrms_backend.Repositories.Implementation
 
         public async Task DeleteConfigAsync(SystemConfigs configs)
         {
-            _dbContext.Remove(configs);
+            _dbContext.SystemConfigs.Update(configs); //soft delete
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -2,3 +2,4 @@
 
 **Email Service** : https://dev.to/mamun_akand/sending-emails-with-gmail-using-mailkit-in-net-web-api-4lj5
 
+**Soft Delete** : https://www.milanjovanovic.tech/blog/implementing-soft-delete-with-ef-core

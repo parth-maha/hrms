@@ -60,6 +60,8 @@ namespace hrms_backend.Services
             var config = await _systemRepo.GetByConfigIdAsync(id);
             if (config == null) throw new Exception("Config not found");
 
+            config.DeletedOn= DateTime.UtcNow;
+            config.IsDeleted = true;
             await  _systemRepo.DeleteConfigAsync(config);
             _logger.LogInformation($"Config Deleted:{config.ConfigName} by {empId}");
         }

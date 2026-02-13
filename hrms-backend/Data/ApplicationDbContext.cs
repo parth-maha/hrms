@@ -67,6 +67,10 @@ namespace hrms_backend.Data
                 .HasForeignKey(e => e.ManagerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Employees>()
+                .HasIndex(e => e.EmployeeId)
+                .IsUnique();
+
             // ================== SOCIAL ======================
 
             //modelBuilder.Entity<Like>()
@@ -183,6 +187,26 @@ namespace hrms_backend.Data
             //    .WithMany()
             //    .HasForeignKey(gs => gs.MemberId)
             //    .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ====================== FILTERS =======================
+            modelBuilder.Entity<Employees>().HasQueryFilter(e => !e.IsDeleted);
+
+            modelBuilder.Entity<Jobs>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<Referrals>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<JobReviewers>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<JobShared>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<SystemConfigs>().HasQueryFilter(s => !s.IsDeleted);
+
+            // indexing on isDeleted
+            modelBuilder.Entity<Jobs>()
+                .HasIndex(j => j.IsDeleted)
+                .HasFilter("[is_deleted] = 0");
+
+            modelBuilder.Entity<SystemConfigs>()
+                .HasIndex(s => s.IsDeleted)
+                .HasFilter("[is_deleted] =0");
+
         }
     }
 }
