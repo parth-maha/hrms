@@ -12,8 +12,8 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260212124536_EmployeeUpdate")]
-    partial class EmployeeUpdate
+    [Migration("20260213133110_TravelUpdate1")]
+    partial class TravelUpdate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,10 @@ namespace hrms_backend.Migrations
                     b.Property<string>("BloodGroup")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
                     b.Property<string>("Department")
                         .HasColumnType("nvarchar(max)");
 
@@ -62,7 +66,7 @@ namespace hrms_backend.Migrations
 
                     b.Property<string>("EmployeeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -71,6 +75,10 @@ namespace hrms_backend.Migrations
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
 
                     b.Property<DateTime>("JoiningDate")
                         .HasColumnType("Date");
@@ -102,6 +110,9 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("RolesId");
@@ -115,6 +126,14 @@ namespace hrms_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("pk_job_reviewer_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
 
                     b.Property<Guid>("JobId")
                         .HasColumnType("uniqueidentifier")
@@ -139,6 +158,14 @@ namespace hrms_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("pk_job_share_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
 
                     b.Property<Guid>("JobId")
                         .HasColumnType("uniqueidentifier")
@@ -175,9 +202,17 @@ namespace hrms_backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
@@ -202,6 +237,9 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("[is_deleted] = 0");
+
                     b.HasIndex("JobCode")
                         .IsUnique();
 
@@ -218,6 +256,14 @@ namespace hrms_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("pk_referral_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
 
                     b.Property<Guid>("JobId")
                         .HasColumnType("uniqueidentifier")
@@ -337,6 +383,14 @@ namespace hrms_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("fk_created_by");
 
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
                     b.Property<int>("SystemId")
                         .HasColumnType("int")
                         .HasColumnName("fk_system_id");
@@ -344,6 +398,9 @@ namespace hrms_backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
+
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("[is_deleted] =0");
 
                     b.HasIndex("SystemId");
 
@@ -367,6 +424,140 @@ namespace hrms_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("system_info");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.HrTravelDocuments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("pk_htd_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("file_name");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("OwnerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("owner_type");
+
+                    b.Property<Guid>("TravelId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_travel_id");
+
+                    b.Property<Guid>("TravelPlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("uploaded_at");
+
+                    b.Property<Guid>("UploadedById")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("uploaded_by");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TravelPlanId");
+
+                    b.HasIndex("UploadedById");
+
+                    b.ToTable("hr_travel_documents");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelAllocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("pk_ta_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_employee_id");
+
+                    b.Property<Guid?>("EmployeesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("TravelId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_travel_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("EmployeesId");
+
+                    b.HasIndex("TravelId");
+
+                    b.ToTable("travel_allocations");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("pk_travel_id");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("end_date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("start_date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("travel_plan");
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Employees", b =>
@@ -493,11 +684,66 @@ namespace hrms_backend.Migrations
                     b.Navigation("System");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.HrTravelDocuments", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Travel.TravelPlan", "TravelPlan")
+                        .WithMany("HrTravelDocuments")
+                        .HasForeignKey("TravelPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "UploadedBy")
+                        .WithMany()
+                        .HasForeignKey("UploadedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TravelPlan");
+
+                    b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelAllocation", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("hrms_backend.Models.Entities.Employees", null)
+                        .WithMany("TravelAllocations")
+                        .HasForeignKey("EmployeesId");
+
+                    b.HasOne("hrms_backend.Models.Entities.Travel.TravelPlan", "TravelPlan")
+                        .WithMany("TravelAllocation")
+                        .HasForeignKey("TravelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("TravelPlan");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Employees", b =>
                 {
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Reports");
+
+                    b.Navigation("TravelAllocations");
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.Jobs", b =>
@@ -512,6 +758,13 @@ namespace hrms_backend.Migrations
             modelBuilder.Entity("hrms_backend.Models.Entities.SystemInfo", b =>
                 {
                     b.Navigation("SystemConfigs");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
+                {
+                    b.Navigation("HrTravelDocuments");
+
+                    b.Navigation("TravelAllocation");
                 });
 #pragma warning restore 612, 618
         }

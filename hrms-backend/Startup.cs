@@ -59,6 +59,8 @@ namespace hrms_backend
             services.AddScoped<EmployeeService>();
             services.AddScoped<ISystemRepository,SystemRepository>();
             services.AddScoped<SystemService>();
+            services.AddScoped<ITravelRepo, TravelRepository>();
+            services.AddScoped<TravelService>();
 
             services.AddScoped<EmailService>();
             services.AddHttpClient();

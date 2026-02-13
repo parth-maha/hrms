@@ -70,6 +70,9 @@ namespace hrms_backend.Models.Entities
 
         public ICollection<Employees> Reports { get; set; } = new List<Employees>();
         public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+
+        public List<TravelAllocation> TravelAllocations { get; set; } = new List<TravelAllocation>();
+
         //public ICollection<Post> Posts { get; set; }
         //public ICollection<TravelExpense> TravelExpenses { get; set; }
         //public ICollection<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }

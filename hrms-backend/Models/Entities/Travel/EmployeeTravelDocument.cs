@@ -1,34 +1,41 @@
-﻿using hrms_backend.Models.Constants;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿//using hrms_backend.Models.Constants;
+//using System.ComponentModel.DataAnnotations;
+//using System.ComponentModel.DataAnnotations.Schema;
 
-namespace hrms_backend.Models.Entities.Travel
-{
-    [Table("employee_travel_documents")]
-    public class EmployeeTravelDocument
-    {
-        [Key]
-        [Column("pk_etd_id")]
-        public Guid Id { get; set;  }
+//namespace hrms_backend.Models.Entities.Travel
+//{
+//    [Table("employee_travel_documents")]
+//    public class EmployeeTravelDocument
+//    {
+//        [Key]
+//        [Column("pk_etd_id")]
+//        public Guid Id { get; set;  }
 
-        [Column("fk_travel_expense_id")]
-        public Guid TravelExpenseId { get; set;  }
-        [ForeignKey("TravelExpesneId")]
-        public virtual TravelExpense TravelExpense { get; set;  }
+//        public Guid TravelId { get; set; }
 
-        public string Description { get; set; }
-        public string ExpenseType { get; set;  }
+//        [Column("fk_allocation_id")]
+//        public Guid AllocationId { get; set; }
+//        [ForeignKey("AllocationId")]
+//        public virtual TravelAllocation TravelAllocation { get; set; }
 
-        [Column("uploaded_by")]
-        public Guid UploadedById { get; set;  }
-        [ForeignKey("UploadedById")]
-        public virtual Employees UploadedBy { get; set;  }
+//        [Column("expense_type")]
+//        public string ExpenseType { get; set; }
 
-        public OwnerType OwnerType { get; set; }
+//        [Column("owner_type")]
+//        public string OwnerType { get; set; }
 
-        public string FileName { get; set;  }
-        public DateTime UploadedAt { get; set;  }
+//        [Column("file_name")]
+//        public string FileName { get; set;  }
 
-        public string Url { get; set;  }
-    }
-}
+//        [Column("url")]
+//        public string Url { get; set;  }
+//        [Column("uploaded_at")]
+//        public DateTime UploadedAt { get; set;  }
+
+//        [Column("is_deleted")]
+//        public bool IsDeleted { get; set; }
+
+//        [Column("deleted_on")]
+//        public DateTime DeletedOn { get; set; }
+//    }
+//}

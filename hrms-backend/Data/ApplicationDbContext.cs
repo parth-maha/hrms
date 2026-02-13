@@ -1,5 +1,6 @@
 using hrms_backend.Models.Entities;
 using hrms_backend.Models.Entities.Jobs;
+using hrms_backend.Models.Entities.Travel;
 using Microsoft.EntityFrameworkCore;
 
 namespace hrms_backend.Data
@@ -18,6 +19,12 @@ namespace hrms_backend.Data
 
         public DbSet<SystemInfo> SystemInfo { get; set; }
         public DbSet<SystemConfigs> SystemConfigs { get; set; }
+
+        public DbSet<TravelPlan> TravelPlans { get; set; }
+        public DbSet<HrTravelDocuments> HrTravelDocuments { get; set; }
+        public DbSet<TravelAllocation> TravelAllocation { get; set; }
+        //public DbSet<TravelExpense> TravelExpenses { get; set; }
+        //public DbSet<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }
 
         // ================== SOCIAL ==================
         //public DbSet<Post> Posts { get; set; }
@@ -93,23 +100,44 @@ namespace hrms_backend.Data
 
             // ================== TRAVEL ==================
 
+            // Travel Plan -> created by hr
+            modelBuilder.Entity<TravelPlan>()
+                .HasOne(tp=> tp.CreatedBy)
+                .WithMany()
+                .HasForeignKey(tp=> tp.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // when travel plan deleted allocation will also be deleted
+            modelBuilder.Entity<TravelAllocation>()
+                .HasOne(ta => ta.TravelPlan)
+                .WithMany(tp => tp.TravelAllocation)
+                .HasForeignKey(ta => ta.TravelId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // allocation -> employee, cant delete if emp has travel history
+            modelBuilder.Entity<TravelAllocation>()
+                .HasOne(ta => ta.Employee)
+                .WithMany()
+                .HasForeignKey(ta => ta.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<HrTravelDocuments>()
+                .HasOne(ta => ta.TravelPlan)
+                .WithMany(d => d.HrTravelDocuments)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // expense belongs to allocation
             //modelBuilder.Entity<TravelExpense>()
-            //    .HasOne(t => t.Employee)
+            //    .HasOne(te => te.TravelAllocation)
             //    .WithMany()
-            //    .HasForeignKey(t => t.EmployeeId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            //    .HasForeignKey(te => te.AllocationId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             //modelBuilder.Entity<TravelExpense>()
-            //    .HasOne(t => t.FkApprovedBy)
-            //    .WithMany()
-            //    .HasForeignKey(t => t.ApprovedById)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<TravelPlan>()
-            //    .HasOne(tp => tp.Hr)
-            //    .WithMany()
-            //    .HasForeignKey(tp => tp.HrId)
-            //    .OnDelete(DeleteBehavior.Restrict); 
+            //.HasOne(te => te.ApprovedBy)
+            //.WithMany()
+            //.HasForeignKey(te => te.ApprovedById)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             // ================== JOBS ==================
 

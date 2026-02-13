@@ -9,6 +9,7 @@ using NLog.Web.LayoutRenderers;
 
 namespace hrms_backend.Controllers
 {
+    [ApiController]
     [Route("api/v1/[controller]")]
     public class AuthController : ControllerBase
     {
@@ -82,6 +83,7 @@ namespace hrms_backend.Controllers
             try
             {
                 _authService.RevokeToken(refreshToken, IpAddress());
+
                 return Ok(new { message = "Token revoked" });
             }
             catch (Exception ex)
