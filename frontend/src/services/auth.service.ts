@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../store/auth.store";
 import { useNavigate } from "react-router-dom";
 import api from "./axios";
+import { toast } from "react-toastify";
 
 interface LoginRequest {
   email: string;
@@ -13,7 +14,7 @@ interface LoginResponse {
   firstName: string;
   lastName: string;
   email: string;
-  role: string[];
+  role: string;
   jwtToken: string;
   refreshToken: string;
 }
@@ -38,6 +39,7 @@ export const useLoginMutation = () => {
       navigate("/");
     },
     onError: (error: any) => {
+      toast.error(error.message || "Failed to login" )
       console.error(
         "Login failed:",
         error.response?.data?.message || error.message,

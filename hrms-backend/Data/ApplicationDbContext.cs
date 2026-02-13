@@ -16,6 +16,9 @@ namespace hrms_backend.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Roles> Roles { get; set; }
 
+        public DbSet<SystemInfo> SystemInfo { get; set; }
+        public DbSet<SystemConfigs> SystemConfigs { get; set; }
+
         // ================== SOCIAL ==================
         //public DbSet<Post> Posts { get; set; }
         //public DbSet<Like> Likes { get; set; }
@@ -43,12 +46,30 @@ namespace hrms_backend.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // each config belongs to a system
+            modelBuilder.Entity<SystemConfigs>()
+                .HasOne(s => s.System)
+                .WithMany(s => s.SystemConfigs)
+                .HasForeignKey(s => s.SystemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // config created by which employee
+            modelBuilder.Entity<SystemConfigs>()
+                .HasOne(r => r.CreatedBy)
+                .WithMany()
+                .HasForeignKey(r => r.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // ================== EMPLOYEES ====================
             modelBuilder.Entity<Employees>()
                 .HasOne(e => e.Manager)
-                .WithOne()
-                .HasForeignKey<Employees>(e => e.ManagerId)
+                .WithMany(e => e.Reports)
+                .HasForeignKey(e => e.ManagerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Employees>()
+                .HasIndex(e => e.EmployeeId)
+                .IsUnique();
 
             // ================== SOCIAL ======================
 
@@ -166,6 +187,26 @@ namespace hrms_backend.Data
             //    .WithMany()
             //    .HasForeignKey(gs => gs.MemberId)
             //    .OnDelete(DeleteBehavior.Restrict);
+
+
+            // ====================== FILTERS =======================
+            modelBuilder.Entity<Employees>().HasQueryFilter(e => !e.IsDeleted);
+
+            modelBuilder.Entity<Jobs>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<Referrals>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<JobReviewers>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<JobShared>().HasQueryFilter(j => !j.IsDeleted);
+            modelBuilder.Entity<SystemConfigs>().HasQueryFilter(s => !s.IsDeleted);
+
+            // indexing on isDeleted
+            modelBuilder.Entity<Jobs>()
+                .HasIndex(j => j.IsDeleted)
+                .HasFilter("[is_deleted] = 0");
+
+            modelBuilder.Entity<SystemConfigs>()
+                .HasIndex(s => s.IsDeleted)
+                .HasFilter("[is_deleted] =0");
+
         }
     }
 }

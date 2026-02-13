@@ -1,7 +1,7 @@
 import { Notifications } from "@mui/icons-material";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
-import { useLocation} from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import useAuthStore from "../../store/auth.store";
 
 interface TopBarProps {
@@ -27,7 +27,9 @@ export function TopBar({  }: TopBarProps) {
             <Notifications className="w-5 h-5 text-white" />
         </div>  
         <div className="flex items-center gap-2">
+          <Link to='/profile'>
             <FaRegUserCircle className="w-5 h-5 text-white" />
+          </Link>
         </div>
 
         <button 

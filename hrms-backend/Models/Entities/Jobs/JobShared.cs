@@ -18,6 +18,12 @@ namespace hrms_backend.Models.Entities.Jobs
         [Column("shared_by")]
         public Guid SharedById { get; set;  }
         [ForeignKey("SharedById")]
+
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
         public virtual Employees SharedBy { get; set;}
 
         public DateTime SharedTime { get; set; }

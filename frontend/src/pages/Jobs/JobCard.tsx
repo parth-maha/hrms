@@ -15,7 +15,7 @@ const JobCard = ({
   return (
     <div
       onClick={() => onView(job.jobId)}
-      className="bg-white border border-gray-300 rounded-xl hover:shadow-sm transition-all duration-300 p-5 flex flex-col justify-between cursor-pointer"
+      className="bg-white border min-h-60 border-gray-300 rounded-xl hover:shadow-sm transition-all duration-300 p-5 flex flex-col justify-between cursor-pointer"
     >
       <div className="items-start mb-3">
         <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>

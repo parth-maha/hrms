@@ -19,13 +19,14 @@ export const useEmployeeOptions = () =>{
     })
 }
 
-export const useCreateJob = (onSucess? : () => void) =>{
+export const useCreateJob = (onSuccess? : () => void) =>{
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: createJob,
         onSuccess :()=>{
             toast.success("Job created")
             queryClient.invalidateQueries({queryKey: ['jobs']})
+            onSuccess?.()
         },
         onError: (e : any) =>{
             toast.error(e.response?.data?.message || "failed to create")

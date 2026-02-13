@@ -113,6 +113,8 @@ namespace hrms_backend.Services
 			var job = await _jobRepo.GetJobByIdAsync(id);
 			if (job == null) throw new Exception("Job not found");
 
+			job.IsDeleted = true;
+			job.DeletedOn = DateTime.Now;  // soft delete
 			await _jobRepo.DeleteJobAsync(job);
 			_logger.LogInformation($"Job Deleted. JobId : {job.Id},Title: {job.Title}, Deleted By: ${empId}");
 		}

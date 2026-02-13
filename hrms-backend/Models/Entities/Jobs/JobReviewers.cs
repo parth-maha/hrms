@@ -17,6 +17,12 @@ namespace hrms_backend.Models.Entities.Jobs
         [JsonIgnore]
         public virtual Jobs Job { get; set;  }
 
+        [Column("deleted_on")]
+        public DateTime DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
+
         [Column("reviewer_id")]
         public Guid ReviewerId { get; set; }
         [ForeignKey("ReviewerId")]

@@ -1,12 +1,8 @@
-﻿using hrms_backend.Data;
-using hrms_backend.Models.Constants;
-using hrms_backend.Models.dto;
+﻿using hrms_backend.Models.dto;
 using hrms_backend.Models.dto.Jobs;
+using hrms_backend.Models.DTO;
 using hrms_backend.Models.Entities;
-using hrms_backend.Models.Entities.Jobs;
 using hrms_backend.Repositories;
-using hrms_backend.Services.Authorization;
-using System.Numerics;
 
 namespace hrms_backend.Services
 {
@@ -37,6 +33,11 @@ namespace hrms_backend.Services
         public async Task<IReadOnlyList<ReviewerDto>> GetListOfEmployees()
         {
             return await _employeeRepo.GetListOfEmployees();
+        }
+
+        public async Task<IReadOnlyList<OrgChartDto>> GetOrgChart()
+        {
+            return await _employeeRepo.GetOrgChartAsync();
         }
 
         public async Task<EmployeeDto> EditJob(Guid Id, EmployeeDto dto)
