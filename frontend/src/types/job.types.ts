@@ -48,6 +48,12 @@ export interface EmployeeOption{
   name : string;
 }
 
+export interface JobFormProps {
+  initialData?: Job;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
 export interface JobCardProps {
   job: Job;
   onDelete: (jobId: string) => void;
@@ -56,14 +62,6 @@ export interface JobCardProps {
   onEdit: (jobId: string) => void;
   onRefer : (jobId : string) => void;
 }
-
-export interface JobFormProps {
-  jobId?: number;
-  initialData?: Job;
-  onSuccess: (data: JobFormData) => Promise<void>;
-  onCancel?: () => void;
-}
-
 
 export interface ApplicationFormProps {
   open: boolean;

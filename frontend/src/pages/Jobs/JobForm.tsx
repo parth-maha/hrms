@@ -1,4 +1,4 @@
-import type { Job, JobFormData } from "../../types/job.types";
+import type { Job, JobFormData, JobFormProps } from "../../types/job.types";
 import {
   useCreateJob,
   useEmployeeOptions,
@@ -11,12 +11,6 @@ import { useEffect } from "react";
 import Button from "../../components/ui/Button";
 import { MenuItem } from "@mui/material";
 import { Close } from "@mui/icons-material";
-
-interface JobFormProps {
-  initialData?: Job;
-  onSuccess: () => void;
-  onCancel: () => void;
-}
 
 const JobForm = ({ initialData, onSuccess, onCancel }: JobFormProps) => {
   const { data: employees = [] } = useEmployeeOptions();

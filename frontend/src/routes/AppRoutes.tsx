@@ -3,7 +3,7 @@ import DashboardLayout from "../components/layout/DashboardLayout";
 import NotFound from "../pages/NotFound";
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
-import Travel from "../pages/Travel";
+import Travel from "../pages/Travel/Travel";
 import Login from "../pages/Login";
 import Jobs from "../pages/Jobs";
 import Games from "../pages/Games/Games";
