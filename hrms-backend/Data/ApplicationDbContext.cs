@@ -225,6 +225,9 @@ namespace hrms_backend.Data
             modelBuilder.Entity<JobReviewers>().HasQueryFilter(j => !j.IsDeleted);
             modelBuilder.Entity<JobShared>().HasQueryFilter(j => !j.IsDeleted);
             modelBuilder.Entity<SystemConfigs>().HasQueryFilter(s => !s.IsDeleted);
+            modelBuilder.Entity<TravelPlan>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<HrTravelDocuments>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<TravelAllocation>().HasQueryFilter(t => !t.IsDeleted);
 
             // indexing on isDeleted
             modelBuilder.Entity<Jobs>()
@@ -235,6 +238,9 @@ namespace hrms_backend.Data
                 .HasIndex(s => s.IsDeleted)
                 .HasFilter("[is_deleted] =0");
 
+            modelBuilder.Entity<TravelPlan>()
+                .HasIndex(s => s.IsDeleted)
+                .HasFilter("[is_deleted] =0");
         }
     }
 }

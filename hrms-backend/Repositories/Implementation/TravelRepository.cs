@@ -59,6 +59,18 @@ namespace hrms_backend.Repositories.Implementation
                 .FirstOrDefaultAsync(a => a.TravelId == travelId && a.EmployeeId == empId);
         }
 
+        public async Task AddHrDocumentAsync(HrTravelDocuments doc)
+        {
+            await _dbContext.HrTravelDocuments.AddAsync(doc);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteTravelPlan(TravelPlan plan)
+        {
+            _dbContext.TravelPlans.Update(plan);
+            await _dbContext.SaveChangesAsync();
+        }
+
         //public async Task AddExpenseAsync(TravelExpense expense)
         //{
         //    await _dbContext.TravelExpenses.AddAsync(expense);
@@ -75,12 +87,6 @@ namespace hrms_backend.Repositories.Implementation
         //    _dbContext.TravelExpenses.Update(expense);
         //    await _dbContext.SaveChangesAsync();
         //}
-
-        public async Task AddHrDocumentAsync(HrTravelDocuments doc)
-        {
-            await _dbContext.HrTravelDocuments.AddAsync(doc);
-            await _dbContext.SaveChangesAsync();
-        }
 
         //public async Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc)
         //{

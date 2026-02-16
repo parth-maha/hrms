@@ -12,8 +12,8 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260213133110_TravelUpdate1")]
-    partial class TravelUpdate1
+    [Migration("20260216113704_InitialCreate1")]
+    partial class InitialCreate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace hrms_backend.Migrations
                     b.Property<string>("BloodGroup")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeletedOn")
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_on");
 

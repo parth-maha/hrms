@@ -11,6 +11,7 @@ namespace hrms_backend.Repositories
         Task<List<TravelPlan>> GetAllPlansAsync();
         Task AddHrDocumentAsync(HrTravelDocuments doc);
 
+        Task DeleteTravelPlan(TravelPlan plan);
         Task<TravelAllocation?> GetAllocationAsync(Guid travelId, Guid empId);
         //Task AddExpenseAsync(TravelExpense expense);
         //Task<TravelExpense?> GetExpenseByIdAsync(Guid id);

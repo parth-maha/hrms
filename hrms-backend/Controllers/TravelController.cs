@@ -24,6 +24,7 @@ namespace hrms_backend.Controllers
             try
             {
                 var user = (Employees?)HttpContext.Items["User"];
+                if (user == null) throw new Exception("User not found");
                 await _travelService.CreatePlan(dto, user.Id);
                 return Ok(new { message = "Travel Plan Created" });
             }
@@ -59,6 +60,19 @@ namespace hrms_backend.Controllers
                 return Ok(plans);
             }
             catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTravelPlan(Guid id)
+        {
+            try
+            {
+                await _travelService.DeleteTravelPlan(id);
+                return Ok(new { message= "Travel Plan Delete" });
+            }catch (Exception ex)
             {
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }

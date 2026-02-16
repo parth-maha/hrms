@@ -12,8 +12,8 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260213131443_TravelUpdate")]
-    partial class TravelUpdate
+    [Migration("20260216120620_TPIndex")]
+    partial class TPIndex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace hrms_backend.Migrations
                     b.Property<string>("BloodGroup")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeletedOn")
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_on");
 
@@ -482,11 +482,8 @@ namespace hrms_backend.Migrations
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelAllocation", b =>
                 {
-                    b.Property<Guid>("TravelId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("fk_travel_id");
-
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("pk_ta_id");
 
@@ -505,11 +502,17 @@ namespace hrms_backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
-                    b.HasKey("TravelId", "Id");
+                    b.Property<Guid>("TravelId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_travel_id");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("EmployeesId");
+
+                    b.HasIndex("TravelId");
 
                     b.ToTable("travel_allocations");
                 });
@@ -553,6 +556,9 @@ namespace hrms_backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
+
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("[is_deleted] =0");
 
                     b.ToTable("travel_plan");
                 });

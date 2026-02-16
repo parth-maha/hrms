@@ -76,6 +76,27 @@ namespace hrms_backend.Services
             }
         }
 
+        public async Task DeleteTravelPlan(Guid id)
+        {
+            var plan = await _travelRepo.GetPlanByIdAsync(id);
+            if (plan == null) throw new Exception("Plan not found");
+
+            plan.IsDeleted = true;
+            plan.DeletedOn = DateTime.UtcNow;
+            foreach(var allocation in plan.TravelAllocation)
+            {
+                allocation.IsDeleted = true;
+                allocation.DeletedOn = DateTime.UtcNow;
+            }
+
+            foreach(var document in plan.HrTravelDocuments)
+            {
+                document.IsDeleted = true;
+                document.DeletedOn = DateTime.UtcNow;
+            }
+            await _travelRepo.DeleteTravelPlan(plan);
+
+        }
         public async Task<List<TravelPlanDto>> GetMyPlans(Guid empId)
         {
             var plans = await _travelRepo.GetPlansByEmployeeIdAsync(empId);

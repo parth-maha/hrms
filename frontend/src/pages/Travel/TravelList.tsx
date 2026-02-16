@@ -15,6 +15,7 @@ import EditIcon from "../../components/ui/EditIcon";
 import ConfirmBox from "../../components/ui/ConfirmBox";
 import DeleteIcon from "../../components/ui/DeleteIcon";
 import type { Travel, TravelListProps } from "../../types/travel.types";
+import { formatDate } from "../../types/job.types";
 
 const ConfigList: React.FC<TravelListProps> = ({
   onAddTravel,
@@ -43,26 +44,19 @@ const ConfigList: React.FC<TravelListProps> = ({
 
   return (
     <>
-      <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 1, m:0}}>
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+      <div className="flex justify-between p-1 mb-2">
+        <Typography variant="h4">Travels</Typography>
+        <Button
+          title="Add System Config"
+          onClick={onAddTravel}
+          variant="contained"
+          withPlusIcon={true}
+          size="small"
         >
-          <Typography variant="h4">Travels</Typography>
-          <Button
-            title="Add System Config"
-            onClick={onAddTravel}
-            variant="contained"
-            withPlusIcon={true}
-            size="small"
-          >
-            Create Travel
-          </Button>
-        </Box>
+          Create Travel
+        </Button>
+      </div>
+      <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 1, m: 0 }}>
         <TableContainer className="border border-gray-100 rounded-lg">
           <Table className="w-full">
             <TableHead className="bg-gray-50 border border-gray-200">
@@ -110,7 +104,14 @@ const ConfigList: React.FC<TravelListProps> = ({
                     <Typography>{row.createdBy}</Typography>
                   </TableCell>
                   <TableCell sx={{ paddingY: "4px" }}>
-                    <Typography>{row.description}</Typography>
+                    <Box>
+                      <Typography>
+                        {formatDate(row.startDate) || "-"}
+                      </Typography>
+                      <Typography color="text.secondary">
+                        {formatDate(row.endDate)}
+                      </Typography>
+                    </Box>
                   </TableCell>
                   <TableCell sx={{ paddingY: "4px" }}>
                     <EditIcon

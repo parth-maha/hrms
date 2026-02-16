@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace hrms_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class TravelUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -328,7 +328,7 @@ namespace hrms_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_travel_allocations", x => new { x.fk_travel_id, x.pk_ta_id });
+                    table.PrimaryKey("PK_travel_allocations", x => x.pk_ta_id);
                     table.ForeignKey(
                         name: "FK_travel_allocations_employees_EmployeesId",
                         column: x => x.EmployeesId,
@@ -456,6 +456,11 @@ namespace hrms_backend.Migrations
                 name: "IX_travel_allocations_fk_employee_id",
                 table: "travel_allocations",
                 column: "fk_employee_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_travel_allocations_fk_travel_id",
+                table: "travel_allocations",
+                column: "fk_travel_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_travel_plan_CreatedById",

@@ -20,7 +20,6 @@ namespace hrms_backend.Middlewares
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = jwtUtils.ValidateJwtToken(token);
-
             if (userId != Guid.Empty)
             {
                 context.Items["User"] = await dbContext.Employees.Include(u=> u.Roles).FirstOrDefaultAsync(u => u.Id==userId);
