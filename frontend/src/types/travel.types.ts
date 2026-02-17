@@ -19,7 +19,7 @@ export interface Travel {
   endDate: string;
   createdBy: string;
   files : FileType[];
-  employeeIds : EmployeeDto[];
+  employeeIds : { id : string;name : string;}[];
   documents: TravelDocument[];
 }
 
@@ -34,11 +34,6 @@ export interface FileType{
     id : string;
     fileName : string;
     url : string;
-}
-
-export interface EmployeeDto{
-    id : string;
-    name : string;
 }
 
 export interface TravelDocument {
@@ -58,4 +53,11 @@ export interface TravelFormProps {
   initialData?: Travel;
   onSuccess: () => void;
   onCancel: () => void;
+}
+
+export interface FileItem{
+  id?: string;
+  fileName : string;
+  url? : string;
+  file?: File
 }

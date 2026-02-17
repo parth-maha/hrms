@@ -7,7 +7,7 @@
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public List<Guid> employeeIds { get; set; }
-        public List<IFormFile> files { get; set; }
+        public List<IFormFile> documents { get; set; }
         //public List<HrTravelDocumentDto> documents { get; set; }
     }
 }

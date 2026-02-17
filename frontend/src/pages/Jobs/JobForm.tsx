@@ -190,6 +190,9 @@ const JobForm = ({ initialData, onSuccess, onCancel }: JobFormProps) => {
                     rel="noopener noreferrer"
                     className="text-xs text-blue-600 hover:underline truncate"
                   >
+                    {typeof attachedFile==='string'
+                    ? attachedFile.split('/').pop()
+                    :attachedFile.name }
                   </a>
                 </div>
               </div>

@@ -26,9 +26,14 @@ namespace hrms_backend.Services.Authorization
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var claims = new List<Claim>
+            {
+                new Claim("employeeId",employee.EmployeeId),
+                new Claim(ClaimTypes.Role, employee.Roles.Role)
+            };
             var tokenDetails = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("employeeId", employee.Id.ToString())}),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(300),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _appSettings.Issuer,

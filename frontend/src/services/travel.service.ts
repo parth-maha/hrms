@@ -1,4 +1,4 @@
-import type { CreateTravelFormData, Travel } from "../types/travel.types"
+import type { CreateTravelFormData,Travel } from "../types/travel.types"
 import api from "./axios"
 
 export const getTravelForEmployee = async() =>{
@@ -12,7 +12,7 @@ export const getAllTravels = async () =>{
 }
 
 export const createTravelByHr = async (data : CreateTravelFormData) =>{
-    const formData = getCreateTravelForm(data)
+    const formData = getCreateTravelForm(data)    
     const response = await api.post('/Travel/plan' ,formData,{
         headers : {
             "Content-Type": "multipart/form-data",
@@ -23,6 +23,15 @@ export const createTravelByHr = async (data : CreateTravelFormData) =>{
 
 export const deleteTravel = async (id:string)=>{
     const response = await api.delete(`/Travel/${id}`)
+    return response.data
+}
+
+export const updateTravel = async(id:string, data: FormData)=>{
+    const response = await api.put(`/Travel/${id}`,data,{
+        headers:{
+            "Content-Type": "multipart/form-data",
+        }
+    })
     return response.data
 }
 
@@ -40,10 +49,11 @@ const getCreateTravelForm = (data : CreateTravelFormData) =>{
             formData.append('employeeIds',id)
         })
     }
-
+    console.log(data.documents);
+    
     if(data.documents){
-        data.documents.forEach((file) => {
-            formData.append('documents', file)
+        data.documents.forEach((doc) => {
+            formData.append('documents', doc.file)
         })
     }
 

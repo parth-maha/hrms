@@ -34,6 +34,22 @@ namespace hrms_backend.Controllers
             }
         }
 
+        [HttpPut("plan/{id}")]
+        public async Task<IActionResult> UpdatePlan(Guid id, [FromForm] CreateTravelPlanDto dto)
+        {
+            try
+            {
+                var user = (Employees ?)HttpContext.Items["User"];
+                if (user == null) return Unauthorized(new { message = "Invalid User" });
+                await _travelService.UpdatePlan(id,dto, user.Id);
+                return Ok(new { message = "Travel Plan Updated" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
         [HttpGet("my")]
         public async Task<IActionResult> GetMyPlans()
         {

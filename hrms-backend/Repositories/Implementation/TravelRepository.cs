@@ -25,6 +25,19 @@ namespace hrms_backend.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task RemoveAllocationsAsync(List<TravelAllocation> allocations)
+        {
+            _dbContext.TravelAllocation.RemoveRange(allocations);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<TravelAllocation?> GetAllocationAsync(Guid travelId, Guid empId)
+        {
+            return await _dbContext.TravelAllocation
+                .Include(a => a.TravelPlan)
+                .FirstOrDefaultAsync(a => a.TravelId == travelId && a.EmployeeId == empId);
+        }
+
         public async Task<TravelPlan?> GetPlanByIdAsync(Guid id)
         {
             return await _dbContext.TravelPlans
@@ -52,19 +65,22 @@ namespace hrms_backend.Repositories.Implementation
                 .ToListAsync();
         }
 
-        public async Task<TravelAllocation?> GetAllocationAsync(Guid travelId, Guid empId)
-        {
-            return await _dbContext.TravelAllocation
-                .Include(a => a.TravelPlan)
-                .FirstOrDefaultAsync(a => a.TravelId == travelId && a.EmployeeId == empId);
-        }
-
         public async Task AddHrDocumentAsync(HrTravelDocuments doc)
         {
             await _dbContext.HrTravelDocuments.AddAsync(doc);
             await _dbContext.SaveChangesAsync();
         }
+        public async Task RemoveHrDocumentsAsync(List<HrTravelDocuments> hrTravelDocuments)
+        {
+            _dbContext.HrTravelDocuments.RemoveRange(hrTravelDocuments);
+            await _dbContext.SaveChangesAsync();
+        }
 
+        public async Task UpdatePlanAsync(TravelPlan plan)
+        {
+            _dbContext.TravelPlans.Update(plan);
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task DeleteTravelPlan(TravelPlan plan)
         {
             _dbContext.TravelPlans.Update(plan);

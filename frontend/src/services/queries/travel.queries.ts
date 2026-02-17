@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createTravelByHr, deleteTravel, getAllTravels, getTravelForEmployee } from "../travel.service"
+import { createTravelByHr, deleteTravel, getAllTravels, getTravelForEmployee, updateTravel } from "../travel.service"
 import { toast } from "react-toastify"
 
 export const useEmployeeTravels = () =>{
@@ -18,6 +18,21 @@ export const useCreateTravelByHr = (onSuccess? : ()=> void) =>{
             toast.success("Travel Created")
             queryClient.invalidateQueries({queryKey:['travel']})
             onSuccess?.()
+        }
+    })
+}
+
+export const useUpdateTravel = (onSuccess? : ()=> void) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn : ({id,data} : {id:string; data: FormData}) =>updateTravel(id,data),
+        onSuccess : () =>{
+            toast.success("Travel Updated")
+            queryClient.invalidateQueries({queryKey: ['travel']});
+            onSuccess?.()
+        },
+        onError : (error:any)=>{
+            toast.error(error.response?.data?.message || "Failed to update travel")
         }
     })
 }

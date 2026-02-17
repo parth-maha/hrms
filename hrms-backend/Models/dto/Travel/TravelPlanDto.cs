@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using hrms_backend.Models.dto;
+using MassTransit;
 
 namespace hrms_backend.Models.DTO.Travel
 {
@@ -13,6 +14,7 @@ namespace hrms_backend.Models.DTO.Travel
 
         public string createdBy { get; set; }
 
+        public List<EmployeeListDto> employeeIds { get; set; }
         public List<DocumentsDto> documents { get; set; }
     }
 
@@ -21,5 +23,11 @@ namespace hrms_backend.Models.DTO.Travel
         public string id { get; set; }
         public string fileName { get; set;  }
         public string url { get; set; }
+    }
+
+    public class EmployeeListDto
+    {
+        public string id { get; set; }
+        public string name { get; set; }
     }
 }

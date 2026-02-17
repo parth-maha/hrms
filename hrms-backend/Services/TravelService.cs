@@ -55,9 +55,9 @@ namespace hrms_backend.Services
                 //}
             }
 
-            if(dto.files!=null  && dto.files.Any())
+            if(dto.documents != null  && dto.documents.Any())
             {
-                foreach(var file in dto.files)
+                foreach(var file in dto.documents)
                 {
                     var result = await _cloudinaryService.UploadDocument(file);
 
@@ -68,12 +68,71 @@ namespace hrms_backend.Services
                         TravelPlan = plan,
                         OwnerType = "HR",
                         UploadedById = hrId,
+                        UploadedAt = DateTime.UtcNow,
+                    };
+
+                    await _travelRepo.AddHrDocumentAsync(document);
+                }
+            }
+        }
+
+        public async Task UpdatePlan(Guid id, CreateTravelPlanDto dto, Guid hrId)
+        {
+            var plan = await _travelRepo.GetPlanByIdAsync(id);
+            if (plan == null)
+            {
+                throw new Exception("Travel plan not found");
+            }
+
+            plan.Name = dto.name;
+            plan.Description = dto.description;
+            plan.StartDate = dto.startDate;
+            plan.EndDate = dto.endDate;
+
+            if(dto.employeeIds!= null && dto.employeeIds.Any())
+            {
+                await _travelRepo.RemoveAllocationsAsync(plan.TravelAllocation.ToList());
+                
+                var newAllocations = dto.employeeIds.Select(empId => new TravelAllocation
+                {
+                   Id = Guid.NewGuid(),
+                   TravelId = plan.Id,
+                   EmployeeId = empId
+                 }).ToList();
+                 await _travelRepo.AddAllocationAsync(newAllocations);
+            }
+
+            if(dto.documents!=null && dto.documents.Any())
+            {
+                foreach(var file in dto.documents)
+                {
+                    if(plan.HrTravelDocuments.Any())
+                    {
+                        foreach(var doc in  plan.HrTravelDocuments)
+                        {
+                            await _cloudinaryService.DeleteFileAsync(doc.Url);
+                        }
+                        await _travelRepo.RemoveHrDocumentsAsync(plan.HrTravelDocuments.ToList());
+                    }
+
+                    var result = await _cloudinaryService.UploadDocument(file);
+
+                    var document = new HrTravelDocuments
+                    {
+                        FileName = file.FileName,
+                        Url = result.Url,
+                        TravelPlan = plan,
+                        TravelId = plan.Id,
+                        OwnerType = "HR",
+                        UploadedById = hrId,
                         UploadedAt = DateTime.Now,
                     };
 
                     await _travelRepo.AddHrDocumentAsync(document);
                 }
             }
+
+            await _travelRepo.UpdatePlanAsync(plan);
         }
 
         public async Task DeleteTravelPlan(Guid id)
@@ -113,18 +172,23 @@ namespace hrms_backend.Services
         {
             return new TravelPlanDto
             {
-                   id = plan.Id.ToString(),
-                   name=plan.Name,
-                   description = plan.Description,
-                   startDate = plan.StartDate,
-                   endDate = plan.EndDate,
-                   createdBy = $"{plan.CreatedBy.FirstName} {plan.CreatedBy.LastName}",
+                id = plan.Id.ToString(),
+                name = plan.Name,
+                description = plan.Description,
+                startDate = plan.StartDate,
+                endDate = plan.EndDate,
+                createdBy = $"{plan.CreatedBy.FirstName} {plan.CreatedBy.LastName}",
                    documents = plan.HrTravelDocuments.Select(dto => new DocumentsDto
                    {
-                        id = dto.Id.ToString(),
-                        fileName = dto.FileName,
-                        url = dto.Url,
+                       id = dto.Id.ToString(),
+                       fileName = dto.FileName,
+                       url = dto.Url,
                    }).ToList(),
+                employeeIds = plan.TravelAllocation.Select(dto => new EmployeeListDto
+                {
+                    id = dto.Employee.Id.ToString(),
+                    name = $"{dto.Employee.FirstName} {dto.Employee.LastName}"
+                }).ToList()
             };
         }
     }
