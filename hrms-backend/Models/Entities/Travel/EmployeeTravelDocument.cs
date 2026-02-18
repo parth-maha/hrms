@@ -12,9 +12,9 @@ namespace hrms_backend.Models.Entities.Travel
         public Guid Id { get; set; }
 
         [Column("fk_expense_id")]
-        public Guid TravelExpenseId { get; set; }
+        public Guid? TravelExpenseId { get; set; }
         [ForeignKey("TravelExpenseId")]
-        public virtual TravelExpense TravelExpense { get; set; }
+        public virtual TravelExpense? TravelExpense { get; set; }
 
         [Column("expense_type")]
         public string ExpenseType { get; set; }

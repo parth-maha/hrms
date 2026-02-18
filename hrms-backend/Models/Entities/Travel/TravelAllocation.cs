@@ -12,10 +12,12 @@ namespace hrms_backend.Models.Entities.Travel
 
         [Column("fk_travel_id")]
         public Guid TravelId { get; set; }
+        [ForeignKey("TravelId")]
         public virtual TravelPlan TravelPlan { get; set; }
 
         [Column("fk_employee_id")]
         public Guid EmployeeId { get; set; }
+        [ForeignKey("EmployeeId")]
         public virtual Employees Employee { get; set; }
 
         [Column("is_deleted")]

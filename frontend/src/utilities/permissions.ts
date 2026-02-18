@@ -22,7 +22,7 @@ export type Permission =
   
 const rolePermissions: Record<Role, Permission[]> = {
   HR: [
-    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share', 'travel:create','travel:delete'
+    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share', 'travel:create','travel:delete','expense:approve'
   ],
   MANAGER :[
     'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share','travel:create','travel:delete'

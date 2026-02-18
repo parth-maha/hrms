@@ -12,7 +12,7 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260218132644_InitialCreate")]
+    [Migration("20260218154647_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

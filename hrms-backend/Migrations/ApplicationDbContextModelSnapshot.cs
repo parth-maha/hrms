@@ -114,7 +114,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("RolesId");
 
-                    b.ToTable("employees");
+                    b.ToTable("employees", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.JobReviewers", b =>
@@ -146,7 +146,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("ReviewerId");
 
-                    b.ToTable("job_reviewers");
+                    b.ToTable("job_reviewers", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.JobShared", b =>
@@ -185,7 +185,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("SharedById");
 
-                    b.ToTable("job_shares");
+                    b.ToTable("job_shares", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.Jobs", b =>
@@ -244,7 +244,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("PostedById");
 
-                    b.ToTable("jobs");
+                    b.ToTable("jobs", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Jobs.Referrals", b =>
@@ -293,7 +293,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("ReferralById");
 
-                    b.ToTable("job_referrals");
+                    b.ToTable("job_referrals", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.RefreshToken", b =>
@@ -334,7 +334,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("refresh_tokens");
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Roles", b =>
@@ -352,7 +352,7 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("roles");
+                    b.ToTable("roles", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.SystemConfigs", b =>
@@ -401,7 +401,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("SystemId");
 
-                    b.ToTable("system_configs");
+                    b.ToTable("system_configs", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.SystemInfo", b =>
@@ -420,7 +420,7 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("system_info");
+                    b.ToTable("system_info", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.EmployeeTravelDocument", b =>
@@ -471,7 +471,7 @@ namespace hrms_backend.Migrations
                     b.HasIndex("TravelExpenseId")
                         .IsUnique();
 
-                    b.ToTable("employee_travel_documents");
+                    b.ToTable("employee_travel_documents", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.HrTravelDocuments", b =>
@@ -522,7 +522,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("hr_travel_documents");
+                    b.ToTable("hr_travel_documents", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelAllocation", b =>
@@ -559,7 +559,7 @@ namespace hrms_backend.Migrations
 
                     b.HasIndex("TravelId");
 
-                    b.ToTable("travel_allocations");
+                    b.ToTable("travel_allocations", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelExpense", b =>
@@ -624,7 +624,7 @@ namespace hrms_backend.Migrations
                     b.HasIndex("IsDeleted")
                         .HasFilter("[is_deleted] =0");
 
-                    b.ToTable("travel_expenses");
+                    b.ToTable("travel_expenses", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
@@ -670,7 +670,7 @@ namespace hrms_backend.Migrations
                     b.HasIndex("IsDeleted")
                         .HasFilter("[is_deleted] =0");
 
-                    b.ToTable("travel_plan");
+                    b.ToTable("travel_plan", (string)null);
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Employees", b =>

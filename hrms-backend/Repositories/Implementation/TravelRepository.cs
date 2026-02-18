@@ -52,6 +52,7 @@ namespace hrms_backend.Repositories.Implementation
             return await _dbContext.TravelPlans
                 .Include(t => t.TravelAllocation).ThenInclude(a => a.Employee)
                 .Include(t => t.HrTravelDocuments)
+                .Include(t=> t.CreatedBy)
                 .OrderByDescending(t => t.StartDate)
                 .ToListAsync();
         }
@@ -59,11 +60,11 @@ namespace hrms_backend.Repositories.Implementation
         public async Task<List<TravelPlan>> GetPlansByEmployeeIdAsync(Guid empId)
         {
             return await _dbContext.TravelPlans
-
-        .Include(t => t.TravelAllocation.Where(a => a.EmployeeId == empId))
-        .Include(t => t.HrTravelDocuments)
-        .OrderByDescending(t => t.StartDate)
-        .ToListAsync();
+                .Include(t => t.CreatedBy)
+                .Include(t => t.TravelAllocation.Where(a=>a.EmployeeId==empId)).ThenInclude(a=>a.Employee)
+                .Include(t => t.HrTravelDocuments)
+                .OrderByDescending(t => t.StartDate)
+                .ToListAsync();
         }
 
         public async Task AddHrDocumentAsync(HrTravelDocuments doc)
@@ -137,6 +138,30 @@ namespace hrms_backend.Repositories.Implementation
         {
             _dbContext.EmployeeTravelDocuments.Remove(doc);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<TravelExpense>> GetFilteredExpensesAsync(Guid? empId, Guid? travelid, string? category, string? status)
+        {
+            var query = _dbContext.TravelExpenses
+                .Include(e => e.TravelAllocation).ThenInclude(a => a.TravelPlan)
+                .Include(e => e.TravelAllocation).ThenInclude(a => a.Employee)
+                .Include(e => e.EmployeeTravelDocuments)
+                .AsQueryable();
+
+            if(empId.HasValue)
+                query.Where(e => e.TravelAllocation.EmployeeId == empId);
+            
+
+            if (travelid.HasValue)
+                query = query.Where(e => e.TravelAllocation.TravelId == travelid);
+
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(e => e.Category == category);
+
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(e => e.Status == status);
+
+            return await query.OrderByDescending(e => e.ExpenseDate).ToListAsync();
         }
     }
 }

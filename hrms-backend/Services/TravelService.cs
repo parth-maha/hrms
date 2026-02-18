@@ -164,10 +164,10 @@ namespace hrms_backend.Services
             var plans = await _travelRepo.GetPlansByEmployeeIdAsync(empId);
             return plans.Select(mapToTravelDto).ToList();
         }
-        public async Task<List<TravelPlan>> GetAllPlans()
+        public async Task<List<TravelPlanDto>> GetAllPlans()
         {
             var plans = await _travelRepo.GetAllPlansAsync();
-            return plans;
+            return plans.Select(mapToTravelDto).ToList();
         }
 
         public async Task AddExpense(AddExpenseDto dto, Guid empId)

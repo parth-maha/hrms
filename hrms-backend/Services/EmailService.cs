@@ -27,10 +27,10 @@ namespace hrms_backend.Services
         {
             if(dto.Type == EmailType.REFERRAL)
             {
-                var email = JobReferralEmail(dto);
+                await JobReferralEmail(dto);
             }else if(dto.Type == EmailType.SHARE_JOB)
             {
-                var email = JobShareEmail(dto); 
+                await JobShareEmail(dto); 
             }
 
             _logger.LogInformation($"Mail Sent: {dto.ToEmail} for {dto.Type}");
@@ -47,14 +47,13 @@ namespace hrms_backend.Services
             var defaultMail = await _systemRepo.GetDefaultMail();
             var deafaultHr = await _systemRepo.GetHrEmail();
 
-            var builder = new BodyBuilder
-            {
-                TextBody = req.Body
-            };
+            if (deafaultHr==null || string.IsNullOrEmpty(deafaultHr.ConfigValue)) throw new Exception("Default hr is null");
+            if (deafaultHr == null || string.IsNullOrEmpty(deafaultHr.ConfigValue)) throw new Exception("Default hr is null");
+            
+            email.Cc.Add(new MailboxAddress("HR",defaultMail.ConfigValue));
+            email.Cc.Add(new MailboxAddress("Default Email", defaultMail.ConfigValue));
 
-            email.Cc.Add(new MailboxAddress(deafaultHr.ConfigValue,defaultMail.ConfigValue));
-
-            if(req.cc!=null && req.cc.Any())
+            if (req.cc!=null && req.cc.Any())
             {
                 foreach (var c in req.cc)
                 {
@@ -62,12 +61,15 @@ namespace hrms_backend.Services
                 }
             }
 
-            using (Stream stream = await httpClient.GetStreamAsync(req.fileUrl))
-            {
-                builder.Attachments.Add("CV", stream);
-            }
+            var builder = new BodyBuilder();
+            builder.HtmlBody = $@"
+                <p>{req.Body.Replace("\n", "<br/>")}</p>   
+                </hr>
+                <p> Please find the attached candidate CV </p>
+            ";
 
-            SendEmailMessage(email);
+            email.Body = builder.ToMessageBody();
+            await SendEmailMessage(email);
         }
 
         private async Task JobShareEmail(EmailDto req)
@@ -78,20 +80,18 @@ namespace hrms_backend.Services
             email.To.Add(MailboxAddress.Parse(req.ToEmail));
             email.Subject = req.Subject;
 
-            var builder = new BodyBuilder
-            {
-                TextBody = req.Body
-            };
+            var builder = new BodyBuilder();
+            builder.HtmlBody = $@"
+                <p>{req.Body.Replace("\n", "<br/>")}</p>   
+                </hr>
+                <p> Check out job details in deattached file </p>
+            ";
 
-            using (Stream stream = await httpClient.GetStreamAsync(req.fileUrl))
-            {
-                builder.Attachments.Add("Job Description", stream);
-            }
-
-            SendEmailMessage(email);
+            email.Body = builder.ToMessageBody();
+            await SendEmailMessage(email);
         }
 
-        private void SendEmailMessage(MimeMessage email)
+        private async Task SendEmailMessage(MimeMessage email)
         {
             using var smtp = new SmtpClient();
 

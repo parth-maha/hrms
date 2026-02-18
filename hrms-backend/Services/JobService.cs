@@ -137,8 +137,9 @@ namespace hrms_backend.Services
 			{
 				ToEmail = share.SharedTo,
 				Subject = $"{job.Title}",
-				Body = $"New Job shared by {share.SharedBy.FirstName} {share.SharedBy.LastName} for the role {job.Title}",
-				Type = EmailType.SHARE_JOB
+				Body = $"New Job shared by {share.SharedBy.FirstName} {share.SharedBy.LastName} \n Role: {job.Title} \n\nJob Details:{job.AttachedFile}",
+				Type = EmailType.SHARE_JOB,
+				fileUrl = job.AttachedFile
 			};
 
 			await _emailService.SendEmailAsync(email);
@@ -166,7 +167,8 @@ namespace hrms_backend.Services
 			{
 				ToEmail = referral.RefferedToEmail,
 				Subject = $"Referral for {job.Title}",
-				Body = $"Hi {referral.RefferedTo}, You were referred to a job at Roima.Below are the given details. \n\nReferred By:{referral.RefferedBy.EmployeeId} - {referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}\n Job Code:{job.JobCode} \n Title: {job.Title}.",
+				fileUrl = referral.ReferredToCV,
+				Body = $"Hi {referral.RefferedTo}, \nYou were referred to a job at Roima.Below are the given details. \n\nReferred By:{referral.RefferedBy.EmployeeId} - {referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}\n Job Code:{job.JobCode} \n Title: {job.Title}. \nCV: {referral.ReferredToCV}",
 				Type = EmailType.REFERRAL,
 				cc = job.JobReviewers.Select(r => r.Reviewer.Email).ToList()
 			};

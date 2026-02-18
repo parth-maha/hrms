@@ -15,14 +15,17 @@ import useAuthStore from "../../store/auth.store";
 import { formatDate } from "../../types/job.types";
 import type { Expense } from "../../types/travel.types";
 import usePermissions from "../../hooks/usePermission";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ExpenseApprovalModal from "./ExpenseApprovalModal";
 import EditIcon from "../../components/ui/EditIcon";
 import EditExpenseModal from "./EditExpenseModal";
 import Loader from "../../components/ui/RequestLoaders";
 import IconButton from "../../components/ui/IconButton";
-import { Visibility } from "@mui/icons-material";
+import { FilterAlt, Visibility } from "@mui/icons-material";
 import { FaEye } from "react-icons/fa";
+import Button from "../../components/ui/Button";
+import Filter from "../../components/ui/Filter";
+import ExpenseFilter from "./ExpenseFilter";
 
 const ExpenseList = () => {
   const { roles } = useAuthStore();
@@ -30,16 +33,80 @@ const ExpenseList = () => {
   const { data: expenses = [], isLoading } = useExpenses(roles === "HR");
   const [selectedExpense, setSelectedExpense] = useState<any | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const grouped = expenses.reduce((acc: any, exp: Expense) => {
+  const [filters, setFilters] = useState({
+    employee: "",
+    travel: "",
+    category: "",
+    status: "",
+  });
+  const [appliedFilters, setAppliedFilters] = useState(filters);
+
+  const options = useMemo(
+    () => ({
+      employees: Array.from(
+        new Set(expenses.map((e: any) => e.employeeName).filter(Boolean)),
+      ),
+      travels: Array.from(new Set(expenses.map((e: any) => e.travelName))),
+      categories: Array.from(new Set(expenses.map((e: any) => e.category))),
+    }),
+    [expenses],
+  );
+
+  const handleApply = () => {
+    setAppliedFilters(filters);
+    setIsFilterOpen(false);
+  };
+  const filteredData = expenses.filter((exp: any) => {
+    return (
+      (appliedFilters.employee === "" ||
+        exp.employeeName === appliedFilters.employee) &&
+      (appliedFilters.travel === "" ||
+        exp.travelName === appliedFilters.travel) &&
+      (appliedFilters.category === "" ||
+        exp.category === appliedFilters.category) &&
+      (appliedFilters.status === "" || exp.status === appliedFilters.status)
+    );
+  });
+  const grouped = filteredData.reduce((acc: any, exp: any) => {
     (acc[exp.travelName] = acc[exp.travelName] || []).push(exp);
     return acc;
   }, {});
 
+  const handleReset = () => {
+    const reset = { employee: "", travel: "", category: "", status: "" };
+    setFilters(reset);
+    setAppliedFilters(reset);
+  };
+
   if (isLoading) return <Loader />;
 
   return (
-    <div>
+    <div className="p-2">
+      {/* <div className="flex justify-end">
+        <Button
+          variant="contained"
+          startIcon={<FilterAlt />}
+          onClick={() => setIsFilterOpen(true)}
+          sx={{ textTransform: "none", borderRadius: "8px" }}
+        >
+          Filter Expenses
+        </Button>
+      </div> */}
+
+      <Filter
+        opened={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+      >
+        <ExpenseFilter
+          filters={filters}
+          setFilters={setFilters}
+          options={options}
+          onApply={handleApply}
+          onReset={handleReset}
+        />
+      </Filter>
       {Object.keys(grouped).map((travelName) => (
         <div className="p-1 mt-2">
           <Typography variant="h6" className="mb-3 font-semibold text-black">
@@ -135,7 +202,10 @@ const ExpenseList = () => {
                     </TableCell>
                     <TableCell>
                       {permissions.can("expense:approve") && (
-                        <IconButton title="Expense approval" onClick={() => setSelectedExpense(exp)}>
+                        <IconButton
+                          title="Expense approval"
+                          onClick={() => setSelectedExpense(exp)}
+                        >
                           <Visibility fontSize="small" />
                         </IconButton>
                       )}

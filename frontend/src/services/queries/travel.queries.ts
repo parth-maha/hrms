@@ -66,8 +66,7 @@ export const useAddExpenseMutation = (onSuccess? : () => void) =>{
         mutationFn : addExpesne,
         onSuccess : () =>{
             toast.success("Expense added")
-            queryClient.invalidateQueries({ queryKey : ['my-expenses']})
-            queryClient.invalidateQueries({ queryKey : ['all-expenses']})
+            queryClient.invalidateQueries({ queryKey : ['expenses']})
             onSuccess?.()
         },
         onError: (error: any) => {
@@ -83,8 +82,7 @@ export const useUpdateExpenseStatus = (onSuccess? : () => void) => {
         mutationFn: ({id,data} : {id:string, data: UpdateExpenseDto}) => updateExpenseStatus(id,data),
         onSuccess : () =>{
             toast.success(`Expense Status Updated`)
-            queryClient.invalidateQueries({ queryKey : ['all-expenses']})
-            queryClient.invalidateQueries({ queryKey : ['my-expenses']})
+            queryClient.invalidateQueries({ queryKey : ['expenses']})
             onSuccess?.()
         },
         onError: (error: any) => {
