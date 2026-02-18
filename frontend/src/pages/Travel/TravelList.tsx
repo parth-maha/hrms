@@ -16,16 +16,22 @@ import ConfirmBox from "../../components/ui/ConfirmBox";
 import DeleteIcon from "../../components/ui/DeleteIcon";
 import type { Travel, TravelListProps } from "../../types/travel.types";
 import { formatDate } from "../../types/job.types";
+import usePermissions from "../../hooks/usePermission";
+import useAuthStore from "../../store/auth.store";
+import IconButton from "../../components/ui/IconButton";
+import { Add } from "@mui/icons-material";
 
 const ConfigList: React.FC<TravelListProps> = ({
   onAddTravel,
   onEditTravel,
   onDeleteTravel,
+  onAddExpense,
   travels,
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-
+  const permissions = usePermissions();
+  const { empId } = useAuthStore();
   const handleDeleteTravel = (travel: Travel) => {
     setShowConfirm(true);
     setSelectedId(travel.id);
@@ -46,15 +52,16 @@ const ConfigList: React.FC<TravelListProps> = ({
     <>
       <div className="flex justify-between p-1 mb-2">
         <Typography variant="h4">Travels</Typography>
-        <Button
-          title="Add System Config"
-          onClick={onAddTravel}
-          variant="contained"
-          withPlusIcon={true}
-          size="small"
-        >
-          Create Travel
-        </Button>
+        {permissions.can("travel:create") && (
+          <Button
+            title="Add Travel"
+            onClick={onAddTravel}
+            variant="contained"
+            size="small"
+          >
+            Create Travel
+          </Button>
+        )}
       </div>
       <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 1, m: 0 }}>
         <TableContainer className="border border-gray-100 rounded-lg">
@@ -81,50 +88,67 @@ const ConfigList: React.FC<TravelListProps> = ({
                     Date
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ paddingY: "10px" }}>
-                  <Typography fontWeight={600} variant="body2">
-                    Action
-                  </Typography>
-                </TableCell>
+                {permissions.canAll(["travel:delete"]) && (
+                  <TableCell sx={{ paddingY: "10px", paddingLeft: "25px" }}>
+                    <Typography fontWeight={600} variant="body2">
+                      Action
+                    </Typography>
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
-              {travels?.map((row, idx) => (
-                <TableRow
-                  key={idx}
-                  className="border-b border-gray-100 hover:bg-gray-50"
-                >
-                  <TableCell sx={{ paddingY: "4px" }}>
-                    <Typography>{row.name}</Typography>
-                  </TableCell>
-                  <TableCell sx={{ paddingY: "4px" }}>
-                    <Typography>{row.description}</Typography>
-                  </TableCell>
-                  <TableCell sx={{ paddingY: "4px" }}>
-                    <Typography>{row.createdBy}</Typography>
-                  </TableCell>
-                  <TableCell sx={{ paddingY: "4px" }}>
-                    <Box>
-                      <Typography>
-                        {formatDate(row.startDate) || "-"}
-                      </Typography>
-                      <Typography color="text.secondary">
-                        {formatDate(row.endDate)}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ paddingY: "4px" }}>
-                    <EditIcon
-                      title="Edit"
-                      onClick={() => handleEditTravel(row)}
-                    />
-                    <DeleteIcon
-                      title="Delete"
-                      onClick={() => handleDeleteTravel(row)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {travels?.map((row, idx) => {
+                const isMyList = row.employeeIds.some((emp) => emp.id == empId);
+                return (
+                  <TableRow
+                    key={idx}
+                    className="border-b border-gray-100 hover:bg-gray-50"
+                  >
+                    <TableCell sx={{ paddingY: "4px" }}>
+                      <Typography>{row.name}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ paddingY: "4px" }}>
+                      <Typography>{row.description}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ paddingY: "4px" }}>
+                      <Typography>{row.createdBy}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ paddingY: "4px" }}>
+                      <Box>
+                        <Typography>
+                          {formatDate(row.startDate) || "-"}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          {formatDate(row.endDate)}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ paddingY: "4px", paddingLeft: "0" }}>
+                      {isMyList && (
+                        <IconButton
+                          title="Add Expense"
+                          onClick={() => onAddExpense(row)}
+                        >
+                          <Add />
+                        </IconButton>
+                      )}
+                      {permissions.canAll(["travel:delete"]) && (
+                        <>
+                          <EditIcon
+                            title="Edit"
+                            onClick={() => handleEditTravel(row)}
+                          />
+                          <DeleteIcon
+                            title="Delete"
+                            onClick={() => handleDeleteTravel(row)}
+                          />
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

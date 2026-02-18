@@ -142,7 +142,7 @@ namespace hrms_backend.Services
 			};
 
 			await _emailService.SendEmailAsync(email);
-			_logger.LogInformation($"Job Shared. JobId : {share.Id},ShareTo: {share.SharedTo}, SharedBy: ${share.SharedBy.EmployeeId}");
+			_logger.LogInformation($"Job Shared. JobId : {job.JobCode},ShareTo: {share.SharedTo}, SharedBy: ${share.SharedBy.EmployeeId}");
 		}
 
 		public async Task ReferJob(ReferJobDTO dto)
@@ -167,11 +167,12 @@ namespace hrms_backend.Services
 				ToEmail = referral.RefferedToEmail,
 				Subject = $"Referral for {job.Title}",
 				Body = $"Hi {referral.RefferedTo}, You were referred to a job at Roima.Below are the given details. \n\nReferred By:{referral.RefferedBy.EmployeeId} - {referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}\n Job Code:{job.JobCode} \n Title: {job.Title}.",
-				Type = EmailType.REFERRAL
+				Type = EmailType.REFERRAL,
+				cc = job.JobReviewers.Select(r => r.Reviewer.Email).ToList()
 			};
 
 			await _emailService.SendEmailAsync(email);
-			_logger.LogInformation($"Job Referred. JobId : {referral.JobId},ShareTo: {referral.RefferedToEmail}, ReferrdBy: ${referral.RefferedBy.EmployeeId}");
+			_logger.LogInformation($"Job Referred. JobId : {referral.JobId},ShareTo: {referral.RefferedToEmail}, ReferrdBy: ${referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}");
 		}
 
 		private JobDto mapToDto(Jobs job)

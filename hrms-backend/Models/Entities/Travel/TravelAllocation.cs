@@ -16,7 +16,6 @@ namespace hrms_backend.Models.Entities.Travel
 
         [Column("fk_employee_id")]
         public Guid EmployeeId { get; set; }
-        [ForeignKey("EmployeeId")]
         public virtual Employees Employee { get; set; }
 
         [Column("is_deleted")]

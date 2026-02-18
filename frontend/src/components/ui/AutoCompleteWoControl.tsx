@@ -17,7 +17,6 @@ const AutocompleteWoControl = <
 	options = [],
 	label,
 	fullWidth = true,
-	id,
 	value,
 	...props
 }: CustomAutoCompleteWoControlProps<
@@ -31,7 +30,6 @@ const AutocompleteWoControl = <
 		<AutocompleteMUI
 			{...props}
 			value={value}
-			id={id}
 			options={options}
 			renderInput={
 				props.renderInput ??

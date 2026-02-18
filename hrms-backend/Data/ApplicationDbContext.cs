@@ -23,8 +23,8 @@ namespace hrms_backend.Data
         public DbSet<TravelPlan> TravelPlans { get; set; }
         public DbSet<HrTravelDocuments> HrTravelDocuments { get; set; }
         public DbSet<TravelAllocation> TravelAllocation { get; set; }
-        //public DbSet<TravelExpense> TravelExpenses { get; set; }
-        //public DbSet<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }
+        public DbSet<TravelExpense> TravelExpenses { get; set; }
+        public DbSet<EmployeeTravelDocument> EmployeeTravelDocuments { get; set; }
 
         // ================== SOCIAL ==================
         //public DbSet<Post> Posts { get; set; }
@@ -127,17 +127,23 @@ namespace hrms_backend.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // expense belongs to allocation
-            //modelBuilder.Entity<TravelExpense>()
-            //    .HasOne(te => te.TravelAllocation)
-            //    .WithMany()
-            //    .HasForeignKey(te => te.AllocationId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TravelExpense>()
+                .HasOne(te => te.TravelAllocation)
+                .WithMany()
+                .HasForeignKey(te => te.AllocationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<TravelExpense>()
-            //.HasOne(te => te.ApprovedBy)
-            //.WithMany()
-            //.HasForeignKey(te => te.ApprovedById)
-            //.OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TravelExpense>()
+                .HasOne(te => te.ApprovedBy)
+                .WithMany()
+                .HasForeignKey(te => te.ApprovedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TravelExpense>()
+                .HasOne(te => te.EmployeeTravelDocuments)
+                .WithOne(doc => doc.TravelExpense)
+                .HasForeignKey<EmployeeTravelDocument>(doc => doc.TravelExpenseId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ================== JOBS ==================
 
@@ -228,6 +234,8 @@ namespace hrms_backend.Data
             modelBuilder.Entity<TravelPlan>().HasQueryFilter(t => !t.IsDeleted);
             modelBuilder.Entity<HrTravelDocuments>().HasQueryFilter(t => !t.IsDeleted);
             modelBuilder.Entity<TravelAllocation>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<TravelExpense>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<EmployeeTravelDocument>().HasQueryFilter(t => !t.IsDeleted);
 
             // indexing on isDeleted
             modelBuilder.Entity<Jobs>()
@@ -240,6 +248,10 @@ namespace hrms_backend.Data
 
             modelBuilder.Entity<TravelPlan>()
                 .HasIndex(s => s.IsDeleted)
+                .HasFilter("[is_deleted] =0");
+
+            modelBuilder.Entity<TravelExpense>()
+                .HasIndex(t => t.IsDeleted)
                 .HasFilter("[is_deleted] =0");
         }
     }

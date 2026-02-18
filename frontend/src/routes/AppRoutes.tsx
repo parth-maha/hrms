@@ -15,62 +15,62 @@ import Travel from "../pages/Travel/Travel";
 
 const router = createBrowserRouter([
   {
-    path : "",
-    errorElement : <ErrorPage/>,
-    children : [
+    path: "",
+    errorElement: <ErrorPage />,
+    children: [
       {
-        element : <ProtectedRotue/>,
+        element: <ProtectedRotue />,
         children: [
           {
-            element : <DashboardLayout/>,
-            children :[
+            element: <DashboardLayout />,
+            children: [
               {
-                index : true,
-                element : <Home/>
+                index: true,
+                element: <Home />,
               },
               {
-                path : "travel",
-                element : <Travel/>
+                path: "travel",
+                element: <Travel />,
               },
               {
-                path : "games",
-                element : <Games/>
+                path: "games",
+                element: <Games />,
               },
               {
-                path : "jobs",
-                element : <Jobs/>
+                path: "jobs",
+                element: <Jobs />,
               },
               {
-                path : "chart",
-                element : <OrgChart/>
+                path: "chart",
+                element: <OrgChart />,
               },
               {
-                path : "policies",
-                element : <Policies/>
-
-              },{
-                element : <AdminRoute/>,
-                children : [
+                path: "policies",
+                element: <Policies />,
+              },
+              {
+                element: <AdminRoute />,
+                children: [
                   {
-                    path : "config",
-                    element : <Config/>
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                    path: "config",
+                    element: <Config />,
+                  },
+                ],
+              },
+              {
+                path: "*",
+                element: <NotFound />,
+              },  
+            ],
+          },
+        ],
       },
       {
-        path : "/login",
-        element : <Login/>
+        path: "/login",
+        element: <Login />,
       },
-      {
-        path : "*",
-        element : <NotFound/>
-      }
-    ]
-  }
+    ],
+  },
 ]);
 
 export default router;

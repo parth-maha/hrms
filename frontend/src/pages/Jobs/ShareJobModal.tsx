@@ -50,7 +50,6 @@ const ShareJobModal = ({ open, onClose, jobId }: ShareJobModalProps) => {
                 <TextField
                 {...field}
                 label="Recipient Email"
-                placeholder="Enter email address"
                 errors={errors}
                 errorKey="email"
                 fullWidth

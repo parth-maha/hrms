@@ -48,7 +48,7 @@ namespace hrms_backend.Services
             //        $"Login detected from IP : {ipAddress} at {DateTime.UtcNow}"
             //    );
 
-            _logger.LogInformation($"Email sent:{employee.Email} - Refresh Token Added : {refreshToken}");
+            _logger.LogInformation($"Email sent:{employee.Email} - Refresh Token Added : {refreshToken.Token}");
             return new LoginResponse(employee.Id.ToString(),employee.FirstName,employee.LastName,employee.Email, employee.Roles.Role.ToString(), jwtToken, refreshToken.Token);
         }
         

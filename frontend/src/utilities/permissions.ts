@@ -15,16 +15,17 @@ export type Permission =
   | 'travel:create'
   | 'travel:approve'
   | 'travel:reject'
+  | 'travel:delete'
   | 'expense:create'
   | 'expense:approve'
   | 'expense:reject'
   
 const rolePermissions: Record<Role, Permission[]> = {
   HR: [
-    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share', 'travel:create'
+    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share', 'travel:create','travel:delete'
   ],
   MANAGER :[
-    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share'
+    'job:view', 'job:edit', 'job:create','job:delete','job:refer','job:share','travel:create','travel:delete'
   ],
   EMPLOYEE : [
     'job:view', 'job:share' , 'job:refer', 'expense:create'

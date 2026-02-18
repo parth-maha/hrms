@@ -10,6 +10,10 @@ namespace hrms_backend.Models.dto
 
         public string Subject { get; set; }
 
+        public string? fileUrl { get; set; }
+
+        public List<string>? cc { get; set; }
+
         public EmailType Type { get; set; }
 
     }

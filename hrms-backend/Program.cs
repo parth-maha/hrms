@@ -16,7 +16,7 @@ try
                     {
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            RoleClaimType = ClaimTypes.Role,
+                            //RoleClaimType = ClaimTypes.Role,
                             ValidateIssuer = true,
                             ValidateAudience = true,
                             ValidateLifetime = true,
@@ -38,7 +38,7 @@ try
         app.UseSwaggerUI();
     }
 
-    //app.UseMiddleware<ErrorHandlerMiddleware>();
+    app.UseMiddleware<ErrorHandlerMiddleware>();
     app.UseCors("AllowFrontend");
     app.UseMiddleware<JwtMiddleware>();
 

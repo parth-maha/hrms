@@ -15,10 +15,12 @@ namespace hrms_backend.Repositories
         Task RemoveHrDocumentsAsync(List<HrTravelDocuments> hrTravelDocuments);
         Task UpdatePlanAsync(TravelPlan plan);
         Task DeleteTravelPlan(TravelPlan plan);
-        //Task AddExpenseAsync(TravelExpense expense);
-        //Task<TravelExpense?> GetExpenseByIdAsync(Guid id);
-        //Task UpdateExpenseAsync(TravelExpense expense);
-
-        //Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc);
+        Task<TravelExpense?> GetExpenseByIdAsync(Guid id);
+        Task AddExpenseAsync(TravelExpense expense);
+        Task UpdateExpenseAsync(TravelExpense expense);
+        Task<List<TravelExpense>> GetExpenseByEmployeeAsync(Guid empId);
+        Task<List<TravelExpense>> GetAllTravelExpensesAsync();
+        Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc);
+        Task DeleteEmployeeDocumentAsync(EmployeeTravelDocument doc);
     }
 }

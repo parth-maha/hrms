@@ -13,7 +13,7 @@ namespace hrms_backend.Models.Entities.Travel
 
         [Column("fk_travel_id")]
         public Guid TravelId { get; set; }
-
+        [ForeignKey("TravelId")]
         public virtual TravelPlan TravelPlan { get; set; }
 
         [Column("uploaded_by")]

@@ -26,6 +26,16 @@ namespace hrms_backend.Repositories.Implementation
                 .FirstOrDefaultAsync(s=> s.Id == configId);
         }
 
+        public async Task<SystemConfigs> GetDefaultMail()
+        {
+            return await _dbContext.SystemConfigs.FirstOrDefaultAsync(s => s.ConfigName == "Default Email");
+        }
+
+        public async Task<SystemConfigs> GetHrEmail()
+        {
+            return await _dbContext.SystemConfigs.FirstOrDefaultAsync(s => s.ConfigName == "Default HR Email");
+        }
+
         public async Task AddSystemConfigAsync(SystemConfigs configs)
         {
             await _dbContext.SystemConfigs.AddAsync(configs);

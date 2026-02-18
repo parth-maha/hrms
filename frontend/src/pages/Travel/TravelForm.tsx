@@ -1,9 +1,9 @@
-import type {
-  FileItem,
-  TravelFormProps,
-} from "../../types/travel.types";
+import type { FileItem, TravelFormProps } from "../../types/travel.types";
 import useAuthStore from "../../store/auth.store";
-import { useCreateTravelByHr, useUpdateTravel } from "../../services/queries/travel.queries";
+import {
+  useCreateTravelByHr,
+  useUpdateTravel,
+} from "../../services/queries/travel.queries";
 import CommonModal from "../../components/ui/CommonModal";
 import { Controller, useForm } from "react-hook-form";
 import Button from "../../components/ui/Button";
@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import TextField from "../../components/ui/TextField";
 import { MenuItem } from "@mui/material";
 import { useEmployeeOptions } from "../../services/queries/job.queries";
-import { Close} from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { useEffect } from "react";
 import IconButton from "../../components/ui/IconButton";
 
@@ -31,6 +31,8 @@ const TravelForm = ({ initialData, onSuccess, onCancel }: TravelFormProps) => {
     reset,
     watch,
     setValue,
+    trigger,
+    getValues
   } = useForm({
     defaultValues: {
       name: "",
@@ -41,10 +43,11 @@ const TravelForm = ({ initialData, onSuccess, onCancel }: TravelFormProps) => {
       documents: [] as FileItem[],
       CreatedBy: empId,
     },
+    mode : "onBlur"
   });
 
   const documents = watch("documents");
-
+  const startDate = watch("startDate");
   useEffect(() => {
     if (initialData) {
       reset({
@@ -66,7 +69,7 @@ const TravelForm = ({ initialData, onSuccess, onCancel }: TravelFormProps) => {
 
   const onSubmit = (data: any) => {
     if (initialData) {
-      updateMutation.mutate({ id: initialData.id, data});
+      updateMutation.mutate({ id: initialData.id, data });
     } else {
       createMutation.mutate(data);
     }
@@ -143,8 +146,14 @@ const TravelForm = ({ initialData, onSuccess, onCancel }: TravelFormProps) => {
                 render={({ field }) => (
                   <DatePicker
                     label="Start Date"
+                    disablePast
                     value={field.value}
-                    onChange={(date) => field.onChange(date)}
+                    onChange={(date) => {
+                      field.onChange(date);
+                      if(getValues("endDate")){
+                        trigger("endDate")
+                      }
+                    }}
                     slotProps={{
                       textField: {
                         fullWidth: true,
@@ -161,11 +170,22 @@ const TravelForm = ({ initialData, onSuccess, onCancel }: TravelFormProps) => {
               <Controller
                 name="endDate"
                 control={control}
-                rules={{ required: "End Date is required" }}
+                rules={{
+                  required: "End Date is required",
+                  validate: (value) => {
+                    const start = getValues("startDate")
+                    if (!value || !startDate) return true;
+                    if (dayjs(value).isBefore(dayjs(start),'day')) {
+                      return "End date cannot be before start date";
+                    }
+                    return true;
+                  },
+                }}
                 render={({ field }) => (
                   <DatePicker
                     label="End Date"
                     value={field.value}
+                    minDate={startDate}
                     onChange={(date) => field.onChange(date)}
                     slotProps={{
                       textField: {

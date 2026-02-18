@@ -1,4 +1,5 @@
 ﻿using hrms_backend.Data;
+using hrms_backend.Models.DTO.Travel;
 using hrms_backend.Models.Entities.Travel;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,11 +59,11 @@ namespace hrms_backend.Repositories.Implementation
         public async Task<List<TravelPlan>> GetPlansByEmployeeIdAsync(Guid empId)
         {
             return await _dbContext.TravelPlans
-                .Where(t => t.TravelAllocation.Any(a => a.EmployeeId == empId))
-                .Include(t => t.TravelAllocation.Where(a => a.EmployeeId == empId))
-                .Include(t => t.HrTravelDocuments)
-                .OrderByDescending(t => t.StartDate)
-                .ToListAsync();
+
+        .Include(t => t.TravelAllocation.Where(a => a.EmployeeId == empId))
+        .Include(t => t.HrTravelDocuments)
+        .OrderByDescending(t => t.StartDate)
+        .ToListAsync();
         }
 
         public async Task AddHrDocumentAsync(HrTravelDocuments doc)
@@ -87,27 +88,55 @@ namespace hrms_backend.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
         }
 
-        //public async Task AddExpenseAsync(TravelExpense expense)
-        //{
-        //    await _dbContext.TravelExpenses.AddAsync(expense);
-        //    await _dbContext.SaveChangesAsync();
-        //}
+        public async Task AddExpenseAsync(TravelExpense expense)
+        {
+            await _dbContext.TravelExpenses.AddAsync(expense);
+            await _dbContext.SaveChangesAsync();
+        }
 
-        //public async Task<TravelExpense?> GetExpenseByIdAsync(Guid id)
-        //{
-        //    return await _dbContext.TravelExpenses.Include(e => e.TravelAllocation).ThenInclude(a => a.Employee).FirstOrDefaultAsync(e => e.Id == id);
-        //}
+        public async Task<TravelExpense?> GetExpenseByIdAsync(Guid id)
+        {
+            return await _dbContext.TravelExpenses
+            .Include(e => e.TravelAllocation).ThenInclude(a => a.Employee)
+            .Include(e => e.EmployeeTravelDocuments)
+            .FirstOrDefaultAsync(e => e.Id == id);
+        }
 
-        //public async Task UpdateExpenseAsync(TravelExpense expense)
-        //{
-        //    _dbContext.TravelExpenses.Update(expense);
-        //    await _dbContext.SaveChangesAsync();
-        //}
+        public async Task UpdateExpenseAsync(TravelExpense expense)
+        {
+            _dbContext.TravelExpenses.Update(expense);
+            await _dbContext.SaveChangesAsync();
+        }
 
-        //public async Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc)
-        //{
-        //    await _dbContext.EmployeeTravelDocuments.AddAsync(doc);
-        //    await _dbContext.SaveChangesAsync();
-        //}
+        public async Task<List<TravelExpense>> GetAllTravelExpensesAsync()
+        {
+            return await _dbContext.TravelExpenses
+                .Include(e => e.TravelAllocation).ThenInclude(e => e.TravelPlan)
+                .Include(e => e.TravelAllocation).ThenInclude(a => a.Employee)
+                .Include(e => e.EmployeeTravelDocuments)
+                .OrderByDescending(e => e.ExpenseDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<TravelExpense>> GetExpenseByEmployeeAsync(Guid empId)
+        {
+            return await _dbContext.TravelExpenses
+                .Include(e => e.TravelAllocation).ThenInclude(e => e.TravelPlan)
+                .Include(e => e.EmployeeTravelDocuments)
+                .Where(e => e.TravelAllocation.EmployeeId == empId)
+                .OrderByDescending(e => e.ExpenseDate)
+                .ToListAsync();
+        }
+        public async Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc)
+        {
+            await _dbContext.EmployeeTravelDocuments.AddAsync(doc);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteEmployeeDocumentAsync(EmployeeTravelDocument doc)
+        {
+            _dbContext.EmployeeTravelDocuments.Remove(doc);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

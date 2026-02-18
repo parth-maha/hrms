@@ -9,5 +9,9 @@ namespace hrms_backend.Repositories
         Task <SystemConfigs?> GetByConfigIdAsync(int id);
         Task AddSystemConfigAsync(SystemConfigs config);
         Task DeleteConfigAsync(SystemConfigs configs);
+
+        Task<SystemConfigs> GetDefaultMail();
+
+        Task<SystemConfigs> GetHrEmail();
     }
 }
