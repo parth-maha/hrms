@@ -163,6 +163,12 @@ namespace hrms_backend.Services
 			await _jobRepo.AddReferralAsync(referral);
 
 			var job = await _jobRepo.GetJobByIdAsync(dto.JobId);
+			Console.WriteLine($"{referral.RefferedToEmail}");
+			Console.WriteLine($"{job.Title}");
+			Console.WriteLine($"{referral.ReferredToCV}");
+			Console.WriteLine($"{referral.RefferedTo}");
+			Console.WriteLine($"{referral.RefferedTo}");
+			Console.WriteLine($"{referral.RefferedBy.EmployeeId}");
 			var email = new EmailDto
 			{
 				ToEmail = referral.RefferedToEmail,

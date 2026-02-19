@@ -26,7 +26,7 @@ namespace hrms_backend.Repositories.Implementation
         public async Task<Jobs?> GetJobByIdAsync(Guid Id)
         {
             return await _dbContext.Jobs
-                .Include(j => j.JobReviewers)
+                .Include(j => j.JobReviewers).ThenInclude(r=> r.Reviewer)
                 .Include(j=> j.Referrals)
                 .Include(j => j.PostedBy)
                 .Include(j => j.Poc)

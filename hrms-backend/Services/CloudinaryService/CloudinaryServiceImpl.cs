@@ -22,8 +22,12 @@ namespace hrms_backend.Services.CloudinaryService
 
             try
             {
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                string name = fileName.Replace(" ", "-");
+                string fileExtension = Path.GetExtension(file.FileName);
+
                 using var stream = file.OpenReadStream();
-                var publicId = $"documents/{DateTime.UtcNow:yyyy-MM-dd}/{Guid.NewGuid()}_{Path.GetFileNameWithoutExtension(file.FileName)}";
+                var publicId = $"documents/{DateTime.UtcNow:yyyy-MM-dd}/{Guid.NewGuid()}_{name}{fileExtension}";
                 var uploadParams = new RawUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
