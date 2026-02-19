@@ -137,12 +137,13 @@ namespace hrms_backend.Services
 			{
 				ToEmail = share.SharedTo,
 				Subject = $"{job.Title}",
-				Body = $"New Job shared by {share.SharedBy.FirstName} {share.SharedBy.LastName} for the role {job.Title}",
-				Type = EmailType.SHARE_JOB
+				Body = $"New Job shared by {share.SharedBy.FirstName} {share.SharedBy.LastName} \n Role: {job.Title} \n\nJob Details:{job.AttachedFile}",
+				Type = EmailType.SHARE_JOB,
+				fileUrl = job.AttachedFile
 			};
 
 			await _emailService.SendEmailAsync(email);
-			_logger.LogInformation($"Job Shared. JobId : {share.Id},ShareTo: {share.SharedTo}, SharedBy: ${share.SharedBy.EmployeeId}");
+			_logger.LogInformation($"Job Shared. JobId : {job.JobCode},ShareTo: {share.SharedTo}, SharedBy: ${share.SharedBy.EmployeeId}");
 		}
 
 		public async Task ReferJob(ReferJobDTO dto)
@@ -166,12 +167,14 @@ namespace hrms_backend.Services
 			{
 				ToEmail = referral.RefferedToEmail,
 				Subject = $"Referral for {job.Title}",
-				Body = $"Hi {referral.RefferedTo}, You were referred to a job at Roima.Below are the given details. \n\nReferred By:{referral.RefferedBy.EmployeeId} - {referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}\n Job Code:{job.JobCode} \n Title: {job.Title}.",
-				Type = EmailType.REFERRAL
+				fileUrl = referral.ReferredToCV,
+				Body = $"Hi {referral.RefferedTo}, \nYou were referred to a job at Roima.Below are the given details. \n\nReferred By:{referral.RefferedBy.EmployeeId} - {referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}\n Job Code:{job.JobCode} \n Title: {job.Title}. \nCV: {referral.ReferredToCV}",
+				Type = EmailType.REFERRAL,
+				cc = job.JobReviewers.Select(r => r.Reviewer.Email).ToList()
 			};
 
 			await _emailService.SendEmailAsync(email);
-			_logger.LogInformation($"Job Referred. JobId : {referral.JobId},ShareTo: {referral.RefferedToEmail}, ReferrdBy: ${referral.RefferedBy.EmployeeId}");
+			_logger.LogInformation($"Job Referred. JobId : {referral.JobId},ShareTo: {referral.RefferedToEmail}, ReferrdBy: ${referral.RefferedBy.FirstName} {referral.RefferedBy.LastName}");
 		}
 
 		private JobDto mapToDto(Jobs job)

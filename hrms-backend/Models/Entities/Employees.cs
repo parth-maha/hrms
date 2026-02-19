@@ -63,10 +63,10 @@ namespace hrms_backend.Models.Entities
         public string? Position { get; set; }
 
         [Column("deleted_on")]
-        public DateTime DeletedOn { get; set; }
+        public DateTime? DeletedOn { get; set; }
 
         [Column("is_deleted")]
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public ICollection<Employees> Reports { get; set; } = new List<Employees>();
         public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();

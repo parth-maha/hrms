@@ -57,10 +57,9 @@ const ConfigList: React.FC<ConfigListProps> = ({
             title="Add System Config"
             onClick={onAddConfig}
             variant="contained"
-            withPlusIcon={true}
             size="small"
           >
-            Config
+            Add Config
           </Button>
         </Box>
         <TableContainer className="border border-gray-100 rounded-lg">

@@ -12,8 +12,8 @@ using hrms_backend.Data;
 namespace hrms_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260213133110_TravelUpdate1")]
-    partial class TravelUpdate1
+    [Migration("20260218154647_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace hrms_backend.Migrations
                     b.Property<string>("BloodGroup")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeletedOn")
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_on");
 
@@ -426,6 +426,57 @@ namespace hrms_backend.Migrations
                     b.ToTable("system_info");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.EmployeeTravelDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("pk_etd_id");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<string>("ExpenseType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("expense_type");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("file_name");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("OwnerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("owner_type");
+
+                    b.Property<Guid>("TravelExpenseId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_expense_id");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("uploaded_at");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TravelExpenseId")
+                        .IsUnique();
+
+                    b.ToTable("employee_travel_documents");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.HrTravelDocuments", b =>
                 {
                     b.Property<Guid>("Id")
@@ -455,9 +506,6 @@ namespace hrms_backend.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("fk_travel_id");
 
-                    b.Property<Guid>("TravelPlanId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("uploaded_at");
@@ -473,7 +521,7 @@ namespace hrms_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TravelPlanId");
+                    b.HasIndex("TravelId");
 
                     b.HasIndex("UploadedById");
 
@@ -517,6 +565,71 @@ namespace hrms_backend.Migrations
                     b.ToTable("travel_allocations");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("pk_expense_id");
+
+                    b.Property<Guid>("AllocationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("fk_allocation_id");
+
+                    b.Property<Guid?>("ApprovedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("category");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_on");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("expense_date");
+
+                    b.Property<string>("HrRemarks")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("hr_remarks");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_approved");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("expense_status");
+
+                    b.Property<long>("TotalAmount")
+                        .HasColumnType("bigint")
+                        .HasColumnName("total_expense");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AllocationId");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("[is_deleted] =0");
+
+                    b.ToTable("travel_expenses");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -556,6 +669,9 @@ namespace hrms_backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
+
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("[is_deleted] =0");
 
                     b.ToTable("travel_plan");
                 });
@@ -684,11 +800,22 @@ namespace hrms_backend.Migrations
                     b.Navigation("System");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.EmployeeTravelDocument", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Travel.TravelExpense", "TravelExpense")
+                        .WithOne("EmployeeTravelDocuments")
+                        .HasForeignKey("hrms_backend.Models.Entities.Travel.EmployeeTravelDocument", "TravelExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TravelExpense");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.HrTravelDocuments", b =>
                 {
                     b.HasOne("hrms_backend.Models.Entities.Travel.TravelPlan", "TravelPlan")
                         .WithMany("HrTravelDocuments")
-                        .HasForeignKey("TravelPlanId")
+                        .HasForeignKey("TravelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -726,6 +853,24 @@ namespace hrms_backend.Migrations
                     b.Navigation("TravelPlan");
                 });
 
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelExpense", b =>
+                {
+                    b.HasOne("hrms_backend.Models.Entities.Travel.TravelAllocation", "TravelAllocation")
+                        .WithMany()
+                        .HasForeignKey("AllocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("hrms_backend.Models.Entities.Employees", "ApprovedBy")
+                        .WithMany()
+                        .HasForeignKey("ApprovedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ApprovedBy");
+
+                    b.Navigation("TravelAllocation");
+                });
+
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>
                 {
                     b.HasOne("hrms_backend.Models.Entities.Employees", "CreatedBy")
@@ -758,6 +903,12 @@ namespace hrms_backend.Migrations
             modelBuilder.Entity("hrms_backend.Models.Entities.SystemInfo", b =>
                 {
                     b.Navigation("SystemConfigs");
+                });
+
+            modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelExpense", b =>
+                {
+                    b.Navigation("EmployeeTravelDocuments")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("hrms_backend.Models.Entities.Travel.TravelPlan", b =>

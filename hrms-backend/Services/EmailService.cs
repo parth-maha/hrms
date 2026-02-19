@@ -1,6 +1,7 @@
 ﻿using hrms_backend.Models.Constants;
 using hrms_backend.Models.dto;
 using hrms_backend.Models.Events;
+using hrms_backend.Repositories;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -13,30 +14,65 @@ namespace hrms_backend.Services
     {
         private readonly EmailConfig _emailConfig;
         private readonly ILogger<EmailService> _logger;
-        private readonly IWebHostEnvironment _env;
+        private static readonly HttpClient httpClient = new HttpClient();
+        private readonly ISystemRepository _systemRepo;
 
-        public EmailService(IOptions<EmailConfig> config, ILogger<EmailService> logger, IWebHostEnvironment env )
+        public EmailService(IOptions<EmailConfig> config, ILogger<EmailService> logger, ISystemRepository systemRepository)
         {
             _emailConfig = config.Value;
             _logger = logger;
-            _env = env;
+            _systemRepo = systemRepository;
         }
         public async Task SendEmailAsync(EmailDto dto)
         {
             if(dto.Type == EmailType.REFERRAL)
             {
-                var email = JobReferralEmail(dto);
-                SendEmailMessage(email);
+                await JobReferralEmail(dto);
             }else if(dto.Type == EmailType.SHARE_JOB)
             {
-                var email = JobShareEmail(dto); 
-                SendEmailMessage(email);
+                await JobShareEmail(dto); 
             }
 
             _logger.LogInformation($"Mail Sent: {dto.ToEmail} for {dto.Type}");
         }
 
-        private MimeMessage JobReferralEmail(EmailDto req)
+        private async Task JobReferralEmail(EmailDto req)
+        {
+            var email = new MimeMessage();
+
+            email.From.Add(MailboxAddress.Parse(_emailConfig.Username));
+            email.To.Add(MailboxAddress.Parse(req.ToEmail));
+            email.Subject = req.Subject;
+            
+            var defaultMail = await _systemRepo.GetDefaultMail();
+            var deafaultHr = await _systemRepo.GetHrEmail();
+
+            if (deafaultHr==null || string.IsNullOrEmpty(deafaultHr.ConfigValue)) throw new Exception("Default hr is null");
+            if (deafaultHr == null || string.IsNullOrEmpty(deafaultHr.ConfigValue)) throw new Exception("Default hr is null");
+            
+            email.Cc.Add(new MailboxAddress("HR",defaultMail.ConfigValue));
+            email.Cc.Add(new MailboxAddress("Default Email", defaultMail.ConfigValue));
+
+            if (req.cc!=null && req.cc.Any())
+            {
+                foreach (var c in req.cc)
+                {
+                    email.Cc.Add(new MailboxAddress("CC",c));
+                }
+            }
+
+            var builder = new BodyBuilder();
+            builder.HtmlBody = $@"
+                <p>{req.Body.Replace("\n", "<br/>")}</p>   
+                </hr>
+                <p> Please find the attached candidate CV </p>
+            ";
+
+            email.Body = builder.ToMessageBody();
+            await SendEmailMessage(email);
+        }
+
+        private async Task JobShareEmail(EmailDto req)
         {
             var email = new MimeMessage();
 
@@ -44,31 +80,18 @@ namespace hrms_backend.Services
             email.To.Add(MailboxAddress.Parse(req.ToEmail));
             email.Subject = req.Subject;
 
-            email.Body = new TextPart(TextFormat.Html)
-            {
-                Text = $"<p>{req.Body}</p>"
-            };
+            var builder = new BodyBuilder();
+            builder.HtmlBody = $@"
+                <p>{req.Body.Replace("\n", "<br/>")}</p>   
+                </hr>
+                <p> Check out job details in deattached file </p>
+            ";
 
-            return email;
+            email.Body = builder.ToMessageBody();
+            await SendEmailMessage(email);
         }
 
-        private MimeMessage JobShareEmail(EmailDto req)
-        {
-            var email = new MimeMessage();
-
-            email.From.Add(MailboxAddress.Parse(_emailConfig.Username));
-            email.To.Add(MailboxAddress.Parse(req.ToEmail));
-            email.Subject = req.Subject;
-
-            email.Body = new TextPart(TextFormat.Html)
-            {
-                Text = $"<p>{req.Body}</p>"
-            };
-
-            return email;
-        }
-
-        private void SendEmailMessage(MimeMessage email)
+        private async Task SendEmailMessage(MimeMessage email)
         {
             using var smtp = new SmtpClient();
 

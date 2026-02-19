@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace hrms_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class TravelUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,7 +62,7 @@ namespace hrms_backend.Migrations
                     BankBranch = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    deleted_on = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    deleted_on = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -289,7 +289,6 @@ namespace hrms_backend.Migrations
                 {
                     pk_htd_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     fk_travel_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TravelPlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     uploaded_by = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     owner_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -308,8 +307,8 @@ namespace hrms_backend.Migrations
                         principalColumn: "pk_employee_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_hr_travel_documents_travel_plan_TravelPlanId",
-                        column: x => x.TravelPlanId,
+                        name: "FK_hr_travel_documents_travel_plan_fk_travel_id",
+                        column: x => x.fk_travel_id,
                         principalTable: "travel_plan",
                         principalColumn: "pk_travel_id",
                         onDelete: ReferentialAction.Cascade);
@@ -328,7 +327,7 @@ namespace hrms_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_travel_allocations", x => new { x.fk_travel_id, x.pk_ta_id });
+                    table.PrimaryKey("PK_travel_allocations", x => x.pk_ta_id);
                     table.ForeignKey(
                         name: "FK_travel_allocations_employees_EmployeesId",
                         column: x => x.EmployeesId,
@@ -348,6 +347,71 @@ namespace hrms_backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "travel_expenses",
+                columns: table => new
+                {
+                    pk_expense_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    fk_allocation_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApprovedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    is_approved = table.Column<bool>(type: "bit", nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    total_expense = table.Column<long>(type: "bigint", nullable: false),
+                    expense_status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    expense_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    hr_remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    deleted_on = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_travel_expenses", x => x.pk_expense_id);
+                    table.ForeignKey(
+                        name: "FK_travel_expenses_employees_ApprovedById",
+                        column: x => x.ApprovedById,
+                        principalTable: "employees",
+                        principalColumn: "pk_employee_id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_travel_expenses_travel_allocations_fk_allocation_id",
+                        column: x => x.fk_allocation_id,
+                        principalTable: "travel_allocations",
+                        principalColumn: "pk_ta_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "employee_travel_documents",
+                columns: table => new
+                {
+                    pk_etd_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    fk_expense_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    expense_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    owner_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    uploaded_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    deleted_on = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_employee_travel_documents", x => x.pk_etd_id);
+                    table.ForeignKey(
+                        name: "FK_employee_travel_documents_travel_expenses_fk_expense_id",
+                        column: x => x.fk_expense_id,
+                        principalTable: "travel_expenses",
+                        principalColumn: "pk_expense_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employee_travel_documents_fk_expense_id",
+                table: "employee_travel_documents",
+                column: "fk_expense_id",
+                unique: true);
+
             migrationBuilder.CreateIndex(
                 name: "IX_employees_EmployeeId",
                 table: "employees",
@@ -365,9 +429,9 @@ namespace hrms_backend.Migrations
                 column: "RolesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_hr_travel_documents_TravelPlanId",
+                name: "IX_hr_travel_documents_fk_travel_id",
                 table: "hr_travel_documents",
-                column: "TravelPlanId");
+                column: "fk_travel_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_hr_travel_documents_uploaded_by",
@@ -458,14 +522,44 @@ namespace hrms_backend.Migrations
                 column: "fk_employee_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_travel_allocations_fk_travel_id",
+                table: "travel_allocations",
+                column: "fk_travel_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_travel_expenses_ApprovedById",
+                table: "travel_expenses",
+                column: "ApprovedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_travel_expenses_fk_allocation_id",
+                table: "travel_expenses",
+                column: "fk_allocation_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_travel_expenses_is_deleted",
+                table: "travel_expenses",
+                column: "is_deleted",
+                filter: "[is_deleted] =0");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_travel_plan_CreatedById",
                 table: "travel_plan",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_travel_plan_is_deleted",
+                table: "travel_plan",
+                column: "is_deleted",
+                filter: "[is_deleted] =0");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "employee_travel_documents");
+
             migrationBuilder.DropTable(
                 name: "hr_travel_documents");
 
@@ -485,13 +579,16 @@ namespace hrms_backend.Migrations
                 name: "system_configs");
 
             migrationBuilder.DropTable(
-                name: "travel_allocations");
+                name: "travel_expenses");
 
             migrationBuilder.DropTable(
                 name: "jobs");
 
             migrationBuilder.DropTable(
                 name: "system_info");
+
+            migrationBuilder.DropTable(
+                name: "travel_allocations");
 
             migrationBuilder.DropTable(
                 name: "travel_plan");

@@ -27,6 +27,7 @@ namespace hrms_backend.Repositories.Implementation
         {
             return await _dbContext.Jobs
                 .Include(j => j.JobReviewers)
+                .Include(j=> j.Referrals)
                 .Include(j => j.PostedBy)
                 .Include(j => j.Poc)
                 .FirstOrDefaultAsync(j => j.Id == Id);

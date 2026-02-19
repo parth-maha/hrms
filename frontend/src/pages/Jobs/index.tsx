@@ -58,7 +58,7 @@ const Jobs = () => {
           Job Listings
         </Typography>
         {permissions.can("job:create") && (
-          <Button withPlusIcon variant="contained" onClick={handleCreate}>
+          <Button variant="contained" onClick={handleCreate}>
             Create Job
           </Button>
         )}

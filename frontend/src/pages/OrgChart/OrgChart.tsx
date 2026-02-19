@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
-import { Typography, Autocomplete, TextField, Button, Paper } from "@mui/material";
-import { Search, RestartAlt } from "@mui/icons-material";
+import { Autocomplete, TextField, Button} from "@mui/material";
+import { RestartAlt } from "@mui/icons-material";
 import type { OrgChartNode } from "../../types/employee.types";
 import OrgNode from "./OrgChartNode";
 import {useEmployeeOptions } from "../../services/queries/job.queries"

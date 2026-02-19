@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Box } from "@mui/material";
 import ConfigForm from "./ConfigForm";
 import ConfigList from "./ConfigList";
@@ -6,7 +6,7 @@ import type { Config } from "../../types/config.types";
 import { useConfigs, useDeleteConfig } from "../../services/queries/config.queries";
 import Loader from "../../components/ui/RequestLoaders";
 
-const Branch: React.FC = () => {
+const Travel: React.FC = () => {
   const [view, setView] = useState<"list" | "create" | "edit">("list");
   const [selectedConfig, setSelectedConfig] = useState<Config | undefined>(undefined);
   const {data, isLoading} = useConfigs();
@@ -55,4 +55,4 @@ const Branch: React.FC = () => {
   );
 };
 
-export default Branch;
+export default Travel;

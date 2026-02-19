@@ -1,21 +1,13 @@
 import Sidebar from "./Sidebar";
 import TopBar from "./Topbar";
-// import { useStore } from "../store/store";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Breadcrumbs from "../ui/BreadCrumbs";
-// import type { DashboardData } from "../utilities/types";
 
 export default function DashboardLayout() {
-	// const { userDetails } = useStore();
 	const user = {
         name : "Parth",
         email : "parth.maha@roimaint.com"
     };
-
-	// useEffect(() => {
-	// 	localStorage.getItem("token") === null
-	// 		navigate("/login");
-	// }, []);
 
 	return (
 		<div className="min-h-screen bg-white">

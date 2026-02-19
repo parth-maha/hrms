@@ -3,6 +3,7 @@ using hrms_backend.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
+using System.Security.Claims;
 using System.Text;
 
 try
@@ -15,6 +16,7 @@ try
                     {
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
+                            //RoleClaimType = ClaimTypes.Role,
                             ValidateIssuer = true,
                             ValidateAudience = true,
                             ValidateLifetime = true,
@@ -36,7 +38,7 @@ try
         app.UseSwaggerUI();
     }
 
-    //app.UseMiddleware<ErrorHandlerMiddleware>();
+    app.UseMiddleware<ErrorHandlerMiddleware>();
     app.UseCors("AllowFrontend");
     app.UseMiddleware<JwtMiddleware>();
 
