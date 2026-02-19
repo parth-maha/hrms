@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import type {
   AddExpenseFormData,
   CreateTravelFormData,
+  ExpenseFilterDto,
   Travel,
   UpdateExpenseDto,
 } from "../types/travel.types";
@@ -62,18 +63,26 @@ export const addExpesne = async (data: AddExpenseFormData) => {
   return response.data;
 };
 
-export const updateExpenseStatus = async (id:string, data : UpdateExpenseDto) => {
-    const response = await api.put(`/Travel/expenses/status/${id}`,data)
-    return response.data
-}
+export const updateExpenseStatus = async (
+  id: string,
+  data: UpdateExpenseDto,
+) => {
+  const response = await api.put(`/Travel/expenses/status/${id}`, data);
+  return response.data;
+};
 
 export const updateExpense = async (id: string, formData: FormData) => {
-    const response = await api.put(`/Travel/expenses/${id}`, formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
-    return response.data;
+  const response = await api.put(`/Travel/expenses/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const getFilteredExpenses = async (data: ExpenseFilterDto) => {
+  const response = await api.post("/Travel/expenses/filter", data);
+  return response.data;
 };
 
 // ======================== HELPERS ==================

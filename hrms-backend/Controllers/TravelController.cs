@@ -176,5 +176,19 @@ namespace hrms_backend.Controllers
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
         }
+
+        [HttpPost("expenses/filter")]
+        public async Task<IActionResult> GetFilteredExpenses([FromBody] ExpenseFilterDto dto)
+        {
+            try
+            {
+                var expenses = await _travelService.GetFilteredExpenses(dto);
+                return Ok(expenses);
+
+            }catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
     }
 }

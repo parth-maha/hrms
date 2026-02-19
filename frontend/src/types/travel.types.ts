@@ -98,4 +98,10 @@ export interface AddExpenseFormData {
   proof : File
 }
 
+export interface ExpenseFilterDto{
+  employeeId? : string;
+  travelId? : string;
+  category? : string;
+  status? : string;
+}
 

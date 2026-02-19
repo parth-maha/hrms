@@ -318,6 +318,24 @@ namespace hrms_backend.Services
             _logger.LogInformation($"Expense Updated. ExpenseId:{expense.Id} UpdatedBy:{empId}");
         }
 
+        public async Task<List<ExpenseResponseDto>> GetFilteredExpenses(ExpenseFilterDto dto)
+        {
+            var expenses = await _travelRepo.GetFilteredExpensesAsync(dto);
+
+            return expenses.Select(e => new ExpenseResponseDto
+            {
+                Id = e.Id,
+                travelName = e.TravelAllocation.TravelPlan.Name,
+                description = e.Description,
+                amount = e.TotalAmount,
+                category = e.Category,
+                expenseDate = e.ExpenseDate,
+                status = e.Status,
+                hrRemarks = e.HrRemarks,
+                document = e.EmployeeTravelDocuments.Url,
+                fileName = e.EmployeeTravelDocuments.FileName
+            }).ToList();
+        }
 
         // ======================= HELPERS =====================
         private TravelPlanDto mapToTravelDto(TravelPlan plan)

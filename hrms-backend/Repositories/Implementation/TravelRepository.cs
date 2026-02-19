@@ -140,7 +140,7 @@ namespace hrms_backend.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<TravelExpense>> GetFilteredExpensesAsync(Guid? empId, Guid? travelid, string? category, string? status)
+        public async Task<List<TravelExpense>> GetFilteredExpensesAsync(ExpenseFilterDto dto)
         {
             var query = _dbContext.TravelExpenses
                 .Include(e => e.TravelAllocation).ThenInclude(a => a.TravelPlan)
@@ -148,18 +148,18 @@ namespace hrms_backend.Repositories.Implementation
                 .Include(e => e.EmployeeTravelDocuments)
                 .AsQueryable();
 
-            if(empId.HasValue)
-                query.Where(e => e.TravelAllocation.EmployeeId == empId);
+            if(dto.employeeId.HasValue)
+                query.Where(e => e.TravelAllocation.EmployeeId == dto.employeeId);
             
 
-            if (travelid.HasValue)
-                query = query.Where(e => e.TravelAllocation.TravelId == travelid);
+            if (dto.travelId.HasValue)
+                query = query.Where(e => e.TravelAllocation.TravelId == dto.travelId);
 
-            if (!string.IsNullOrEmpty(category))
-                query = query.Where(e => e.Category == category);
+            if (!string.IsNullOrEmpty(dto.category))
+                query = query.Where(e => e.Category == dto.category);
 
-            if (!string.IsNullOrEmpty(status))
-                query = query.Where(e => e.Status == status);
+            if (!string.IsNullOrEmpty(dto.status))
+                query = query.Where(e => e.Status == dto.status);
 
             return await query.OrderByDescending(e => e.ExpenseDate).ToListAsync();
         }

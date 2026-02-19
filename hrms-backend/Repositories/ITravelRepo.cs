@@ -1,4 +1,5 @@
-﻿using hrms_backend.Models.Entities.Travel;
+﻿using hrms_backend.Models.DTO.Travel;
+using hrms_backend.Models.Entities.Travel;
 
 namespace hrms_backend.Repositories
 {
@@ -22,5 +23,6 @@ namespace hrms_backend.Repositories
         Task<List<TravelExpense>> GetAllTravelExpensesAsync();
         Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc);
         Task DeleteEmployeeDocumentAsync(EmployeeTravelDocument doc);
+        Task<List<TravelExpense>> GetFilteredExpensesAsync(ExpenseFilterDto dto);
     }
 }

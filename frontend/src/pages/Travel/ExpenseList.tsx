@@ -22,7 +22,6 @@ import EditExpenseModal from "./EditExpenseModal";
 import Loader from "../../components/ui/RequestLoaders";
 import IconButton from "../../components/ui/IconButton";
 import { FilterAlt, Visibility } from "@mui/icons-material";
-import { FaEye } from "react-icons/fa";
 import Button from "../../components/ui/Button";
 import Filter from "../../components/ui/Filter";
 import ExpenseFilter from "./ExpenseFilter";
@@ -84,16 +83,15 @@ const ExpenseList = () => {
 
   return (
     <div className="p-2">
-      {/* <div className="flex justify-end">
+      <div className="flex justify-end">
         <Button
           variant="contained"
           startIcon={<FilterAlt />}
           onClick={() => setIsFilterOpen(true)}
-          sx={{ textTransform: "none", borderRadius: "8px" }}
         >
           Filter Expenses
         </Button>
-      </div> */}
+      </div>
 
       <Filter
         opened={isFilterOpen}
