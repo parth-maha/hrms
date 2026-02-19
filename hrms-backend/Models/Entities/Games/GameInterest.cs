@@ -14,7 +14,7 @@ namespace hrms_backend.Models.Entities.Games
         public Guid EmployeeId { get; set; }
 
         [Column("fk_game_id")]
-        public Guid GameId { get; set; }
+        public int GameId { get; set; }
 
         public virtual Employees Employee { get; set; }
         public virtual GameType GameType { get; set; }

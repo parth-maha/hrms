@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FilterAlt } from "@mui/icons-material";
 import TravelForm from "./TravelForm";
 import TravelList from "./TravelList";
 import ExpenseList from "./ExpenseList";
 import ExpenseForm from "./ExpenseForm";
 import Loader from "../../components/ui/RequestLoaders";
+import Button from "../../components/ui/Button";
 import useAuthStore from "../../store/auth.store";
-import type { Travel, Travel as TravelType } from "../../types/travel.types";
+import type { Travel as TravelType } from "../../types/travel.types";
 import {
   useDeleteTravel,
   useGetAllTravel,
@@ -14,17 +17,24 @@ import {
 
 const Travel: React.FC = () => {
   const { roles } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<"plans" | "expenses">("plans");
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [view, setView] = useState<"list" | "create" | "edit">("list");
-
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [selectedTravel, setSelectedTravel] = useState<TravelType | undefined>(undefined);
+  
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const [selectedTravel, setSelectedTravel] = useState<TravelType | undefined>(
-    undefined,
-  );
+  const activeTab = pathname.includes("expenses") ? "expenses" : "plans";
 
-  const { data, isLoading } = useGetAllTravel(roles==="HR");
+  const { data, isLoading } = useGetAllTravel(roles === "HR");
   const deleteTravel = useDeleteTravel();
+
+  const handleTabChange = (_: any, val: string) => {
+    if (val) {
+      navigate(val === "expenses" ? "/expenses" : "/travel");
+    }
+  };
 
   const handleCreateTravel = () => {
     setSelectedTravel(undefined);
@@ -36,7 +46,7 @@ const Travel: React.FC = () => {
     setView("edit");
   };
 
-  const handleAddExpenseClick = (travel: Travel) => {
+  const handleAddExpenseClick = (travel: TravelType) => {
     setSelectedTravel(travel);
     setShowExpenseForm(true);
   };
@@ -51,11 +61,11 @@ const Travel: React.FC = () => {
 
   return (
     <Box>
-      <div className="flex mb-1">
+      <div className="flex justify-between items-center mb-4">
         <ToggleButtonGroup
           value={activeTab}
           exclusive
-          onChange={(_, val) => val && setActiveTab(val)}
+          onChange={handleTabChange}
           size="small"
         >
           <ToggleButton value="plans" className="px-6">
@@ -65,7 +75,18 @@ const Travel: React.FC = () => {
             Expenses
           </ToggleButton>
         </ToggleButtonGroup>
+
+        {activeTab === "expenses" && (
+          <Button
+            variant="contained"
+            startIcon={<FilterAlt />}
+            onClick={() => setIsFilterOpen(true)}
+          >
+            Filter Expenses
+          </Button>
+        )}
       </div>
+
       {activeTab === "plans" ? (
         <>
           <TravelList
@@ -85,7 +106,10 @@ const Travel: React.FC = () => {
           )}
         </>
       ) : (
-        <ExpenseList />
+        <ExpenseList 
+          isFilterOpen={isFilterOpen} 
+          setIsFilterOpen={setIsFilterOpen} 
+        />
       )}
 
       {showExpenseForm && (
@@ -99,4 +123,4 @@ const Travel: React.FC = () => {
   );
 };
 
-export default Travel;
+export default Travel;  

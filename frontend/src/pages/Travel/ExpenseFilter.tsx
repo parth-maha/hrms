@@ -9,7 +9,12 @@ interface ExpenseFilterProps {
     category: string;
     status: string;
   };
-  setFilters: (filters: any) => void;
+  setFilters: React.Dispatch<React.SetStateAction<{
+    employee : string;
+    travel :string;
+    category : string;
+    status: string
+  }>>
   options: {
     employees: { id: string; name: string }[];
     travels: { id: string; name: string }[];
@@ -39,29 +44,30 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
             select
             fullWidth
             label="Employee"
-            value={filters.employee}
+            value={filters.employee || ""}
             onChange={handleChange("employee")}
             variant="outlined"
             size="small"
           >
-            <MenuItem value="">All Employees</MenuItem>
+            <MenuItem value="">All</MenuItem>
             {options.employees.map((emp) => (
               <MenuItem key={emp.id} value={emp.id}>
                 {emp.name}
               </MenuItem>
             ))}
           </TextField>
+          {filters.employee}
         </div>
         <div className="col-span-1">
           <TextField
             select
             fullWidth
             label="Travel Plan"
-            value={filters.travel}
+            value={filters.travel || ""}
             onChange={handleChange("travel")}
             size="small"
           >
-            <MenuItem value="">All Travel Plans</MenuItem>
+            <MenuItem value="">All</MenuItem>
             {options.travels.map((t) => (
               <MenuItem key={t.id} value={t.id}>
                 {t.name}

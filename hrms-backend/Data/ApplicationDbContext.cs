@@ -246,6 +246,7 @@ namespace hrms_backend.Data
             modelBuilder.Entity<TravelAllocation>().HasQueryFilter(t => !t.IsDeleted);
             modelBuilder.Entity<TravelExpense>().HasQueryFilter(t => !t.IsDeleted);
             modelBuilder.Entity<EmployeeTravelDocument>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<GameType>().HasQueryFilter(t => !t.IsDeleted);
 
             // indexing on isDeleted
             modelBuilder.Entity<Jobs>()
@@ -261,6 +262,10 @@ namespace hrms_backend.Data
                 .HasFilter("[is_deleted] =0");
 
             modelBuilder.Entity<TravelExpense>()
+                .HasIndex(t => t.IsDeleted)
+                .HasFilter("[is_deleted] =0");
+
+            modelBuilder.Entity<GameType>()
                 .HasIndex(t => t.IsDeleted)
                 .HasFilter("[is_deleted] =0");
         }

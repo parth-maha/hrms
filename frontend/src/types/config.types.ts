@@ -19,3 +19,44 @@ export interface ConfigFormData{
     ConfigId : string;
     ConfigValue : string;
 }
+
+export interface GameTypeFormData {
+  gameName: string;
+  gameDuration: number;
+  gameStartTime: string;
+  gameEndTime: string;
+  maxMembers: number;
+  noOfSlots: number;
+}
+
+export interface GameFormProps {
+  initialData?: any;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+export interface GameListProps{
+  onAdd : () => void
+  onEdit : (game : Game) => void
+  onDelete : (id : number) => void
+  games : Game[] | undefined
+}
+
+export interface Game{
+  id : number;
+  gameName : string;
+  duration : number;
+  gameStartTime : string;
+  gameEndTime : string;
+  noOfSlots : number;
+  maxMembers : number;
+}
+
+export interface GameFormData{
+  gameName : string;
+  duration : number;
+  gameStartTime : string;
+  gameEndTime : string;
+  noOfSlots : number;
+  maxMembers : number;
+}

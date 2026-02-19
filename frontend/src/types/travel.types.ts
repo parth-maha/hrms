@@ -41,6 +41,10 @@ export interface TravelDocument {
   fileName: string;
   url: string;
 }
+export interface ExpenseListProps{
+  isFilterOpen: boolean;
+  setIsFilterOpen: (open: boolean) => void;
+}
 
 export interface TravelListProps {
   travels: Travel[] | undefined;
