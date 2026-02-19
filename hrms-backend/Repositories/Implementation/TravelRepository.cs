@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrms_backend.Repositories.Implementation
 {
-    public class TravelRepository : ITravelRepo
+    public class TravelRepository : ITravelRepository
     {
         public ApplicationDbContext _dbContext;
 

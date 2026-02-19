@@ -1,4 +1,5 @@
 using hrms_backend.Models.Entities;
+using hrms_backend.Models.Entities.Games;
 using hrms_backend.Models.Entities.Jobs;
 using hrms_backend.Models.Entities.Travel;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +32,6 @@ namespace hrms_backend.Data
         //public DbSet<Like> Likes { get; set; }
         //public DbSet<Comment> Comments { get; set; }
 
-        // ================== TRAVEL ==================
-        //public DbSet<TravelPlan> TravelPlans { get; set; }
-        //public DbSet<TravelExpense> TravelExpenses { get; set; }
-        //public DbSet<EmployeeTravelDocument> TravelDocuments { get; set; }
-        //public DbSet<HrTravelDocuments> HrTravelDocuments { get; set; }
-
         // ================== JOBS ==================
         public DbSet<Jobs> Jobs { get; set; }
         public DbSet<Referrals> Referrals { get; set; }
@@ -44,10 +39,10 @@ namespace hrms_backend.Data
         public DbSet<JobReviewers> JobReviewers { get; set; }
 
         // ================== GAMES ==================
-        //public DbSet<GameType> GameTypes { get; set; }
+        public DbSet<GameType> GameType { get; set; }
+        public DbSet<GameInterest> GameInterests { get; set; }
+        public DbSet<GameSlots> GameSlots { get; set; }
         //public DbSet<GameBooking> GameBookings { get; set; }
-        //public DbSet<GameSlots> GameSlots { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -209,6 +204,21 @@ namespace hrms_backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // ================== GAMES ==================
+
+            modelBuilder.Entity<GameInterest>()
+                .HasOne(e => e.Employee)
+                .WithMany()
+                .HasForeignKey(e => e.EmployeeId);
+
+            modelBuilder.Entity<GameInterest>()
+                .HasOne(e => e.GameType)
+                .WithMany()
+                .HasForeignKey(e => e.GameId);
+
+            modelBuilder.Entity<GameSlots>()
+                .HasOne(g => g.Game)
+                .WithMany()
+                .HasForeignKey(g => g.GameTypeId);
 
             //modelBuilder.Entity<GameBooking>()
             //    .HasOne(gb => gb.BookedBy)

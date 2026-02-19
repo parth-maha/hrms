@@ -6,6 +6,7 @@ using hrms_backend.Repositories.Implementation;
 using hrms_backend.Services;
 using hrms_backend.Services.Authorization;
 using hrms_backend.Services.CloudinaryService;
+using hrms_backend.Services.Games;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
@@ -59,8 +60,11 @@ namespace hrms_backend
             services.AddScoped<EmployeeService>();
             services.AddScoped<ISystemRepository,SystemRepository>();
             services.AddScoped<SystemService>();
-            services.AddScoped<ITravelRepo, TravelRepository>();
+            services.AddScoped<ITravelRepository, TravelRepository>();
             services.AddScoped<TravelService>();
+            services.AddScoped<IGameTypeRepository, GameTypeRepository>();
+            services.AddScoped<IGameSlotRepository,GameSlotRepository>();
+            services.AddScoped<GameTypeService>();
 
             services.AddScoped<EmailService>();
             services.AddHttpClient();

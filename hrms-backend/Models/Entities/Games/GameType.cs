@@ -11,13 +11,28 @@ namespace hrms_backend.Models.Entities.Games
         [Column("pk_game_type_id")]
         public int Id { get; set;  }
 
+        [Column("game_name")]
         public string GameName { get; set; }
-        public int GameDuration { get; set; }
 
+        [Column("game_duration")]
+        public int GameDuration { get; set; } // in minutes
+
+        [Column("game_start_time")]
         public DateTime GameStartTime { get; set; }
+
+        [Column("game_end_time")]
         public DateTime GameEndTime { get; set; }
+
+        [Column("no_of_slots")]
         public int NoOfSlots { get; set;  }
 
+        [Column("max_members")]
         public int MaxMembers { get; set;  }
+
+        [Column("deleted_on")]
+        public DateTime? DeletedOn { get; set; }
+
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; } = false;
     }
 }

@@ -8,11 +8,11 @@ namespace hrms_backend.Services
     public class TravelService
     {
         private readonly CloudinaryServiceImpl _cloudinaryService;
-        private readonly ITravelRepo _travelRepo;
+        private readonly ITravelRepository _travelRepo;
         private EmailService _emailService;
         private ILogger<TravelService> _logger;
 
-        public TravelService(CloudinaryServiceImpl cloudinaryService, ITravelRepo travelRepo, EmailService emailService, ILogger<TravelService> logger)
+        public TravelService(CloudinaryServiceImpl cloudinaryService, ITravelRepository travelRepo, EmailService emailService, ILogger<TravelService> logger)
         {
             _cloudinaryService = cloudinaryService;
             _travelRepo = travelRepo;

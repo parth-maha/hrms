@@ -10,17 +10,22 @@ namespace hrms_backend.Models.Entities.Games
         [Column("pk_gs_id")]
         public Guid Id { get; set; }
 
-        [Column("fk_game_booking_id")]
-        public Guid GameBookingId { get; set; }
-        [ForeignKey("BookingId")]
-        public virtual GameBooking GameBooking { get; set; }
+        [Column("fk_game_type_id")]
+        public int GameTypeId { get; set; }
+        [ForeignKey("GameTypeId")]
+        public virtual GameType Game { get; set; }
+
+        //[Column("fk_game_booking_id")]
+        //public Guid GameBookingId { get; set; }
+        //[ForeignKey("BookingId")]
+        //public virtual GameBooking GameBooking { get; set; }
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        [Column("member_id")]
-        public Guid MemberId { get; set;  }
-        [ForeignKey("MemberId")]
-        public virtual Employees Member { get; set;  }
+        //[Column("member_id")]
+        //public Guid MemberId { get; set;  }
+        //[ForeignKey("MemberId")]
+        //public virtual Employees Member { get; set;  }
     }
 }

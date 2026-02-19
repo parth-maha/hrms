@@ -3,7 +3,7 @@ using hrms_backend.Models.Entities.Travel;
 
 namespace hrms_backend.Repositories
 {
-    public interface ITravelRepo
+    public interface ITravelRepository
     {
         Task AddPlanAsync(TravelPlan plan);
         Task AddAllocationAsync(List<TravelAllocation> allocations);
