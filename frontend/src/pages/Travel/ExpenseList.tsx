@@ -10,12 +10,12 @@ import {
   Link,
   Tooltip,
 } from "@mui/material";
-import { useExpenses, useFilteredExpenses } from "../../services/queries/travel.queries";
+import { useExpenses, useFilteredExpenses, useTravelList } from "../../services/queries/travel.queries";
 import useAuthStore from "../../store/auth.store";
 import { formatDate } from "../../types/job.types";
 import type { Expense, ExpenseListProps } from "../../types/travel.types";
 import usePermissions from "../../hooks/usePermission";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import ExpenseApprovalModal from "./ExpenseApprovalModal";
 import EditIcon from "../../components/ui/EditIcon";
 import EditExpenseModal from "./EditExpenseModal";
@@ -24,66 +24,64 @@ import IconButton from "../../components/ui/IconButton";
 import { Visibility } from "@mui/icons-material";
 import Filter from "../../components/ui/Filter";
 import ExpenseFilter from "./ExpenseFilter";
+import { useEmployeeOptions } from "../../services/queries/job.queries";
 
 const ExpenseList = ({ isFilterOpen, setIsFilterOpen }: ExpenseListProps) => {
   const { roles } = useAuthStore();
   const permissions = usePermissions();
+
+  const [filters, setFilters] = useState({
+    employeeId: null as string | null,
+    travelId: null as string | null,
+    category: null as string | null,
+    status: null as string | null,
+  });
+
+  const [activeFilters, setActiveFilters] = useState<any>(null);
+
+  const { data: initialExpenses = [], isLoading: isInitialLoading } = useExpenses(
+    roles === "HR" && !activeFilters
+  );
+
+  const { data: filteredData, isLoading: isFilterLoading } = useFilteredExpenses(
+    activeFilters,
+    !!activeFilters
+  );
+
+  const { data: employeeOptions = [] } = useEmployeeOptions();
+  const { data: travelList = [] } = useTravelList();
   
-  const { data: initialExpenses = [], isLoading } = useExpenses(roles === "HR");
-  const filterMutation = useFilteredExpenses();
-  
-  const [displayData, setDisplayData] = useState<any[]>([]);
   const [selectedExpense, setSelectedExpense] = useState<any | null>(null);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
-  const [filters, setFilters] = useState({
-    employee: "",
-    travel: "",
-    category: "",
-    status: "",
-  });
+  const options = useMemo(() => ({
+    employees: employeeOptions,
+    travels: travelList,
+    categories: ["FOOD", "MISCELLANEOUS", "COMMUTE", "STAY"]
+  }), [employeeOptions, travelList]);
 
-  useEffect(() => {
-    if (initialExpenses) setDisplayData(initialExpenses);
-  }, [initialExpenses]);
-
-  const options = useMemo(
-    () => ({
-      employees: Array.from(
-        new Set(initialExpenses.map((e: any) => JSON.stringify({ id: e.employeeId, name: e.employeeName })).filter(Boolean))
-      ).map(s => JSON.parse(s as string)),
-      travels: Array.from(
-        new Set(initialExpenses.map((e: any) => JSON.stringify({ id: e.travelId, name: e.travelName })))
-      ).map(s => JSON.parse(s as string)),
-      categories: Array.from(new Set(initialExpenses.map((e: any) => e.category))),
-    }),
-    [initialExpenses],
-  );
+  const displayData = activeFilters ? (filteredData || []) : initialExpenses;
 
   const handleApply = () => {
-    filterMutation.mutate(filters, {
-      onSuccess: (data) => {
-        setDisplayData(data);
-        setIsFilterOpen(false);
-      }
-    });
+    setActiveFilters({ ...filters });
+    setIsFilterOpen(false);
   };
 
   const handleReset = () => {
-    const reset = { employee: "", travel: "", category: "", status: "" };
-    setFilters(reset);
-    setDisplayData(initialExpenses);
+    const resetValues = { employeeId: null, travelId: null, category: null, status: null };
+    setFilters(resetValues);
+    setActiveFilters(null);
     setIsFilterOpen(false);
   };
 
   const grouped = useMemo(() => {
-    return displayData.reduce((acc: any, exp: any) => {
+    return (displayData as any[]).reduce((acc: any, exp: any) => {
       (acc[exp.travelName] = acc[exp.travelName] || []).push(exp);
       return acc;
     }, {});
   }, [displayData]);
 
-  if (isLoading || filterMutation.isPending) return <Loader />;
+  if (isInitialLoading || isFilterLoading) return <Loader />;
 
   return (
     <div className="p-2">
@@ -103,7 +101,7 @@ const ExpenseList = ({ isFilterOpen, setIsFilterOpen }: ExpenseListProps) => {
             <Typography variant="h6" className="mb-3 font-semibold text-black">
               {travelName}
             </Typography>
-            <TableContainer className="border border-gray-300">
+            <TableContainer className="border border-gray-300 h-40">
               <Table size="small" sx={{ tableLayout: "fixed" }}>
                 <TableHead className="bg-gray-50 border border-gray-200">
                   <TableRow>
@@ -134,7 +132,13 @@ const ExpenseList = ({ isFilterOpen, setIsFilterOpen }: ExpenseListProps) => {
                         <Chip
                           label={exp.status}
                           size="small"
-                          color={exp.status === "APPROVED" ? "success" : exp.status === "REJECTED" ? "error" : "warning"}
+                          color={
+                            exp.status === "APPROVED"
+                              ? "success"
+                              : exp.status === "REJECTED"
+                              ? "error"
+                              : "warning"
+                          }
                         />
                       </TableCell>
                       <TableCell>

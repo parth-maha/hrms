@@ -83,6 +83,9 @@ export const useAddGame = (onSuccess? : ()=> void) =>{
             toast.success("Game Added")
             queryClient.invalidateQueries({queryKey:['games']}),
             onSuccess?.()
+        },
+        onError : (error : any)=>{
+          toast.error(error.response?.data?.message || 'Failed to add game')
         }
     })
 }

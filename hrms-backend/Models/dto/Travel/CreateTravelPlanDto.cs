@@ -12,4 +12,10 @@
 
         //public List<HrTravelDocumentDto> documents { get; set; }
     }
+    public class TravelListDto
+    {
+        public string travelId { get; set; }
+        public string travelName { get; set; }
+    }
+
 }

@@ -1,3 +1,5 @@
+import type { EmployeeOption } from "./job.types";
+
 export type OnwerType = "HR" | "MANAGER" | "EMPLOYEE";
 export type ExpenseStaus = "PENDING" | "APPROVED" | "REJECTED";
 export type ExpenseCategory = "FOOD" | "MISCELLANEOUS" | "COMMUTE" | "STAY";
@@ -59,6 +61,30 @@ export interface TravelFormProps {
   onSuccess: () => void;
   onCancel: () => void;
 }
+
+export interface ExpenseFilterProps {
+  filters: {
+    employeeId: string | null;
+    travelId: string | null;
+    category: string | null;
+    status: string | null;
+  };
+  setFilters: React.Dispatch<
+    React.SetStateAction<{
+      employeeId: string | null;
+      travelId: string | null;
+      category: string | null;
+      status: string | null;
+    }>
+  >;
+  options: {
+    employees: EmployeeOption[]
+    travels: { travelId: string; travelName: string }[];
+    categories: string[];
+  };
+  onApply: () => void;
+  onReset: () => void;
+}
 export interface ExpenseFormProps{
   open: boolean;
   onClose: () => void;
@@ -108,4 +134,3 @@ export interface ExpenseFilterDto{
   category? : string;
   status? : string;
 }
-

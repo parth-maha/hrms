@@ -11,7 +11,7 @@ namespace hrms_backend.Repositories.Implementation
 
         public TravelRepository(ApplicationDbContext dbContext)
         {
-            _dbContext = dbContext; 
+            _dbContext = dbContext;
         }
 
         public async Task AddPlanAsync(TravelPlan plan)
@@ -20,6 +20,11 @@ namespace hrms_backend.Repositories.Implementation
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<TravelPlan>> GetTravelList()
+        {
+            return await _dbContext.TravelPlans.ToListAsync();
+
+        }
         public async Task AddAllocationAsync(List<TravelAllocation> allocations)
         {
             await _dbContext.TravelAllocation.AddRangeAsync(allocations);
@@ -52,7 +57,7 @@ namespace hrms_backend.Repositories.Implementation
             return await _dbContext.TravelPlans
                 .Include(t => t.TravelAllocation).ThenInclude(a => a.Employee)
                 .Include(t => t.HrTravelDocuments)
-                .Include(t=> t.CreatedBy)
+                .Include(t => t.CreatedBy)
                 .OrderByDescending(t => t.StartDate)
                 .ToListAsync();
         }
@@ -61,7 +66,7 @@ namespace hrms_backend.Repositories.Implementation
         {
             return await _dbContext.TravelPlans
                 .Include(t => t.CreatedBy)
-                .Include(t => t.TravelAllocation.Where(a=>a.EmployeeId==empId)).ThenInclude(a=>a.Employee)
+                .Include(t => t.TravelAllocation.Where(a => a.EmployeeId == empId)).ThenInclude(a => a.Employee)
                 .Include(t => t.HrTravelDocuments)
                 .OrderByDescending(t => t.StartDate)
                 .ToListAsync();
@@ -148,9 +153,9 @@ namespace hrms_backend.Repositories.Implementation
                 .Include(e => e.EmployeeTravelDocuments)
                 .AsQueryable();
 
-            if(dto.employeeId.HasValue)
-                query.Where(e => e.TravelAllocation.EmployeeId == dto.employeeId);
-            
+            if (dto.employeeId.HasValue)
+                query = query.Where(e => e.TravelAllocation.EmployeeId == dto.employeeId);
+
 
             if (dto.travelId.HasValue)
                 query = query.Where(e => e.TravelAllocation.TravelId == dto.travelId);

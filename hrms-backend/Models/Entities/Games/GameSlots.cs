@@ -20,8 +20,8 @@ namespace hrms_backend.Models.Entities.Games
         //[ForeignKey("BookingId")]
         //public virtual GameBooking GameBooking { get; set; }
 
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         //[Column("member_id")]
         //public Guid MemberId { get; set;  }

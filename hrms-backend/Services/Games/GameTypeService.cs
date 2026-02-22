@@ -16,8 +16,18 @@ namespace hrms_backend.Services.Games
             _gameSlotRepo = gameSlotRepo;
         }
 
-        public async Task<GameTypeDto> AddGame(AddGameTypeDto dto,Guid id)
+        public async Task<GameTypeDto> AddGame(AddGameTypeDto dto, Guid id)
         {
+            TimeSpan totalAvailableTime = dto.gameEndTime - dto.gameStartTime;
+
+            if (totalAvailableTime.TotalMinutes < 0)
+            {
+                totalAvailableTime = totalAvailableTime.Add(TimeSpan.FromDays(1));
+            }
+
+            int totalMinutes = (int)totalAvailableTime.TotalMinutes;
+            int totalSlots = dto.duration > 0 ? totalMinutes / dto.duration : 0;
+
             var game = new GameType
             {
                 GameName = dto.gameName,
@@ -25,24 +35,35 @@ namespace hrms_backend.Services.Games
                 GameStartTime = dto.gameStartTime,
                 GameEndTime = dto.gameEndTime,
                 MaxMembers = dto.maxMembers,
-                NoOfSlots = dto.noOfSlots,
+                NoOfSlots = totalSlots,
             };
             await _gameTypeRepo.AddGameAsync(game);
 
             var startTime = dto.gameStartTime;
             var slots = new List<GameSlots>();
-            for(var i=1; i<dto.noOfSlots; i++)
+            for (var i = 1; i < totalSlots; i++)
             {
+                var duration = TimeSpan.FromMinutes(game.GameDuration);
+                var slotEndTime = startTime.Add(duration);
+
+                if (slotEndTime > dto.gameEndTime) break;
+
                 var slot = new GameSlots
                 {
                     GameTypeId = game.Id,
                     StartTime = startTime,
-                    EndTime = startTime.AddMinutes(game.GameDuration)
+                    EndTime = slotEndTime
                 };
+
                 slots.Add(slot);
-                startTime = slot.EndTime;
+                startTime = slotEndTime;
             }
-            await _gameSlotRepo.AddSlotAsync(slots);
+
+            if (slots.Any())
+            {
+                await _gameSlotRepo.AddSlotAsync(slots);
+            }
+
             _logger.LogInformation($"Game Added. Game Name:{game.GameName} by {id}");
 
             return mapToDto(game);
@@ -54,7 +75,7 @@ namespace hrms_backend.Services.Games
             return games.Select(mapToDto).ToList();
         }
 
-        public async Task DeleteGame(int id,Guid empId)
+        public async Task DeleteGame(int id, Guid empId)
         {
             var game = await _gameTypeRepo.FindByGameIdAsync(id);
             if (game == null)

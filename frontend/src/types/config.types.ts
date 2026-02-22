@@ -20,14 +20,6 @@ export interface ConfigFormData{
     ConfigValue : string;
 }
 
-export interface GameTypeFormData {
-  gameName: string;
-  gameDuration: number;
-  gameStartTime: string;
-  gameEndTime: string;
-  maxMembers: number;
-  noOfSlots: number;
-}
 
 export interface GameFormProps {
   initialData?: any;

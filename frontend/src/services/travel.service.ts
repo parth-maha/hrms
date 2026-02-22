@@ -33,6 +33,11 @@ export const deleteTravel = async (id: string) => {
   return response.data;
 };
 
+export const getTravelList = async () =>{
+  const response = await api.get("/Travel/list");
+  return response.data
+}
+
 export const updateTravel = async (id: string, data: CreateTravelFormData) => {
   const formData = getCreateTravelForm(data);
   const response = await api.put(`/Travel/${id}`, formData, {

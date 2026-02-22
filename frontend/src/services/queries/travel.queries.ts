@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addExpesne, createTravelByHr, deleteTravel, getAllExpenses, getAllTravels, getFilteredExpenses, getMyExpenses, getTravelForEmployee, updateExpense, updateExpenseStatus, updateTravel } from "../travel.service"
+import { addExpesne, createTravelByHr, deleteTravel, getAllExpenses, getAllTravels, getFilteredExpenses, getMyExpenses, getTravelForEmployee, getTravelList, updateExpense, updateExpenseStatus, updateTravel } from "../travel.service"
 import { toast } from "react-toastify"
 import type { CreateTravelFormData, UpdateExpenseDto } from "../../types/travel.types"
 
@@ -15,6 +15,13 @@ export const useCreateTravelByHr = (onSuccess? : ()=> void) =>{
     })
 }
 
+export const useTravelList = () =>{
+    return useQuery({
+        queryKey : ['travel-list'],
+        queryFn : getTravelList,
+        staleTime : 60 * 60 * 1000
+    })
+}
 export const useUpdateTravel = (onSuccess? : ()=> void) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -60,16 +67,13 @@ export const useExpenses = (isHr : boolean) =>{
     })
 }
 
-export const useFilteredExpenses = (onSuccess? : () => void) =>{
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn : getFilteredExpenses,
-        onSuccess : () =>{
-            queryClient.invalidateQueries({queryKey : ['expenses']})
-            onSuccess?.()
-        }
-    })
-}
+export const useFilteredExpenses = (filters: any, enabled: boolean) => {
+    return useQuery({
+        queryKey: ['expenses', 'filtered', filters],
+        queryFn: () => getFilteredExpenses(filters),
+        enabled: enabled && !!filters,
+    });
+};
 
 export const useAddExpenseMutation = (onSuccess? : () => void) =>{
     const queryClient = useQueryClient();

@@ -52,7 +52,7 @@ const Jobs = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="max-w-7xl mx-auto ">
+    <div className=" mx-auto ">
       <div className="flex justify-between items-center mb-6">
         <Typography variant="h4" className="font-bold text-gray-900">
           Job Listings

@@ -27,7 +27,7 @@ const Travel: React.FC = () => {
 
   const activeTab = pathname.includes("expenses") ? "expenses" : "plans";
 
-  const { data, isLoading } = useGetAllTravel(roles === "HR");
+  const { data, isLoading } = useGetAllTravel((roles==="HR" || roles==="MANAGER"));
   const deleteTravel = useDeleteTravel();
 
   const handleTabChange = (_: any, val: string) => {

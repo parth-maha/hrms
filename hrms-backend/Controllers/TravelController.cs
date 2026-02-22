@@ -9,7 +9,7 @@ namespace hrms_backend.Controllers
     [ApiController]
     [Authorize]
     [Route("api/v1/[controller]")]
-    public class TravelController : ControllerBase  
+    public class TravelController : ControllerBase
     {
         private readonly TravelService _travelService;
 
@@ -39,9 +39,9 @@ namespace hrms_backend.Controllers
         {
             try
             {
-                var user = (Employees ?)HttpContext.Items["User"];
+                var user = (Employees?)HttpContext.Items["User"];
                 if (user == null) return Unauthorized(new { message = "Invalid User" });
-                await _travelService.UpdatePlan(id,dto, user.Id);
+                await _travelService.UpdatePlan(id, dto, user.Id);
                 return Ok(new { message = "Travel Plan Updated" });
             }
             catch (Exception ex)
@@ -71,9 +71,24 @@ namespace hrms_backend.Controllers
         public async Task<IActionResult> GetAllTravelPlans()
         {
             try
-            { 
+            {
                 var plans = await _travelService.GetAllPlans();
                 return Ok(plans);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> GetTravelList()
+        {
+            try
+            {
+                var plans = await _travelService.GetTravelList();
+                return Ok(plans);
+
             }
             catch (Exception ex)
             {
@@ -92,7 +107,7 @@ namespace hrms_backend.Controllers
                 await _travelService.UpdatePlan(id, dto, user.Id);
                 return Ok(new { message = "Travel Plan Updated" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
@@ -106,9 +121,10 @@ namespace hrms_backend.Controllers
                 var user = (Employees?)HttpContext.Items["User"];
                 if (user == null) return Unauthorized(new { message = "Invalid User" });
 
-                await _travelService.DeleteTravelPlan(id,user.Id);
-                return Ok(new { message= "Travel Plan Delete" });
-            }catch (Exception ex)
+                await _travelService.DeleteTravelPlan(id, user.Id);
+                return Ok(new { message = "Travel Plan Delete" });
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
@@ -124,7 +140,7 @@ namespace hrms_backend.Controllers
                 await _travelService.AddExpense(dto, user.Id);
                 return Ok(new { message = "Expense added" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }
@@ -185,7 +201,8 @@ namespace hrms_backend.Controllers
                 var expenses = await _travelService.GetFilteredExpenses(dto);
                 return Ok(expenses);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.InnerException?.Message ?? ex.Message });
             }

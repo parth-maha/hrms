@@ -16,8 +16,9 @@
     {
         public Guid Id { get; set; }
         public string travelName { get; set; }
+        public string travelId { get; set; }
         public string description { get; set; }
-
+        public string employeeId { get; set; }
         public string employeeName { get; set; }
         public long amount { get; set; }
         public string category { get; set; }
@@ -31,7 +32,7 @@
     public class UpdateExpenseStatusDto
     {
         public string status { get; set; }
-        public string? remarks { get; set;  }
+        public string? remarks { get; set; }
     }
 
     public class ExpenseFilterDto

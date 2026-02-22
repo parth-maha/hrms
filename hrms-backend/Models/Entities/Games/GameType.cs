@@ -9,7 +9,7 @@ namespace hrms_backend.Models.Entities.Games
     {
         [Key]
         [Column("pk_game_type_id")]
-        public int Id { get; set;  }
+        public int Id { get; set; }
 
         [Column("game_name")]
         public string GameName { get; set; }
@@ -18,16 +18,16 @@ namespace hrms_backend.Models.Entities.Games
         public int GameDuration { get; set; } // in minutes
 
         [Column("game_start_time")]
-        public DateTime GameStartTime { get; set; }
+        public TimeSpan GameStartTime { get; set; }
 
         [Column("game_end_time")]
-        public DateTime GameEndTime { get; set; }
+        public TimeSpan GameEndTime { get; set; }
 
         [Column("no_of_slots")]
-        public int NoOfSlots { get; set;  }
+        public int NoOfSlots { get; set; }
 
         [Column("max_members")]
-        public int MaxMembers { get; set;  }
+        public int MaxMembers { get; set; }
 
         [Column("deleted_on")]
         public DateTime? DeletedOn { get; set; }

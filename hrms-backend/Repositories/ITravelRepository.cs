@@ -24,5 +24,6 @@ namespace hrms_backend.Repositories
         Task AddEmployeeDocumentAsync(EmployeeTravelDocument doc);
         Task DeleteEmployeeDocumentAsync(EmployeeTravelDocument doc);
         Task<List<TravelExpense>> GetFilteredExpensesAsync(ExpenseFilterDto dto);
+        Task<List<TravelPlan>> GetTravelList();
     }
 }

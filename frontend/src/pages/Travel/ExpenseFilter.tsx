@@ -1,28 +1,9 @@
 import React from "react";
-import { MenuItem, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import Button from "../../components/ui/Button";
+import type { ExpenseFilterProps } from "../../types/travel.types";
 
-interface ExpenseFilterProps {
-  filters: {
-    employee: string;
-    travel: string;
-    category: string;
-    status: string;
-  };
-  setFilters: React.Dispatch<React.SetStateAction<{
-    employee : string;
-    travel :string;
-    category : string;
-    status: string
-  }>>
-  options: {
-    employees: { id: string; name: string }[];
-    travels: { id: string; name: string }[];
-    categories: string[];
-  };
-  onApply: () => void;
-  onReset: () => void;
-}
+const STATUS_OPTIONS = ["PENDING", "APPROVED", "REJECTED"];
 
 const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   filters,
@@ -31,86 +12,91 @@ const ExpenseFilter: React.FC<ExpenseFilterProps> = ({
   onApply,
   onReset,
 }) => {
-  const handleChange =
-    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFilters((prev: any) => ({ ...prev, [field]: e.target.value }));
-    };
+  const selectedEmployee =
+    options.employees.find((e) => e.id === filters.employeeId) ?? null;
+
+  const selectedTravel =
+    options.travels.find((t) => t.travelId === filters.travelId) ?? null;
 
   return (
     <div className="h-1/2 flex flex-col justify-between">
       <div className="grid grid-cols-2 gap-6 mt-4">
         <div className="col-span-1">
-          <TextField
-            select
-            fullWidth
-            label="Employee"
-            value={filters.employee || ""}
-            onChange={handleChange("employee")}
-            variant="outlined"
+          <Autocomplete
+            options={options.employees}
+            getOptionLabel={(option) => option.name}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            value={selectedEmployee}
+            onChange={(_, newValue) =>
+              setFilters((prev) => ({
+                ...prev,
+                employeeId: newValue?.id ?? null,
+              }))
+            }
             size="small"
-          >
-            <MenuItem value="">All</MenuItem>
-            {options.employees.map((emp) => (
-              <MenuItem key={emp.id} value={emp.id}>
-                {emp.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          {filters.employee}
+            renderInput={(params) => (
+              <TextField {...params} label="Employee" fullWidth />
+            )}
+          />
         </div>
+
         <div className="col-span-1">
-          <TextField
-            select
-            fullWidth
-            label="Travel Plan"
-            value={filters.travel || ""}
-            onChange={handleChange("travel")}
+          <Autocomplete
+            options={options.travels}
+            getOptionLabel={(option) => option.travelName}
+            isOptionEqualToValue={(option, value) => option.travelId === value.travelId}
+            value={selectedTravel}
+            onChange={(_, newValue) =>
+              setFilters((prev) => ({
+                ...prev,
+                travel: newValue?.travelId ?? null,
+              }))
+            }
             size="small"
-          >
-            <MenuItem value="">All</MenuItem>
-            {options.travels.map((t) => (
-              <MenuItem key={t.id} value={t.id}>
-                {t.name}
-              </MenuItem>
-            ))}
-          </TextField>
+            renderInput={(params) => (
+              <TextField {...params} label="Travel Plan" fullWidth />
+            )}
+          />
         </div>
+
         <div className="col-span-1">
-          <TextField
-            select
-            fullWidth
-            label="Category"
-            value={filters.category}
-            onChange={handleChange("category")}
+          <Autocomplete
+            options={options.categories}
+            getOptionLabel={(option) => option}
+            value={filters.category || null}
+            onChange={(_, newValue) =>
+              setFilters((prev) => ({ ...prev, category: newValue ?? null }))
+            }
             size="small"
-          >
-            <MenuItem value="">All Categories</MenuItem>
-            {options.categories.map((cat) => (
-              <MenuItem key={cat} value={cat}>
-                {cat}
-              </MenuItem>
-            ))}
-          </TextField>
+            renderInput={(params) => (
+              <TextField {...params} label="Category" fullWidth />
+            )}
+          />
         </div>
+
         <div className="col-span-1">
-          <TextField
-            select
-            fullWidth
-            label="Status"
-            value={filters.status}
-            onChange={handleChange("status")}
+          <Autocomplete
+            options={STATUS_OPTIONS}
+            getOptionLabel={(option) => option}
+            value={filters.status || null}
+            onChange={(_, newValue) =>
+              setFilters((prev) => ({ ...prev, status: newValue ?? null }))
+            }
             size="small"
-          >
-            <MenuItem value="">All Statuses</MenuItem>
-            <MenuItem value="PENDING">PENDING</MenuItem>
-            <MenuItem value="APPROVED">APPROVED</MenuItem>
-            <MenuItem value="REJECTED">REJECTED</MenuItem>
-          </TextField>
+            renderInput={(params) => (
+              <TextField {...params} label="Status" fullWidth />
+            )}
+          />
         </div>
       </div>
+
       <div className="flex gap-4">
-        <Button onClick={onReset} color="error">Reset</Button>
-        <Button onClick={onApply} color="success">Apply Filters</Button>
+        <Button onClick={onReset} color="error">
+          Reset
+        </Button>
+        <Button onClick={onApply} color="success">
+          Apply Filters
+        </Button>
       </div>
     </div>
   );

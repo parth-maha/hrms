@@ -2,7 +2,6 @@
 using hrms_backend.Models.dto.Jobs;
 using hrms_backend.Models.DTO;
 using hrms_backend.Models.Entities;
-using MassTransit.Initializers.Variables;
 using Microsoft.EntityFrameworkCore;
 
 namespace hrms_backend.Repositories.Implementation
@@ -19,7 +18,7 @@ namespace hrms_backend.Repositories.Implementation
         public async Task<List<Employees>> GetEmployeesAsync()
         {
             return await _dbContext.Employees
-                .Include(e=> e.Roles)
+                .Include(e => e.Roles)
                 .ToListAsync();
         }
 
@@ -41,7 +40,7 @@ namespace hrms_backend.Repositories.Implementation
         public async Task UpdateEmployeeAsync(Employees employee)
         {
             _dbContext.Employees.Update(employee);
-             await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<OrgChartDto>> GetOrgChartAsync()
@@ -51,7 +50,7 @@ namespace hrms_backend.Repositories.Implementation
                 {
                     e.Id,
                     Name = e.FirstName + " " + e.LastName,
-                    Position = e.Position, 
+                    Position = e.Position,
                     e.ManagerId
                 })
                 .ToListAsync();
@@ -76,12 +75,12 @@ namespace hrms_backend.Repositories.Implementation
                 {
                     if (emp.ManagerId == null)
                     {
-                        
+
                         rootNodes.Add(employeeDto);
                     }
                     else
                     {
-                      
+
                         if (lookup.TryGetValue(emp.ManagerId.Value, out var managerDto))
                         {
                             managerDto.DirectReports.Add(employeeDto);

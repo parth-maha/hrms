@@ -77,6 +77,12 @@ namespace hrms_backend.Services
             _logger.LogInformation($"Travel Plan Created. Name:{plan.Name} CreatedBy:{plan.CreatedBy.FirstName} {plan.CreatedBy.LastName}");
         }
 
+        public async Task<List<TravelListDto>> GetTravelList()
+        {
+            var travels = await _travelRepo.GetTravelList();
+            return travels.Select(mapToListDto).ToList();
+        }
+
         public async Task UpdatePlan(Guid id, CreateTravelPlanDto dto, Guid hrId)
         {
             var plan = await _travelRepo.GetPlanByIdAsync(id);
@@ -90,26 +96,26 @@ namespace hrms_backend.Services
             plan.StartDate = dto.startDate;
             plan.EndDate = dto.endDate;
 
-            if(dto.employeeIds!= null && dto.employeeIds.Any())
+            if (dto.employeeIds != null && dto.employeeIds.Any())
             {
                 await _travelRepo.RemoveAllocationsAsync(plan.TravelAllocation.ToList());
-                
+
                 var newAllocations = dto.employeeIds.Select(empId => new TravelAllocation
                 {
-                   Id = Guid.NewGuid(),
-                   TravelId = plan.Id,
-                   EmployeeId = empId
-                 }).ToList();
-                 await _travelRepo.AddAllocationAsync(newAllocations);
+                    Id = Guid.NewGuid(),
+                    TravelId = plan.Id,
+                    EmployeeId = empId
+                }).ToList();
+                await _travelRepo.AddAllocationAsync(newAllocations);
             }
 
-            if(dto.documents!=null && dto.documents.Any())
+            if (dto.documents != null && dto.documents.Any())
             {
-                foreach(var file in dto.documents)
+                foreach (var file in dto.documents)
                 {
-                    if(plan.HrTravelDocuments.Any())
+                    if (plan.HrTravelDocuments.Any())
                     {
-                        foreach(var doc in  plan.HrTravelDocuments)
+                        foreach (var doc in plan.HrTravelDocuments)
                         {
                             await _cloudinaryService.DeleteFileAsync(doc.Url);
                         }
@@ -138,20 +144,20 @@ namespace hrms_backend.Services
             _logger.LogInformation($"Travel Plan Updated. Name:{plan.Name} UpdatedBy:{hrId}");
         }
 
-        public async Task DeleteTravelPlan(Guid id,Guid hrId)
+        public async Task DeleteTravelPlan(Guid id, Guid hrId)
         {
             var plan = await _travelRepo.GetPlanByIdAsync(id);
             if (plan == null) throw new Exception("Plan not found");
 
             plan.IsDeleted = true;
             plan.DeletedOn = DateTime.UtcNow;
-            foreach(var allocation in plan.TravelAllocation)
+            foreach (var allocation in plan.TravelAllocation)
             {
                 allocation.IsDeleted = true;
                 allocation.DeletedOn = DateTime.UtcNow;
             }
 
-            foreach(var document in plan.HrTravelDocuments)
+            foreach (var document in plan.HrTravelDocuments)
             {
                 document.IsDeleted = true;
                 document.DeletedOn = DateTime.UtcNow;
@@ -172,23 +178,17 @@ namespace hrms_backend.Services
 
         public async Task AddExpense(AddExpenseDto dto, Guid empId)
         {
-            var allocation = await _travelRepo.GetAllocationAsync(dto.travelId,empId);
+            var allocation = await _travelRepo.GetAllocationAsync(dto.travelId, empId);
             if (allocation == null) throw new Exception("You dont have this travel plan");
 
             var plan = allocation.TravelPlan;
 
-            //check dates
-            if(DateTime.UtcNow.Date < plan.StartDate.Date)
-            {
-                throw new Exception("Cannot submit expense before travel");
-            }
-
-            if(DateTime.UtcNow.Date >  plan.EndDate.AddDays(10))
+            if (DateTime.UtcNow.Date > plan.EndDate.AddDays(10))
             {
                 throw new Exception("Submissiobn window closes");
             }
 
-            if(dto.proof == null)
+            if (dto.proof == null)
             {
                 throw new Exception("Expense proof is required");
             }
@@ -196,8 +196,8 @@ namespace hrms_backend.Services
             // create expense
             var expense = new TravelExpense
             {
-                Id= Guid.NewGuid(),
-                AllocationId= allocation.Id,
+                Id = Guid.NewGuid(),
+                AllocationId = allocation.Id,
                 Description = dto.description,
                 TotalAmount = dto.amount,
                 Status = "PENDING",
@@ -232,6 +232,9 @@ namespace hrms_backend.Services
             {
                 Id = e.Id,
                 travelName = e.TravelAllocation.TravelPlan.Name,
+                travelId = e.TravelAllocation.TravelId.ToString(),
+                employeeId = e.TravelAllocation.Employee.Id.ToString(),
+                employeeName = $"{e.TravelAllocation.Employee.FirstName} {e.TravelAllocation.Employee.LastName}",
                 description = e.Description,
                 amount = e.TotalAmount,
                 category = e.Category,
@@ -250,11 +253,13 @@ namespace hrms_backend.Services
             {
                 Id = e.Id,
                 travelName = e.TravelAllocation.TravelPlan.Name,
+                travelId = e.TravelAllocation.TravelId.ToString(),
                 description = e.Description,
                 amount = e.TotalAmount,
                 category = e.Category,
                 expenseDate = e.ExpenseDate,
                 status = e.Status,
+                employeeId = e.TravelAllocation.Employee.Id.ToString(),
                 employeeName = $"{e.TravelAllocation.Employee.FirstName} {e.TravelAllocation.Employee.LastName}",
                 hrRemarks = e.HrRemarks,
                 document = e.EmployeeTravelDocuments.Url,
@@ -279,7 +284,7 @@ namespace hrms_backend.Services
             _logger.LogInformation($"Expense Status Updated. ExpenseId:{expense.Id} Status:{expense.Status}");
         }
 
-        public async Task UpdateExpense(Guid expenseId, AddExpenseDto dto,Guid empId)
+        public async Task UpdateExpense(Guid expenseId, AddExpenseDto dto, Guid empId)
         {
             var expense = await _travelRepo.GetExpenseByIdAsync(expenseId);
 
@@ -326,18 +331,31 @@ namespace hrms_backend.Services
             {
                 Id = e.Id,
                 travelName = e.TravelAllocation.TravelPlan.Name,
+                travelId = e.TravelAllocation.TravelId.ToString(),
                 description = e.Description,
                 amount = e.TotalAmount,
                 category = e.Category,
                 expenseDate = e.ExpenseDate,
                 status = e.Status,
                 hrRemarks = e.HrRemarks,
+                employeeId = e.TravelAllocation.Employee.Id.ToString(),
+                employeeName = $"{e.TravelAllocation.Employee.FirstName} {e.TravelAllocation.Employee.LastName}",
                 document = e.EmployeeTravelDocuments.Url,
                 fileName = e.EmployeeTravelDocuments.FileName
             }).ToList();
         }
 
         // ======================= HELPERS =====================
+
+        private TravelListDto mapToListDto(TravelPlan plan)
+        {
+            return new TravelListDto
+            {
+                travelId = plan.Id.ToString(),
+                travelName = plan.Name
+            };
+        }
+
         private TravelPlanDto mapToTravelDto(TravelPlan plan)
         {
             return new TravelPlanDto
@@ -348,12 +366,12 @@ namespace hrms_backend.Services
                 startDate = plan.StartDate,
                 endDate = plan.EndDate,
                 createdBy = $"{plan.CreatedBy.FirstName} {plan.CreatedBy.LastName}",
-                   documents = plan.HrTravelDocuments.Select(dto => new DocumentsDto
-                   {
-                       id = dto.Id.ToString(),
-                       fileName = dto.FileName,
-                       url = dto.Url,
-                   }).ToList(),
+                documents = plan.HrTravelDocuments.Select(dto => new DocumentsDto
+                {
+                    id = dto.Id.ToString(),
+                    fileName = dto.FileName,
+                    url = dto.Url,
+                }).ToList(),
                 employeeIds = plan.TravelAllocation.Select(dto => new EmployeeListDto
                 {
                     id = dto.Employee.Id.ToString(),

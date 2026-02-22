@@ -48,25 +48,16 @@ const ConfigDashboard: React.FC = () => {
   if (isLoading || gamesLoading) return <Loader />;
 
   return (
-    <Box className="p-6 bg-gray-50 min-h-screen">
-      <Paper
-        elevation={0}
-        className="p-4 mb-6 border border-gray-200 rounded-xl"
+    <Box className="min-h-screen">
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        textColor="primary"
+        indicatorColor="primary"
       >
-        {/* <Typography variant="h4" className="font-bold text-gray-800 mb-4">
-          
-        </Typography> */}
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          textColor="primary"
-          indicatorColor="primary"
-          className="border-b border-gray-100"
-        >
-          <Tab label="System Configs" className="font-semibold" />
-          <Tab label="Game Scheduling" className="font-semibold" />
-        </Tabs>
-      </Paper>
+        <Tab label="System Configs" className="font-semibold" />
+        <Tab label="Game Scheduling" className="font-semibold" />
+      </Tabs>
 
       <Box className="mt-4">
         {tabValue === 0 ? (
