@@ -1,3 +1,3 @@
 **DB DIAGRAM**
 
-<img width="1045" height="892" alt="image" src="https://github.com/user-attachments/assets/31a2e10c-0601-413f-9f1a-d47f58636429" />
+<img width="1118" height="917" alt="image" src="https://github.com/user-attachments/assets/24a7c29c-04f7-43ad-82bf-750ad1de8ca3" />
